@@ -1,0 +1,95 @@
+{
+    "name": "@salutejs/perftool",
+    "version": "0.3.0",
+    "author": "Salute Frontend Team <salute.developers@gmail.com>",
+    "description": "Performance measurement tool for frontend components",
+    "repository": {
+        "type": "git",
+        "url": "ssh://git@github.com:salute-developers/perftool.git"
+    },
+    "bugs": {
+        "url": "https://github.com/salute-developers/perftool/issues"
+    },
+    "homepage": "https://github.com/salute-developers/perftool#readme",
+    "main": "lib/index.js",
+    "types": "lib/index.d.ts",
+    "type": "module",
+    "engines": {
+        "node": "~16.15"
+    },
+    "bin": {
+        "perftool": "lib/index.js",
+        "perftool-compare": "lib/compare/index.js"
+    },
+    "files": [
+        "lib",
+        "src"
+    ],
+    "scripts": {
+        "prepare": "npm run build",
+        "prebuild": "npm run clean",
+        "build": "tsc",
+        "postbuild": "chmod +x lib/index.js lib/compare/index.js",
+        "clean": "rm -rf lib",
+        "lint": "eslint src --ext .ts,.tsx",
+        "lint:fix": "eslint src --ext .ts,.tsx --fix",
+        "prettier:fix": "prettier --write .",
+        "release": "git diff && auto shipit"
+    },
+    "peerDependencies": {
+        "react": ">=16.0.0",
+        "react-dom": ">=16.0.0"
+    },
+    "dependencies": {
+        "@vercel/ncc": "0.36.0",
+        "chalk": "5.2.0",
+        "commander": "9.4.1",
+        "express": "4.18.2",
+        "fast-glob": "3.2.12",
+        "html-webpack-plugin": "5.5.0",
+        "jstat": "1.9.6",
+        "loglevel": "1.8.1",
+        "loglevel-plugin-prefix": "0.8.4",
+        "morgan": "1.10.0",
+        "nanoevents": "7.0.1",
+        "puppeteer": "13.7.0",
+        "webpack": "5.75.0"
+    },
+    "devDependencies": {
+        "@actions/core": "1.10.0",
+        "@actions/github": "5.1.1",
+        "@types/express": "4.17.14",
+        "@types/morgan": "1.9.3",
+        "@types/node": "16.18.3",
+        "@types/react": "18.0.27",
+        "@types/react-dom": "18.0.10",
+        "@typescript-eslint/eslint-plugin": "^5.47.0",
+        "@typescript-eslint/parser": "^5.47.0",
+        "auto": "^10.37.6",
+        "eslint": "8.33.0",
+        "eslint-config-airbnb": "19.0.4",
+        "eslint-plugin-import": "2.27.5",
+        "eslint-plugin-jest": "23.8.2",
+        "eslint-plugin-prettier": "4.2.1",
+        "eslint-plugin-jsx-a11y": "6.7.1",
+        "eslint-plugin-react": "7.32.2",
+        "eslint-config-prettier": "8.6.0",
+        "eslint-plugin-react-hooks": "4.6.0",
+        "prettier": "2.8.1",
+        "react": "18.2.0",
+        "react-dom": "18.2.0",
+        "typescript": "4.9.4"
+    },
+    "contributors": [
+        "Artem Khaidarov (https://github.com/akhdrv)"
+    ],
+    "publishConfig": {
+        "access": "public"
+    },
+    "keywords": [
+        "performance",
+        "testing",
+        "react",
+        "components"
+    ]
+}
