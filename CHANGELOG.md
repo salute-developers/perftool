@@ -1,3 +1,21 @@
+# v0.3.6 (Thu Feb 02 2023)
+
+#### 🐛 Bug Fix
+
+- fix: correct token [#2](https://github.com/salute-developers/perftool/pull/2) ([@Yeti-or](https://github.com/Yeti-or))
+- fix: correct version [#1](https://github.com/salute-developers/perftool/pull/1) ([@Yeti-or](https://github.com/Yeti-or))
+
+#### ⚠️ Pushed to `master`
+
+- chore: move repo ([@akhdrv](https://github.com/akhdrv))
+
+#### Authors: 2
+
+- Artem Khaydarov ([@akhdrv](https://github.com/akhdrv))
+- Vasiliy ([@Yeti-or](https://github.com/Yeti-or))
+
+---
+
 # v0.3.0 (Wed Jan 25 2023)
 
 #### 🚀 Enhancement
