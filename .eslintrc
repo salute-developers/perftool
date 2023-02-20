@@ -96,12 +96,16 @@
             }
         },
         {
-            "files": ["*.test.tsx?", "*.test.js"],
-            "plugins": ["jest"],
+            "files": ["*.test.ts", "*.test.tsx"],
+            "plugins": ["jest", "prettier"],
             "env": {
                 "browser": true,
                 "mocha": true,
                 "jest/globals": true
+            },
+            "rules": {
+                "no-var": "off",
+                "no-multi-assign": "off"
             }
         }
     ],

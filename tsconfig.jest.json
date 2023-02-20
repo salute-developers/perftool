@@ -1,0 +1,9 @@
+{
+    "extends": "./tsconfig.json",
+    "types": "jest",
+    "include": ["**/__spec__/**/*.test.ts", "src/utils/window.d.ts"],
+    "exclude": [],
+    "compilerOptions": {
+        "sourceMap": true
+    }
+}
