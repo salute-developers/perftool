@@ -1,0 +1,14 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`controller/Executor should create Executor instance with factory 1`] = `
+[
+  {
+    "args": [
+      "--js-flags="--maglev=false --max_opt=0"",
+    ],
+    "devtools": true,
+    "headless": true,
+    "waitForInitialPage": true,
+  },
+]
+`;
