@@ -1,6 +1,6 @@
 type RawTest = { subjectId: string; taskId: string };
 
-function insertTests(serializedTests: string) {
+export function insertTests(serializedTests: string) {
     const tests: RawTest[] = JSON.parse(serializedTests);
 
     /**

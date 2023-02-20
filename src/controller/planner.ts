@@ -1,17 +1,21 @@
-import { Task } from '../client/measurement/types';
-import { Config } from '../config';
-import { TestModule } from '../build/collect';
 import { debug } from '../utils/logger';
 import { id as staticTaskSubjectId } from '../stabilizers/staticTask';
 import { intersectStabilizers } from '../utils/stabilizers';
+import type { Task } from '../client/measurement/types';
+import type { Config } from '../config';
+import type { TestModule } from '../build/collect';
 
-import { Test } from './executor';
+import type { Test } from './executor';
 
 export type IPlanner = {
     plan(): Generator<Test[], undefined>;
 };
 
-function getTests<T extends Task<any, any>[]>(config: Config, tasks: T[number][], modules: TestModule[]): Test[] {
+export function getTests<T extends Task<any, any>[]>(
+    config: Config,
+    tasks: T[number][],
+    modules: TestModule[],
+): Test[] {
     const testGroups = tasks.map(({ id: taskId, availableStabilizers }) => {
         const suitableTestModules = modules.filter(({ path }) => {
             // TODO filter modules by task config rule (minimatch)
