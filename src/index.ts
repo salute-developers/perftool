@@ -1,4 +1,4 @@
-#!/usr/bin/env node --experimental-specifier-resolution=node
+#!/usr/bin/env -S node --experimental-specifier-resolution=node
 import process from 'process';
 import { createArgument, createCommand, createOption, OptionValues } from 'commander';
 

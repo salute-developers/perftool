@@ -1,9 +1,14 @@
 type NamedImport = string | { original: string; alias: string };
 
-type FormatImportExpressionParams = {
-    namedImports?: NamedImport[];
-    defaultImportIdentity?: string;
-};
+type FormatImportExpressionParams =
+    | {
+          namedImports: readonly NamedImport[];
+          defaultImportIdentity?: string;
+      }
+    | {
+          namedImports?: readonly NamedImport[];
+          defaultImportIdentity: string;
+      };
 
 export function formatImportExpression(
     modulePath: string,
@@ -15,7 +20,7 @@ export function formatImportExpression(
         importParts.push(defaultImportIdentity);
     }
 
-    if (namedImports) {
+    if (namedImports && namedImports.length) {
         const line = namedImports
             .map((imp) => {
                 if (typeof imp === 'string') {
@@ -27,6 +32,10 @@ export function formatImportExpression(
             .join(', ');
 
         importParts.push(`{ ${line} }`);
+    }
+
+    if (!importParts.length) {
+        return '';
     }
 
     return `import ${importParts.join(', ')} from '${modulePath}';`;

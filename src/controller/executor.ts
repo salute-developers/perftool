@@ -59,7 +59,7 @@ export default class Executor<T extends Task<any, any>[]> implements IExecutor<T
         debug('[executor]', 'running tests', tests);
         assert(this.workable);
 
-        const page = await (this.browserInstance as Browser).newPage();
+        const page = await this.browserInstance.newPage();
 
         const results = new Deferred<RunTaskResult<T[number]>[]>();
 
