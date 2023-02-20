@@ -4,10 +4,14 @@ on:
   pull_request:
     branches:
       - master
-
   push:
     branches:
       - master
+  workflow_run:
+    workflows: [ "Checks" ]
+    branches: [ master ]
+    types:
+      - completed
 
 jobs:
   publish:
@@ -27,10 +31,10 @@ jobs:
         # https://github.com/intuit/auto/issues/1030
         run: git config --local --unset http.https://github.com/.extraheader
 
-      - name: Use Node.js 16.15
-        uses: actions/setup-node@v1
+      - name: Setup Node.js
+        uses: actions/setup-node@v3
         with:
-          node-version: 16.15
+          node-version-file: '.nvmrc'
 
       - name: Cache node modules
         uses: actions/cache@v1
@@ -43,9 +47,6 @@ jobs:
       - name: Setup packages
         run: |
           npm ci
-
-      - name: Lint
-        run: npm run lint
 
       - name: Release Info
         run: npm whoami && npx auto info || echo 'auto info returned 1'
