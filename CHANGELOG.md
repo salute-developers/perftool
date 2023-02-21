@@ -1,3 +1,22 @@
+# v0.3.7 (Tue Feb 21 2023)
+
+#### 🐛 Bug Fix
+
+- test: add unit tests [#3](https://github.com/salute-developers/perftool/pull/3) ([@akhdrv](https://github.com/akhdrv))
+- refactor: modify modules for tests [#3](https://github.com/salute-developers/perftool/pull/3) ([@akhdrv](https://github.com/akhdrv))
+- ci: add test workflow, misc workflow changes [#3](https://github.com/salute-developers/perftool/pull/3) ([@akhdrv](https://github.com/akhdrv))
+- chore: setup tests, linters, commit hooks [#3](https://github.com/salute-developers/perftool/pull/3) ([@akhdrv](https://github.com/akhdrv))
+
+#### ⚠️ Pushed to `master`
+
+- chore: update readme ([@akhdrv](https://github.com/akhdrv))
+
+#### Authors: 1
+
+- Artem Khaydarov ([@akhdrv](https://github.com/akhdrv))
+
+---
+
 # v0.3.6 (Thu Feb 02 2023)
 
 #### 🐛 Bug Fix
