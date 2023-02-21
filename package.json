@@ -1,6 +1,6 @@
 {
     "name": "@salutejs/perftool",
-    "version": "0.3.6",
+    "version": "0.3.7",
     "author": "Salute Frontend Team <salute.developers@gmail.com>",
     "description": "Performance measurement tool for frontend components",
     "repository": {
