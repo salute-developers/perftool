@@ -6,7 +6,8 @@ describe('utils/hash', () => {
     });
 
     it('should return same hashcode for equal input', () => {
-        expect(getHashCode('lkneoiwrjoq')).toEqual(getHashCode('lkneoiwrjoq'));
+        const value = 'lkneoiwrjoq';
+        expect(getHashCode(value)).toEqual(getHashCode(value));
     });
 
     it('should return different hashcode for different input', () => {
