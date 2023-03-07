@@ -1,16 +1,22 @@
 import { jest } from '@jest/globals';
 
 var assertMock: jest.Mock;
-jest.unstable_mockModule('assert', () => ({ default: (assertMock = jest.fn()) }));
+jest.unstable_mockModule('../assert', () => ({
+    default: (assertMock = jest.fn()),
+}));
 
 const { default: waitForIdle } = await import('../waitForIdle');
-const { default: assert } = await import('assert');
+const { default: assert } = await import('../assert');
 
 describe('utils/waitForIdle', () => {
     let windowSpy: jest.SpiedGetter<Partial<Window>>;
 
     beforeEach(() => {
-        assertMock.mockImplementation(jest.requireActual('assert') as any);
+        assertMock.mockImplementation((c) => {
+            if (!c) {
+                throw new Error();
+            }
+        });
 
         windowSpy = jest.spyOn(global, 'window', 'get');
     });

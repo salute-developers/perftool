@@ -6,22 +6,22 @@ const tests = [
 ];
 
 describe('controller/insertTests', () => {
+    afterEach(() => {
+        delete window.tests;
+    });
+
     it('should parse JSON serialized tests and push in window.tests if present', () => {
         window.tests = [];
 
         insertTests(JSON.stringify(tests));
 
         expect(window.tests).toEqual(tests);
-
-        delete window.tests;
     });
 
     it('should parse JSON serialized tests and push in window.tests if not present', () => {
         insertTests(JSON.stringify(tests));
 
         expect(window.tests).toEqual(tests);
-
-        delete window.tests;
     });
 });
 
