@@ -1,6 +1,6 @@
-import { Config } from '../config';
+import type { Config } from '../config/common';
 
-import { Task } from './measurement/types';
+import type { Task } from './measurement/types';
 import { runTask, Subject } from './measurement/runner';
 import { resolveTests } from './input';
 

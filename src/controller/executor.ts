@@ -1,6 +1,6 @@
 import puppeteer, { Browser } from 'puppeteer';
-import assert from 'assert';
 
+import assert from '../utils/assert';
 import { Config } from '../config';
 import Deferred, { defer } from '../utils/deferred';
 import { RunTaskResult } from '../client/measurement/runner';

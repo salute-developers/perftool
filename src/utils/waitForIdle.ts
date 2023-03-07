@@ -1,4 +1,4 @@
-import assert from 'assert';
+import assert from '../utils/assert';
 
 function waitForIdle(): Promise<void> {
     const idle = window.requestIdleCallback;

@@ -8,11 +8,6 @@ import { debug, info, warn } from '../utils/logger';
 
 export type ExportPickRule = 'named'; // | 'default' | 'all'
 
-type CollectTestSubjectsParams = {
-    config: Config;
-    exportPickRule: ExportPickRule;
-};
-
 export type TestSubject = {
     id: string;
     originalExportedName: string;
@@ -69,10 +64,7 @@ async function getTestModule(path: string, exportPickRule: ExportPickRule): Prom
     };
 }
 
-export default async function collectTestSubjects({
-    config,
-    exportPickRule,
-}: CollectTestSubjectsParams): Promise<TestModule[]> {
+export default async function collectTestSubjects(config: Config): Promise<TestModule[]> {
     info('Collecting test subjects...');
     debug('include: ', config.include, 'exclude: ', config.exclude);
 
@@ -81,7 +73,7 @@ export default async function collectTestSubjects({
     debug('found modules: ', paths);
     debug('parsing modules... ');
 
-    const modulesPromise = Promise.all(paths.map((path) => getTestModule(path, exportPickRule)));
+    const modulesPromise = Promise.all(paths.map((path) => getTestModule(path, config.exportPickRule)));
 
     const result = (await modulesPromise).filter((module): module is TestModule => Boolean(module));
 

@@ -1,6 +1,7 @@
-import { ComponentType } from 'react';
+import type { ComponentType } from 'react';
 
-import { Config, getTaskConfig } from '../../config';
+import type { Config } from '../../config/common';
+import { getTaskConfig } from '../../config/task';
 import BaseError from '../../utils/baseError';
 import { defer } from '../../utils/deferred';
 

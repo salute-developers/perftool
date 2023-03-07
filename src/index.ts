@@ -1,4 +1,4 @@
-#!/usr/bin/env -S node --experimental-specifier-resolution=node
+#!/usr/bin/env -S node --experimental-specifier-resolution=node --loader ts-node/esm
 import process from 'process';
 import { createArgument, createCommand, createOption, OptionValues } from 'commander';
 
@@ -25,9 +25,7 @@ cli.addArgument(createArgument('[include...]', 'Modules to run perftest on'))
 function getCliConfig(include: string[], options: OptionValues): CliConfig {
     return {
         include,
-        configPath: options.configPath,
-        outputFilePath: options.outputFilePath,
-        logLevel: options.logLevel,
+        ...options,
     };
 }
 
@@ -44,10 +42,7 @@ async function start() {
     const importedConfig = await importConfig(cliConfig.configPath);
     const config = getConfig(cliConfig, importedConfig?.value);
 
-    const testModules = await collectTestSubjects({
-        config,
-        exportPickRule: config.exportPickRule,
-    });
+    const testModules = await collectTestSubjects(config);
     const tasks = getAllTasks(config);
 
     info(
@@ -55,7 +50,7 @@ async function start() {
         tasks.map((t) => t.id),
     );
 
-    await buildClient({ config, testModules, projectConfigPath: importedConfig?.path, cliConfig });
+    await buildClient({ config, testModules });
 
     const { port, stop } = await createServer(config);
 

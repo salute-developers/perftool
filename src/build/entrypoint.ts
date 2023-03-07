@@ -3,7 +3,7 @@ import { constants } from 'fs';
 import path from 'path';
 
 import { formatImportExpression, formatLines } from '../utils/codegen';
-import { CliConfig } from '../config/common';
+import { Config } from '../config';
 import { debug } from '../utils/logger';
 
 import { TestModule } from './collect';
@@ -15,21 +15,13 @@ function getModuleRelativePath(modulePath: string, importedModulePath: string): 
     return relativePath.replace(path.extname(importedModulePath), '');
 }
 
-const IMPORTED_CONFIG_NAME = 'importedConfig';
-
 type ModifyEntrypointParams = {
     modules: TestModule[];
     entrypointPath: string;
-    projectConfigPath?: string;
-    cliConfig: CliConfig;
+    config: Config;
 };
 
-export async function modifyEntrypoint({
-    modules,
-    entrypointPath,
-    projectConfigPath,
-    cliConfig,
-}: ModifyEntrypointParams): Promise<void> {
+export async function modifyEntrypoint({ modules, entrypointPath, config }: ModifyEntrypointParams): Promise<void> {
     debug('modifying entrypoint', entrypointPath);
 
     debug('adding imports for modules', modules);
@@ -41,15 +33,6 @@ export async function modifyEntrypoint({
             })),
         }),
     );
-
-    if (projectConfigPath) {
-        debug('adding import for project config', projectConfigPath);
-        imports.push(
-            formatImportExpression(getModuleRelativePath(entrypointPath, projectConfigPath), {
-                defaultImportIdentity: IMPORTED_CONFIG_NAME,
-            }),
-        );
-    }
 
     debug('entry imports', imports);
 
@@ -69,15 +52,7 @@ export async function modifyEntrypoint({
     const formattedContents = contents
         .replace('// <IMPORT_MARK>', formatLines(imports))
         .replace('// <TEST_SUBJECT_MARK>', formatLines(clientTestSubjects))
-        .replace(
-            '// <CONFIG_ARGS_MARK>',
-            formatLines(
-                [
-                    `${JSON.stringify(cliConfig)},`,
-                    projectConfigPath ? `${IMPORTED_CONFIG_NAME} as any,` : undefined,
-                ].filter((s): s is string => Boolean(s)),
-            ),
-        );
+        .replace('// <CONFIG_ARGS_MARK>', JSON.stringify(config));
 
     debug('writing modified contents');
     await fsPromises.writeFile(entrypointPath, formattedContents, { encoding: 'utf-8', mode: constants.O_TRUNC });

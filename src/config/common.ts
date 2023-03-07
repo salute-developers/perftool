@@ -1,5 +1,6 @@
 import { Configuration as WebpackConfig } from 'webpack';
 import { PuppeteerNodeLaunchOptions } from 'puppeteer';
+import merge from 'deepmerge';
 
 import { Task, MeasurerConfig } from '../client/measurement/types';
 import { ExportPickRule } from '../build/collect';
@@ -70,7 +71,7 @@ function withDefault<T>(value: T | undefined, defaultValue: T): T {
 
 export function getConfig(cliConfig: CliConfig = {}, projectConfig: ProjectConfig = {}): Config {
     debug('getting final config');
-    const mixedInputConfig = { ...cliConfig, ...projectConfig };
+    const mixedInputConfig = merge(projectConfig, cliConfig);
 
     const result = {
         taskConfiguration: withDefault(mixedInputConfig.taskConfiguration, {}),
