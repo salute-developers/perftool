@@ -6,7 +6,6 @@ import process from 'process';
 import fs from 'fs';
 
 import { buildDirectory, Config, distDirectory, getWebpackConfig, sourceDirectory } from '../config';
-import { CliConfig } from '../config/common';
 import { debug, error, info, warn } from '../utils/logger';
 
 import { TestModule } from './collect';
@@ -62,6 +61,9 @@ async function copyModules(target: string) {
 
         return fsPromises.cp(path.resolve(source, p), path.resolve(target, p), {
             recursive: true,
+            filter(src) {
+                return !/__spec__|webpack/.test(src);
+            },
         });
     });
 
@@ -71,15 +73,13 @@ async function copyModules(target: string) {
 
 type BuildClientParams = {
     config: Config;
-    projectConfigPath?: string;
-    cliConfig: CliConfig;
     testModules: TestModule[];
 };
 
 // TODO memfs unionfs
 const pathsToClean: string[] = [];
 
-export async function buildClient({ config, testModules, projectConfigPath, cliConfig }: BuildClientParams) {
+export async function buildClient({ config, testModules }: BuildClientParams) {
     info('Building client...');
 
     const entry = path.join(sourceDirectory, 'clientEntry.ts');
@@ -91,8 +91,7 @@ export async function buildClient({ config, testModules, projectConfigPath, cliC
     await modifyEntrypoint({
         modules: testModules,
         entrypointPath: entry,
-        projectConfigPath,
-        cliConfig,
+        config,
     });
 
     const webpackConfig = getWebpackConfig(entry, buildDirectory, config);

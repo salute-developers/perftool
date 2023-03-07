@@ -1,11 +1,10 @@
-#!/usr/bin/env -S node --experimental-specifier-resolution=node
+#!/usr/bin/env -S node --experimental-specifier-resolution=node --loader ts-node/esm
 import process from 'process';
 import fsPromises from 'fs/promises';
 import path from 'path';
-import { createCommand, createArgument, createOption, OptionValues } from 'commander';
+import { createCommand, createArgument, createOption } from 'commander';
 
 import { getConfig } from '../config';
-import { CliConfig } from '../config/common';
 import { debug, error, info, setLogLevel } from '../utils/logger';
 import { importConfig } from '../config/node';
 
@@ -15,19 +14,10 @@ const cli = createCommand('perftool-compare');
 
 cli.addArgument(createArgument('<current>', 'Fresh perftool generated report'))
     .addArgument(createArgument('<previous>', 'Older report to compare with')) // TODO rest, support url
-    .addOption(createOption('-F, --failOnSignificantChanges', 'Fail on significant negative changes').default(true))
+    .addOption(createOption('-F, --failOnSignificantChanges', 'Fail on significant negative changes'))
     .addOption(createOption('-l, --logLevel <level>', 'Log level').choices(['quiet', 'normal', 'verbose']))
     .addOption(createOption('-c, --configPath <path>', 'Config path'))
     .addOption(createOption('-o, --outputFilePath <path>', 'Output file path'));
-
-function getCliConfig(options: OptionValues): CliConfig {
-    return {
-        configPath: options.configPath,
-        failOnSignificantChanges: options.failOnSignificantChanges,
-        outputFilePath: options.outputFilePath,
-        logLevel: options.logLevel,
-    };
-}
 
 async function start() {
     await cli.parseAsync();
@@ -36,11 +26,10 @@ async function start() {
 
     setLogLevel(options.logLevel);
 
-    const cliConfig: CliConfig = getCliConfig(options || {});
-    debug('parsed cli config', cliConfig);
+    debug('cli config', options);
 
-    const importedConfig = await importConfig(cliConfig.configPath);
-    const config = getConfig(cliConfig, importedConfig?.value);
+    const importedConfig = await importConfig(options?.configPath);
+    const config = getConfig(options, importedConfig?.value);
 
     info('Comparing runs...');
     const outputPath = path.resolve(cli.opts().outputFilePath || './perftest/comparison.json');

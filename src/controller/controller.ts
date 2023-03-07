@@ -1,5 +1,4 @@
-import assert from 'assert';
-
+import assert from '../utils/assert';
 import { Config } from '../config';
 import { Task } from '../client/measurement/types';
 import { RunTaskResult } from '../client/measurement/runner';

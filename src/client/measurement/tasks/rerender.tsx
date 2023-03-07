@@ -1,6 +1,6 @@
 import React from 'react';
-import assert from 'assert';
 
+import assert from '../../../utils/assert';
 import { Task } from '../types';
 import { render as reactRender } from '../../../utils/react';
 import Deferred from '../../../utils/deferred';

@@ -1,5 +1,4 @@
-import assert from 'assert';
-
+import assert from '../utils/assert';
 import { ReportWithMeta } from '../reporter';
 import { JSONSerializable } from '../utils/types';
 import { Comparator, CompareResult, MetricResult } from '../statistics/types';

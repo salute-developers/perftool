@@ -1,4 +1,4 @@
-import assert from 'assert';
+import assert from '../utils/assert';
 
 import { Task } from './measurement/types';
 import { Subject } from './measurement/runner';
@@ -11,7 +11,7 @@ type ResolveTestsParams<T extends Task<any, any>[]> = {
     subjects: Subject[];
 };
 
-function getTests<T extends Task<any, any>[]>(
+export function getTests<T extends Task<any, any>[]>(
     rawTests: RawTest[],
     { tasks, subjects }: ResolveTestsParams<T>,
 ): Test<T[number]>[] {

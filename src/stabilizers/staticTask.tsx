@@ -1,5 +1,6 @@
 import React from 'react';
-import assert from 'assert';
+
+import assert from '../utils/assert';
 
 function Component() {
     return (
