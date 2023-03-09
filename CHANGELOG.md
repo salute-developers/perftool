@@ -1,3 +1,16 @@
+# v0.3.9 (Thu Mar 09 2023)
+
+#### 🐛 Bug Fix
+
+- feat: new config import, fix build, deep merge configs, misc package cleanup [#4](https://github.com/salute-developers/perftool/pull/4) ([@akhdrv](https://github.com/akhdrv))
+- test: add more unit tests, cr changes [#4](https://github.com/salute-developers/perftool/pull/4) ([@akhdrv](https://github.com/akhdrv))
+
+#### Authors: 1
+
+- Artem Khaydarov ([@akhdrv](https://github.com/akhdrv))
+
+---
+
 # v0.3.8 (Tue Feb 21 2023)
 
 
