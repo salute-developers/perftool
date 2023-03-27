@@ -15,7 +15,7 @@
     "types": "lib/index.d.ts",
     "type": "module",
     "engines": {
-        "node": "~16.15"
+        "node": "^18.12"
     },
     "bin": {
         "perftool": "lib/index.js",
