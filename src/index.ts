@@ -12,6 +12,7 @@ import Statistics from './statistics';
 import { generateReport, measureStartingPoint, report } from './reporter';
 import { CliConfig } from './config/common';
 import { debug, error, info, setLogLevel } from './utils/logger';
+import getCurrentVersion from './utils/version';
 
 const cli = createCommand('perftool');
 
@@ -30,6 +31,8 @@ function getCliConfig(include: string[], options: OptionValues): CliConfig {
 }
 
 async function start() {
+    info(`Perftool v.${await getCurrentVersion()}`);
+
     await cli.parseAsync();
     const options = cli.opts();
 
