@@ -66,9 +66,6 @@
         "react/sort-comp": "off",
         "react/no-array-index-key": "off",
         "react-hooks/exhaustive-deps": "warn",
-        "jsx-a11y/no-static-element-interactions": "off",
-        "jsx-a11y/click-events-have-key-events": "off",
-        "jsx-a11y/no-noninteractive-tabindex": "off",
         "import/prefer-default-export": "off",
         "import/order": [
             "error",
