@@ -1,3 +1,17 @@
+# v0.3.10 (Tue Apr 11 2023)
+
+#### 🐛 Bug Fix
+
+- feat: print version [#6](https://github.com/salute-developers/perftool/pull/6) ([@akhdrv](https://github.com/akhdrv))
+- ci: update workflows [#6](https://github.com/salute-developers/perftool/pull/6) ([@akhdrv](https://github.com/akhdrv))
+- build: update packages, widen node version range [#6](https://github.com/salute-developers/perftool/pull/6) ([@akhdrv](https://github.com/akhdrv))
+
+#### Authors: 1
+
+- Artem Khaydarov ([@akhdrv](https://github.com/akhdrv))
+
+---
+
 # v0.3.9 (Thu Mar 09 2023)
 
 #### 🐛 Bug Fix
