@@ -12,7 +12,4 @@ export default {
     extensionsToTreatAsEsm: ['.ts', '.tsx'],
     testEnvironment: 'jsdom',
     testMatch: ['**/__spec__/**/*.test.{j,t}s?(x)'],
-    moduleNameMapper: {
-        '^react(.*)$': '<rootDir>/node_modules/react$1',
-    },
 };
