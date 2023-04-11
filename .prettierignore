@@ -1,5 +1,6 @@
 node_modules
 package.json
-package-lock.json
 lib
-src/clientEntry.ts
+
+# Perftool template module
+packages/perftool/src/clientEntry.ts

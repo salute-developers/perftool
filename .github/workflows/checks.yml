@@ -21,27 +21,16 @@ jobs:
       NPM_REGISTRY_TOKEN: ${{ secrets.NPM_REGISTRY_TOKEN }}
     steps:
       - uses: actions/checkout@v3
-
-      - name: Prepare repository
-        run: git fetch --unshallow --tags
-
-      - name: Setup Node.js
-        uses: actions/setup-node@v3
+      - uses: pnpm/action-setup@v2
+      - uses: actions/setup-node@v3
         with:
           node-version-file: '.nvmrc'
-
-      - name: Cache node_modules
-        uses: actions/cache@v3
-        with:
-          path: node_modules
-          key: npm-deps-${{ hashFiles('package-lock.json') }}
-
+          cache: 'pnpm'
       - name: Setup packages
-        run: |
-          npm ci
+        run: pnpm install
 
       - name: Unit tests
-        run: npm run test
+        run: npx lerna run test
 
   lint:
     name: Linting
@@ -51,24 +40,13 @@ jobs:
       NPM_REGISTRY_TOKEN: ${{ secrets.NPM_REGISTRY_TOKEN }}
     steps:
       - uses: actions/checkout@v3
-
-      - name: Prepare repository
-        run: git fetch --unshallow --tags
-
-      - name: Setup Node.js
-        uses: actions/setup-node@v3
+      - uses: pnpm/action-setup@v2
+      - uses: actions/setup-node@v3
         with:
           node-version-file: '.nvmrc'
-
-      - name: Cache node modules
-        uses: actions/cache@v3
-        with:
-          path: node_modules
-          key: npm-deps-${{ hashFiles('package-lock.json') }}
-
+          cache: 'pnpm'
       - name: Setup packages
-        run: |
-          npm ci
+        run: pnpm install
 
       - name: Lint
-        run: npm run lint
+        run: pnpm run lint
