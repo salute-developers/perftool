@@ -1,90 +1,91 @@
 {
-    "name": "@salutejs/perftool",
-    "version": "0.3.10",
-    "author": "Salute Frontend Team <salute.developers@gmail.com>",
-    "description": "Performance measurement tool for frontend components",
-    "repository": {
-        "type": "git",
-        "url": "ssh://git@github.com:salute-developers/perftool.git"
-    },
-    "bugs": {
-        "url": "https://github.com/salute-developers/perftool/issues"
-    },
-    "homepage": "https://github.com/salute-developers/perftool#readme",
-    "main": "lib/index.js",
-    "types": "lib/index.d.ts",
-    "type": "module",
-    "engines": {
-        "node": ">=14"
-    },
-    "bin": {
-        "perftool": "lib/index.js",
-        "perftool-compare": "lib/compare/index.js"
-    },
-    "files": [
-        "lib",
-        "src",
-        "!**/__spec__/**/*.test.ts"
-    ],
-    "scripts": {
-        "prepare": "pnpm run build",
-        "prebuild": "pnpm run clean",
-        "build": "tsc",
-        "postbuild": "chmod +x lib/index.js lib/compare/index.js",
-        "clean": "rm -rf lib",
-        "test": "NODE_OPTIONS=--experimental-vm-modules jest test",
-        "test:coverage": "NODE_OPTIONS=--experimental-vm-modules jest test --coverage",
-        "test:coverage:serve": "npx http-server ./coverage/lcov-report"
-    },
-    "peerDependencies": {
-        "react": ">=16.8.0",
-        "react-dom": ">=16.8.0"
-    },
-    "dependencies": {
-        "@babel/preset-env": "7.21.4",
-        "@babel/preset-react": "7.18.6",
-        "@babel/preset-typescript": "7.21.4",
-        "babel-loader": "9.1.2",
-        "chalk": "5.2.0",
-        "commander": "9.5.0",
-        "deepmerge": "4.3.1",
-        "express": "4.18.2",
-        "fast-glob": "3.2.12",
-        "html-webpack-plugin": "5.5.0",
-        "jstat": "1.9.6",
-        "loglevel": "1.8.1",
-        "loglevel-plugin-prefix": "0.8.4",
-        "morgan": "1.10.0",
-        "nanoevents": "7.0.1",
-        "puppeteer": "19.8.5",
-        "ts-node": "10.9.1",
-        "typescript": "5.0.4",
-        "webpack": "5.78.0"
-    },
-    "devDependencies": {
-        "@jest/globals": "^29.5.0",
-        "@types/express": "4.17.17",
-        "@types/jest": "29.5.0",
-        "@types/morgan": "1.9.4",
-        "@types/node": "18.15.11",
-        "@types/react": "18.0.34",
-        "@types/react-dom": "18.0.11",
-        "jest": "29.5.0",
-        "jest-environment-jsdom": "29.5.0",
-        "react": "18.2.0",
-        "react-dom": "18.2.0",
-        "ts-jest": "29.1.0"
-    },
-    "contributors": [
-        "Artem Khaidarov (https://github.com/akhdrv)"
-    ],
-    "publishConfig": {
-        "access": "public"
-    },
-    "keywords": [
-        "performance",
-        "testing",
-        "react",
-        "components"
-    ]
+  "name": "@salutejs/perftool",
+  "version": "0.3.10",
+  "author": "Salute Frontend Team <salute.developers@gmail.com>",
+  "description": "Performance measurement tool for frontend components",
+  "repository": {
+    "type": "git",
+    "url": "git+ssh://git@github.com/salute-developers/perftool.git",
+    "directory": "packages/perftool"
+  },
+  "bugs": {
+    "url": "https://github.com/salute-developers/perftool/issues"
+  },
+  "homepage": "https://github.com/salute-developers/perftool#readme",
+  "main": "lib/index.js",
+  "types": "lib/index.d.ts",
+  "type": "module",
+  "engines": {
+    "node": ">=14"
+  },
+  "bin": {
+    "perftool": "lib/index.js",
+    "perftool-compare": "lib/compare/index.js"
+  },
+  "files": [
+    "lib",
+    "src",
+    "!**/__spec__/**/*.test.ts"
+  ],
+  "scripts": {
+    "prepare": "npm run build",
+    "prebuild": "npm run clean",
+    "build": "tsc",
+    "postbuild": "chmod +x lib/index.js lib/compare/index.js",
+    "clean": "rm -rf lib",
+    "test": "NODE_OPTIONS=--experimental-vm-modules jest test",
+    "test:coverage": "NODE_OPTIONS=--experimental-vm-modules jest test --coverage",
+    "test:coverage:serve": "npx http-server ./coverage/lcov-report"
+  },
+  "peerDependencies": {
+    "react": ">=16.8.0",
+    "react-dom": ">=16.8.0"
+  },
+  "dependencies": {
+    "@babel/preset-env": "7.21.4",
+    "@babel/preset-react": "7.18.6",
+    "@babel/preset-typescript": "7.21.4",
+    "babel-loader": "9.1.2",
+    "chalk": "5.2.0",
+    "commander": "9.5.0",
+    "deepmerge": "4.3.1",
+    "express": "4.18.2",
+    "fast-glob": "3.2.12",
+    "html-webpack-plugin": "5.5.0",
+    "jstat": "1.9.6",
+    "loglevel": "1.8.1",
+    "loglevel-plugin-prefix": "0.8.4",
+    "morgan": "1.10.0",
+    "nanoevents": "7.0.1",
+    "puppeteer": "19.8.5",
+    "ts-node": "10.9.1",
+    "typescript": "5.0.4",
+    "webpack": "5.78.0"
+  },
+  "devDependencies": {
+    "@jest/globals": "^29.5.0",
+    "@types/express": "4.17.17",
+    "@types/jest": "29.5.0",
+    "@types/morgan": "1.9.4",
+    "@types/node": "18.15.11",
+    "@types/react": "18.0.34",
+    "@types/react-dom": "18.0.11",
+    "jest": "29.5.0",
+    "jest-environment-jsdom": "29.5.0",
+    "react": "18.2.0",
+    "react-dom": "18.2.0",
+    "ts-jest": "29.1.0"
+  },
+  "contributors": [
+    "Artem Khaidarov (https://github.com/akhdrv)"
+  ],
+  "publishConfig": {
+    "access": "public"
+  },
+  "keywords": [
+    "performance",
+    "testing",
+    "react",
+    "components"
+  ]
 }
