@@ -55,12 +55,10 @@
       "conventional-commits"
     ]
   },
-  "packageManager": "npm@9.5.0",
-  "workspaces": [
-    "packages/*"
-  ],
+  "packageManager": "pnpm@8.2.0",
   "engines": {
-    "npm": "^9.5",
-    "node": "^18.15"
+    "npm": "^8",
+    "node": "^18.15",
+    "pnpm": "^8"
   }
 }

@@ -28,23 +28,24 @@ jobs:
         # https://github.com/intuit/auto/issues/1030
         run: git config --local --unset http.https://github.com/.extraheader
 
+      - uses: pnpm/action-setup@v2
       - uses: actions/setup-node@v3
         with:
           node-version-file: '.nvmrc'
-          cache: 'npm'
+          cache: 'pnpm'
       - name: Setup packages
-        run: npm ci
+        run: pnpm install
 
       - name: Release Info
         run: npm whoami && npx auto info || echo 'auto info returned 1'
 
       - name: Create Release
-        run: npm run release
+        run: pnpm run release
 
       - name: Update package-lock's
         if: github.event_name != 'pull_request'
         run: |
-          npm i --workspaces --package-lock-only
+          pnpm i --lockfile-only
 
       - name: Extract branch name
         if: github.event_name != 'pull_request'
