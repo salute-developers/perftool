@@ -5,8 +5,8 @@ import { debug, error, info } from '../utils/logger';
 
 import { ProjectConfig } from './common';
 
-const defaultJsConfigPath = path.resolve('./perftool.config.js');
-const defaultTsConfigPath = path.resolve('./perftool.config.ts');
+const defaultJsConfigPath = path.resolve('./perftool.config.mjs');
+const defaultTsConfigPath = path.resolve('./perftool.config.mts');
 
 type ImportedConfig = {
     path: string;
@@ -40,9 +40,7 @@ export async function importConfig(cliConfigPath?: string): Promise<ImportedConf
 
     info('Using project config', configPath);
 
-    const {
-        default: { default: value }, // some ts-node feature
-    } = await import(configPath);
+    const { default: value } = await import(configPath);
 
     debug('import succeeded, project config:', value);
 

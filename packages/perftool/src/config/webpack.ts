@@ -1,9 +1,12 @@
 import HtmlWebpackPlugin from 'html-webpack-plugin';
 import webpack, { Configuration as WebpackConfig } from 'webpack';
+import { createRequire } from 'node:module';
 
 import { debug } from '../utils/logger';
 
 import { Config } from './common';
+
+const require = createRequire(import.meta.url);
 
 const defaultConfig: WebpackConfig = {
     mode: 'production',
@@ -12,13 +15,21 @@ const defaultConfig: WebpackConfig = {
         extensions: ['.ts', '.tsx', '.js', '.jsx', '.mjs'],
         modules: ['node_modules', 'node_modules/@salutejs/perftool/node_modules'],
     },
+    experiments: {
+        topLevelAwait: true,
+    },
+    performance: {
+        hints: false,
+        maxAssetSize: 1024 * 1024,
+        maxEntrypointSize: 1024 * 1024,
+    },
     output: {
         filename: 'bundle.[chunkhash].js',
     },
     module: {
         rules: [
             {
-                loader: 'babel-loader',
+                loader: require.resolve('babel-loader'),
                 test: /\.(js|mjs|jsx|ts|tsx)$/,
                 exclude: /node_modules/,
                 options: {
