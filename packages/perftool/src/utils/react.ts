@@ -9,7 +9,7 @@ export function isReact18AndNewer() {
 // Import (React 18 specific) react-dom/client conditionally to avoid build-time errors when using older versions
 let ReactDOMClient: typeof ReactDOMClientType = {} as any;
 if (isReact18AndNewer() && process.env.PERFTOOL_CLIENT_RUNTIME) {
-    ReactDOMClient = (await import('react-dom/client')).default;
+    ReactDOMClient = await import('react-dom/client');
 }
 
 export async function render(element: React.ReactElement, container: HTMLElement): Promise<void> {
