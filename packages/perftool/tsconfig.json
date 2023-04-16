@@ -6,7 +6,7 @@
         "module": "esnext",
         "lib": ["dom", "dom.iterable", "ES2021"],
         "jsx": "react",
-        "declaration": true,
+        "declaration": false,
         "declarationMap": false,
         "sourceMap": false,
         "importHelpers": false,
@@ -37,8 +37,10 @@
 
         /* Advanced Options */
         "skipLibCheck": true,
-        "forceConsistentCasingInFileNames": true,
-        "outDir": "./lib",
-        "rootDir": "./src"
+        "forceConsistentCasingInFileNames": true
+    },
+    "ts-node": {
+        "swc": true,
+        "module": "esnext"
     }
 }

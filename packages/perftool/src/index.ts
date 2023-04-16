@@ -1,4 +1,3 @@
-#!/usr/bin/env -S node --experimental-specifier-resolution=node --loader ts-node/esm
 import process from 'process';
 import { createArgument, createCommand, createOption, OptionValues } from 'commander';
 
