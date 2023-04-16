@@ -1,0 +1,30 @@
+{
+    "name": "perftool-main-suite",
+    "version": "0.0.1",
+    "dependencies": {
+        "react": "18.2.0",
+        "react-dom": "18.2.0",
+        "styled-components": "5.3.0"
+    },
+    "devDependencies": {
+        "@salutejs/perftool": "workspace:*",
+        "@types/jest": "29.5.0",
+        "@types/node": "18.15.11",
+        "@types/react": "18.0.35",
+        "@types/styled-components": "5.1.26",
+        "ajv": "8.12.0",
+        "jest": "29.5.0",
+        "ts-jest": "29.1.0",
+        "typescript": "5.0.4",
+        "webpack": "5.79.0"
+    },
+    "scripts": {
+        "integration:prepare": "./start.sh",
+        "integration:check": "NODE_OPTIONS=--experimental-vm-modules jest test",
+        "integration:all": "npm run integration:unchanged && npm run integration:degradation",
+        "integration:degradation": "perftool -o test-result/old.json --logLevel=verbose && SLOW=1 perftool -o test-result/new.json --logLevel=verbose && npm run integration:compare -o test-result/degradation.json",
+        "integration:unchanged": "perftool -o test-result/old.json --logLevel=verbose && perftool -o test-result/new.json --logLevel=verbose && npm run integration:compare -o test-result/unchanged.json",
+        "integration:compare": "perftool-compare test-result/new.json test-result/old.json --logLevel=verbose"
+    },
+    "private": true
+}
