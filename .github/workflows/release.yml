@@ -45,7 +45,7 @@ jobs:
       - name: Update package-lock's
         if: github.event_name != 'pull_request'
         run: |
-          pnpm i --lockfile-only
+          pnpm install --lockfile-only
 
       - name: Extract branch name
         if: github.event_name != 'pull_request'
