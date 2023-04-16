@@ -50,3 +50,43 @@ jobs:
 
       - name: Lint
         run: pnpm run lint
+
+      - name: Type Check
+        run: npx lerna run typecheck
+
+  integration:
+    strategy:
+      matrix:
+        node: [ 14, 16, 18 ]
+        react: [ 16, 17, 18 ]
+    name: Integration testing (Node ${{ matrix.node }}, React ${{ matrix.react }})
+    runs-on: ubuntu-latest
+    env:
+      GITHUB_TOKEN: ${{ secrets.GH_TOKEN }}
+      NPM_REGISTRY_TOKEN: ${{ secrets.NPM_REGISTRY_TOKEN }}
+    steps:
+      - uses: actions/checkout@v3
+      - uses: pnpm/action-setup@v2
+      - uses: actions/setup-node@v3
+        with:
+          node-version-file: '.nvmrc'
+          cache: 'pnpm'
+      - name: Setup packages
+        run: pnpm install
+
+      - name: Prepare
+        env:
+          REACT_VERSION: ${{ matrix.react }}
+        run: |
+          cd spec/main-suite
+          npm run integration:prepare
+
+      - uses: actions/setup-node@v3
+        with:
+          node-version: ${{ matrix.node }}
+
+      - name: Run integration test
+        run: |
+          cd spec/main-suite
+          npm run integration:all
+          npm run integration:check
