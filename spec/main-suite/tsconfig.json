@@ -1,0 +1,22 @@
+{
+    "compilerOptions": {
+        "target": "esnext",
+        "module": "CommonJS",
+        "lib": ["dom", "dom.iterable", "esnext"],
+        "jsx": "react",
+        "importHelpers": false,
+
+        "strict": true,
+        "isolatedModules": true,
+
+        "moduleResolution": "node",
+        "esModuleInterop": true,
+        "resolveJsonModule": true,
+
+        "skipLibCheck": true,
+        "outDir": "./lib",
+        "rootDir": "."
+    },
+    "include": ["."],
+    "exclude": []
+}
