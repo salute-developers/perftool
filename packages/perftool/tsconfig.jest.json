@@ -1,7 +1,7 @@
 {
     "extends": "./tsconfig.json",
     "types": "jest",
-    "include": ["src/**/__spec__/**/*.test.{j,t}s?(x)", "src/utils/window.d.ts"],
+    "include": ["src/**/__spec__/**/*.test.{j,t}s?(x)", "src/typings/window.d.ts"],
     "exclude": [],
     "compilerOptions": {
         "rootDir": ".",

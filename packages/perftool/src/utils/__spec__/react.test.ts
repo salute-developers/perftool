@@ -55,13 +55,10 @@ describe('utils/render', () => {
         let createRootMock = {} as jest.Mock;
         let rootRenderMock = {} as jest.Mock;
         jest.unstable_mockModule('react', () => ({ version: '18.2.0' }));
-        process.env.PERFTOOL_CLIENT_RUNTIME = '1';
-
-        const modifiedRequire = () => undefined;
-        modifiedRequire.context = jest.fn(() => () => ({
+        jest.unstable_mockModule('react-dom/client', () => ({
             createRoot: (createRootMock = jest.fn(() => ({ render: (rootRenderMock = jest.fn()) }))),
         }));
-        global.require = modifiedRequire as any;
+        process.env.PERFTOOL_CLIENT_RUNTIME = '1';
 
         const { render } = await import('../react');
         const fakeElement = {} as React.ReactElement;
@@ -105,13 +102,10 @@ describe('utils/hydrate', () => {
     it('should call ReactDOMClient.hydrateRoot if react version is 18 and higher', async () => {
         let hydrateRootMock = {} as jest.Mock;
         jest.unstable_mockModule('react', () => ({ version: '18.2.0' }));
-        process.env.PERFTOOL_CLIENT_RUNTIME = '1';
-
-        const modifiedRequire = () => undefined;
-        modifiedRequire.context = jest.fn(() => () => ({
+        jest.unstable_mockModule('react-dom/client', () => ({
             hydrateRoot: (hydrateRootMock = jest.fn()),
         }));
-        global.require = modifiedRequire as any;
+        process.env.PERFTOOL_CLIENT_RUNTIME = '1';
 
         const { hydrate } = await import('../react');
         const fakeElement = {} as React.ReactElement;
