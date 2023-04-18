@@ -1,4 +1,4 @@
-import puppeteer, { Browser } from 'puppeteer';
+import puppeteer, { Browser, Page } from 'puppeteer';
 
 import assert from '../utils/assert';
 import { Config } from '../config';
@@ -58,8 +58,14 @@ export default class Executor<T extends Task<any, any>[]> implements IExecutor<T
     async execute(tests: Test[]): Promise<RunTaskResult<T[number]>[] | Error> {
         debug('[executor]', 'running tests', tests);
         assert(this.workable);
+        let page: Page;
 
-        const page = await this.browserInstance.newPage();
+        try {
+            page = await this.browserInstance.newPage();
+        } catch (e) {
+            debug('[executor]', 'Mystery puppeteer error, retrying', e);
+            page = await this.browserInstance.newPage();
+        }
 
         const results = new Deferred<RunTaskResult<T[number]>[]>();
 
