@@ -1,3 +1,22 @@
+# v0.5.0 (Wed Apr 19 2023)
+
+#### 🚀 Enhancement
+
+- feat(perftool): add bootstrap scripts, use ts-node, fix compatibility [#9](https://github.com/salute-developers/perftool/pull/9) ([@akhdrv](https://github.com/akhdrv))
+
+#### 🐛 Bug Fix
+
+- fix(perftool): retry on strange puppeteer error [#9](https://github.com/salute-developers/perftool/pull/9) ([@akhdrv](https://github.com/akhdrv))
+- build(perftool): update puppeteer [#9](https://github.com/salute-developers/perftool/pull/9) ([@akhdrv](https://github.com/akhdrv))
+- test: fix integration [#9](https://github.com/salute-developers/perftool/pull/9) ([@akhdrv](https://github.com/akhdrv))
+- test(perftool): fix unit tests [#9](https://github.com/salute-developers/perftool/pull/9) ([@akhdrv](https://github.com/akhdrv))
+
+#### Authors: 1
+
+- Artem Khaydarov ([@akhdrv](https://github.com/akhdrv))
+
+---
+
 # v0.4.0 (Wed Apr 19 2023)
 
 #### 🚀 Enhancement
