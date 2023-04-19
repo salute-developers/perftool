@@ -10,7 +10,7 @@ type CreatePerfToolClientParams<T extends Task<any, any>[]> = {
     config: Config;
 };
 
-// TODO debug log
+// TODO debug logging
 export async function createPerfToolClient<T extends Task<any, any>[]>({
     subjects,
     tasks,
