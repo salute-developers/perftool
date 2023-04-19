@@ -22,6 +22,7 @@
         "integration:prepare": "./start.sh",
         "integration:check": "NODE_OPTIONS=--experimental-vm-modules jest test",
         "integration:all": "pnpm run integration:unchanged && pnpm run integration:degradation",
+        "integration:npm": "perftool -o test-result/old.json --logLevel=verbose && SLOW=1 perftool -o test-result/new.json --logLevel=verbose && npm run integration:compare",
         "integration:degradation": "perftool -o test-result/old.json --logLevel=verbose && SLOW=1 perftool -o test-result/new.json --logLevel=verbose && pnpm run integration:compare -o test-result/degradation.json",
         "integration:unchanged": "perftool -o test-result/old.json --logLevel=verbose && perftool -o test-result/new.json --logLevel=verbose && pnpm run integration:compare -o test-result/unchanged.json",
         "integration:compare": "perftool-compare test-result/new.json test-result/old.json --logLevel=verbose"
