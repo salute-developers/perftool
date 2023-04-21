@@ -41,3 +41,66 @@ jobs:
           npm run integration:prepare
           npm run integration:all
           npm run integration:check
+
+  npm:
+    name: Project using NPM
+    runs-on: ubuntu-latest
+    env:
+      GITHUB_TOKEN: ${{ secrets.GH_TOKEN }}
+      NPM_REGISTRY_TOKEN: ${{ secrets.NPM_REGISTRY_TOKEN }}
+    steps:
+      - uses: actions/checkout@v3
+      - uses: pnpm/action-setup@v2
+      - uses: actions/setup-node@v3
+        with:
+          node-version-file: '.nvmrc'
+          cache: 'pnpm'
+      - name: Setup packages
+        run: pnpm install
+
+      - name: Prepare
+        run: |
+          cd spec/main-suite
+          npm run integration:prepare
+
+      - name: Install via NPM
+        run: |
+          cd spec/main-suite
+          rm -r node_modules
+          npm install
+
+      - name: Run perftool
+        run: |
+          cd spec/main-suite
+          npm run integration:npm
+
+  bad_ts-node:
+    name: Project with different TS-node version
+    runs-on: ubuntu-latest
+    env:
+      GITHUB_TOKEN: ${{ secrets.GH_TOKEN }}
+      NPM_REGISTRY_TOKEN: ${{ secrets.NPM_REGISTRY_TOKEN }}
+    steps:
+      - uses: actions/checkout@v3
+      - uses: pnpm/action-setup@v2
+      - uses: actions/setup-node@v3
+        with:
+          node-version-file: '.nvmrc'
+          cache: 'pnpm'
+      - name: Setup packages
+        run: pnpm install
+
+      - name: Prepare
+        run: |
+          cd spec/main-suite
+          pnpm run integration:prepare
+
+      - name: Install bad ts-node version
+        run: |
+          cd spec/main-suite
+          pnpm add ts-node@9.1.1
+
+      - name: Run perftool
+        run: |
+          cd spec/main-suite
+          pnpm run integration:unchanged
