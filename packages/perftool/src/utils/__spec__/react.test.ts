@@ -1,8 +1,6 @@
 import { jest } from '@jest/globals';
 import type React from 'react';
 
-const originalRequire = global.require;
-
 describe('utils/react/isReact18AndNewer', () => {
     afterEach(() => {
         jest.restoreAllMocks();
@@ -25,11 +23,14 @@ describe('utils/react/isReact18AndNewer', () => {
 });
 
 describe('utils/render', () => {
+    beforeEach(() => {
+        process.env.PERFTOOL_CLIENT_RUNTIME = '1';
+    });
+
     afterEach(() => {
         jest.restoreAllMocks();
         jest.resetModules();
         process.env.PERFTOOL_CLIENT_RUNTIME = undefined;
-        global.require = originalRequire;
     });
 
     it('should call ReactDOM.render if react version is under 18', async () => {
@@ -38,7 +39,7 @@ describe('utils/render', () => {
 
         jest.unstable_mockModule('react', () => ({ version: '17.3.0' }));
         jest.unstable_mockModule('react-dom', () => ({
-            default: { render: (renderMock = jest.fn((_, __, resolve: any) => (res = resolve)())) },
+            render: (renderMock = jest.fn((_, __, resolve: any) => (res = resolve)())),
         }));
 
         const { render } = await import('../react');
@@ -58,7 +59,6 @@ describe('utils/render', () => {
         jest.unstable_mockModule('react-dom/client', () => ({
             createRoot: (createRootMock = jest.fn(() => ({ render: (rootRenderMock = jest.fn()) }))),
         }));
-        process.env.PERFTOOL_CLIENT_RUNTIME = '1';
 
         const { render } = await import('../react');
         const fakeElement = {} as React.ReactElement;
@@ -74,11 +74,14 @@ describe('utils/render', () => {
 });
 
 describe('utils/hydrate', () => {
+    beforeEach(() => {
+        process.env.PERFTOOL_CLIENT_RUNTIME = '1';
+    });
+
     afterEach(() => {
         jest.restoreAllMocks();
         jest.resetModules();
         process.env.PERFTOOL_CLIENT_RUNTIME = undefined;
-        global.require = originalRequire;
     });
 
     it('should call ReactDOM.hydrate if react version is under 18', async () => {
@@ -86,7 +89,7 @@ describe('utils/hydrate', () => {
         let res = () => undefined;
         jest.unstable_mockModule('react', () => ({ version: '17.3.0' }));
         jest.unstable_mockModule('react-dom', () => ({
-            default: { hydrate: (hydrateMock = jest.fn((_, __, resolve: any) => (res = resolve)())) },
+            hydrate: (hydrateMock = jest.fn((_, __, resolve: any) => (res = resolve)())),
         }));
 
         const { hydrate } = await import('../react');
@@ -105,7 +108,6 @@ describe('utils/hydrate', () => {
         jest.unstable_mockModule('react-dom/client', () => ({
             hydrateRoot: (hydrateRootMock = jest.fn()),
         }));
-        process.env.PERFTOOL_CLIENT_RUNTIME = '1';
 
         const { hydrate } = await import('../react');
         const fakeElement = {} as React.ReactElement;
