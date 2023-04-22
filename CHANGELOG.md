@@ -1,3 +1,23 @@
+# (Sat Apr 22 2023)
+
+#### 🚀 Enhancement
+
+- feat(main-suite): add npm suite [#11](https://github.com/salute-developers/perftool/pull/11) ([@akhdrv](https://github.com/akhdrv))
+- `@salutejs/perftool@0.6.0`
+  - fix(perftool): fix react 16,17 compatibility [#11](https://github.com/salute-developers/perftool/pull/11) ([@akhdrv](https://github.com/akhdrv))
+
+#### 🐛 Bug Fix
+
+- build: update pnpm version [#11](https://github.com/salute-developers/perftool/pull/11) ([@akhdrv](https://github.com/akhdrv))
+- test: add compatibility test for npm, add bad ts-node in project test [#11](https://github.com/salute-developers/perftool/pull/11) ([@akhdrv](https://github.com/akhdrv))
+- ci: separate integration tests [#11](https://github.com/salute-developers/perftool/pull/11) ([@akhdrv](https://github.com/akhdrv))
+
+#### Authors: 1
+
+- Artem Khaydarov ([@akhdrv](https://github.com/akhdrv))
+
+---
+
 # (Wed Apr 19 2023)
 
 #### 🚀 Enhancement

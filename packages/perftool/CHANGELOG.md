@@ -1,3 +1,15 @@
+# v0.6.0 (Sat Apr 22 2023)
+
+#### 🚀 Enhancement
+
+- fix(perftool): fix react 16,17 compatibility [#11](https://github.com/salute-developers/perftool/pull/11) ([@akhdrv](https://github.com/akhdrv))
+
+#### Authors: 1
+
+- Artem Khaydarov ([@akhdrv](https://github.com/akhdrv))
+
+---
+
 # v0.5.0 (Wed Apr 19 2023)
 
 #### 🚀 Enhancement
