@@ -1,19 +1,26 @@
 import HtmlWebpackPlugin from 'html-webpack-plugin';
 import webpack, { Configuration as WebpackConfig } from 'webpack';
 import { createRequire } from 'node:module';
+import path from 'path';
+import { fileURLToPath } from 'url';
 
 import { debug } from '../utils/logger';
 
 import { Config } from './common';
 
 const require = createRequire(import.meta.url);
+const dirname = path.dirname(fileURLToPath(import.meta.url));
+const ownNodeModules = path.relative(process.cwd(), path.resolve(dirname, '../../node_modules'));
 
 const defaultConfig: WebpackConfig = {
     mode: 'production',
     externals: ['fsevents'],
     resolve: {
         extensions: ['.ts', '.tsx', '.js', '.jsx', '.mjs'],
-        modules: ['node_modules', 'node_modules/@salutejs/perftool/node_modules'],
+        modules: ['node_modules', ownNodeModules],
+        fallback: {
+            'react-dom/client': false,
+        },
     },
     experiments: {
         topLevelAwait: true,

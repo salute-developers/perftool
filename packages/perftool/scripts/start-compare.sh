@@ -1,6 +1,6 @@
 #!/usr/bin/env sh
 
-set -ex
+set -e
 
 case "$(uname -s)" in
   Darwin*)
@@ -21,7 +21,6 @@ OPTS="--loader $TS_NODE_ESM_PATH --experimental-specifier-resolution=node"
 
 if [ -z "$PERFTOOL_DEBUG" ]; then
   OPTS="$OPTS --no-warnings"
-  set -x
 fi
 
 NODE_OPTIONS=$OPTS TS_NODE_PROJECT="$PROJECT_DIR/tsconfig.json" TS_NODE_FILES=true node "$PROJECT_DIR/src/compare/index.ts" "$@"

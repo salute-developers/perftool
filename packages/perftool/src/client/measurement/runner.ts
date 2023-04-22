@@ -4,6 +4,7 @@ import type { Config } from '../../config/common';
 import { getTaskConfig } from '../../config/task';
 import BaseError from '../../utils/baseError';
 import { defer } from '../../utils/deferred';
+import { debug } from '../../utils/logger';
 
 import { Task } from './types';
 
@@ -43,18 +44,39 @@ export function runTask<T extends Task<any, any>>({
     const meta = { taskId: task.id, subjectId: subject.id };
     const config = getTaskConfig(task, globalConfig);
     const container = createContainer();
+    let isComplete = false;
+
+    debug('Running test\n', `TaskId: ${meta.taskId}\n`, `SubjectId: ${meta.subjectId}`);
+    debug('Task config: ', config);
 
     return Promise.race([
         task
             .run({ Subject: subject.Component, config, container })
-            .then((result) => ({
-                ...meta,
-                result,
-            }))
-            .catch((error: Error) => ({
-                ...meta,
-                error: error.toString(),
-            })),
-        defer(globalConfig.taskWaitTimeout, () => ({ ...meta, error: new TimeoutError().toString() })),
+            .then((result) => {
+                debug(`Test ${meta.taskId}, ${meta.subjectId} complete. Result:`, result);
+
+                return {
+                    ...meta,
+                    result,
+                };
+            })
+            .catch((error: Error) => {
+                debug(`Test ${meta.taskId}, ${meta.subjectId} failed. Error:`, error);
+
+                return {
+                    ...meta,
+                    error: error.toString(),
+                };
+            })
+            .finally(() => {
+                isComplete = true;
+            }),
+        defer(globalConfig.taskWaitTimeout, () => {
+            if (!isComplete) {
+                debug(`Test ${meta.taskId}, ${meta.subjectId} timed out`);
+            }
+
+            return { ...meta, error: new TimeoutError().toString() };
+        }),
     ]);
 }
