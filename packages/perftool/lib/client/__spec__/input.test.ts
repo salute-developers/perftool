@@ -27,9 +27,11 @@ describe('client/input/getTests', () => {
             { id: 'fakeSubjectId2' },
             { id: 'fakeSubjectId3' },
         ] as Subject[];
+        const state1 = { state1: '' };
+        const state2 = { state2: '' };
         const fakeRawTests = [
-            { subjectId: fakeSubjects[0].id, taskId: fakeTasks[0].id },
-            { subjectId: fakeSubjects[1].id, taskId: fakeTasks[2].id },
+            { subjectId: fakeSubjects[0].id, taskId: fakeTasks[0].id, state: state1 },
+            { subjectId: fakeSubjects[1].id, taskId: fakeTasks[2].id, state: state2 },
         ];
 
         const { getTests } = await import('../input');
@@ -37,8 +39,8 @@ describe('client/input/getTests', () => {
         const result = getTests(fakeRawTests, { tasks: fakeTasks, subjects: fakeSubjects });
 
         expect(result).toEqual([
-            { subject: fakeSubjects[0], task: fakeTasks[0] },
-            { subject: fakeSubjects[1], task: fakeTasks[2] },
+            { subject: fakeSubjects[0], task: fakeTasks[0], state: state1 },
+            { subject: fakeSubjects[1], task: fakeTasks[2], state: state2 },
         ]);
 
         expect(assertMock).toHaveBeenCalledTimes(fakeRawTests.length);
@@ -47,7 +49,7 @@ describe('client/input/getTests', () => {
     it('should throw if task not found', async () => {
         const fakeTasks = [{ id: 'fakeTaskId1' }] as Task<any, any>[];
         const fakeSubjects = [{ id: 'fakeSubjectId1' }] as Subject[];
-        const fakeRawTests = [{ subjectId: fakeSubjects[0].id, taskId: 'fakeTaskId2' }];
+        const fakeRawTests = [{ subjectId: fakeSubjects[0].id, taskId: 'fakeTaskId2', state: {} }];
 
         const { getTests } = await import('../input');
 
@@ -61,7 +63,7 @@ describe('client/input/getTests', () => {
     it('should throw if subject not found', async () => {
         const fakeTasks = [{ id: 'fakeTaskId1' }] as Task<any, any>[];
         const fakeSubjects = [{ id: 'fakeSubjectId1' }] as Subject[];
-        const fakeRawTests = [{ subjectId: 'fakeSubjectId2', taskId: fakeTasks[0].id }];
+        const fakeRawTests = [{ subjectId: 'fakeSubjectId2', taskId: fakeTasks[0].id, state: {} }];
 
         const { getTests } = await import('../input');
 
@@ -114,7 +116,7 @@ describe('client/input/resolveTests', () => {
     it('should reject if error while transforming tests', async () => {
         const tasks = [] as Task<any, any>[];
         const subjects = [] as Subject[];
-        const fakeRawTests = [{ subjectId: 'fakeSubjectId2', taskId: 'fakeTaskId' }];
+        const fakeRawTests = [{ subjectId: 'fakeSubjectId2', taskId: 'fakeTaskId', state: {} }];
 
         const { resolveTests } = await import('../input');
         const resultPromise = resolveTests({ tasks, subjects });

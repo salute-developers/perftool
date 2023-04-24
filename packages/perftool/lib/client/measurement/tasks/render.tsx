@@ -11,7 +11,19 @@ type RenderConfig = {
     renderWaitTimeout: number;
 };
 
-const render: Task<number, RenderConfig> = {
+type State = {
+    /**
+     * Iteratively decreasing wait interval, always more than maxResult.
+     * Tnext = (Tprev + maxResult) / 2
+     */
+    cumulativeWaitTimeout?: number;
+    /**
+     * Max render result for current subject
+     */
+    maxResult?: number;
+};
+
+const render: Task<number, RenderConfig, State> = {
     id: 'render',
     isIdempotent: false,
     aim: 'decrease',
@@ -20,9 +32,10 @@ const render: Task<number, RenderConfig> = {
     defaultConfig: {
         renderWaitTimeout: 1000,
     },
-    async run({ Subject, container, config }) {
+    async run({ Subject, container, config, state }) {
+        const waitTimeout = state.cumulativeWaitTimeout || config.renderWaitTimeout;
         const task = new Deferred<number>();
-        const debouncedFinish = debounce(task.resolve, config.renderWaitTimeout);
+        const debouncedFinish = debounce(task.resolve, waitTimeout);
         let startTime = 0;
 
         function measure(): void {
@@ -34,7 +47,12 @@ const render: Task<number, RenderConfig> = {
         // eslint-disable-next-line react/jsx-no-bind
         await reactRender(<MeasureLab Subject={Subject} onRender={measure} onMutation={measure} />, container);
 
-        return task.promise;
+        const result = await task.promise;
+
+        state.maxResult = Math.max(result, state.maxResult || 0);
+        state.cumulativeWaitTimeout = (state.maxResult + (state.cumulativeWaitTimeout || config.renderWaitTimeout)) / 2;
+
+        return result;
     },
 };
 

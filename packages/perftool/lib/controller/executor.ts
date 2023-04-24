@@ -4,8 +4,9 @@ import assert from '../utils/assert';
 import { Config } from '../config';
 import Deferred, { defer } from '../utils/deferred';
 import { RunTaskResult } from '../client/measurement/runner';
-import { Task } from '../client/measurement/types';
+import { Task, TaskState } from '../client/measurement/types';
 import { debug } from '../utils/logger';
+import { RawTest } from '../client/input';
 
 import { createInsertionScriptContent } from './clientScript';
 
@@ -15,7 +16,7 @@ export type IExecutor<T extends Task<any, any>[]> = {
     execute(tests: Test[]): Promise<RunTaskResult<T[number]>[] | Error>;
 };
 
-export default class Executor<T extends Task<any, any>[]> implements IExecutor<T> {
+export default class Executor<T extends Task<any, any, any>[]> implements IExecutor<T> {
     private readonly config: Config;
 
     private readonly port: number;
@@ -23,6 +24,31 @@ export default class Executor<T extends Task<any, any>[]> implements IExecutor<T
     private readonly browserInstance: Browser;
 
     private workable = true;
+
+    private readonly stateMap: Map<string, TaskState<T[number]>> = new Map();
+
+    private decorateWithState = (test: Test): RawTest<T[number]> => {
+        const key = `${test.taskId}_${test.subjectId}`;
+
+        if (!this.stateMap.has(key)) {
+            this.stateMap.set(key, {} as TaskState<T[number]>);
+        }
+
+        const state = this.stateMap.get(key)!;
+
+        return {
+            ...test,
+            state,
+        };
+    };
+
+    private setState = (result: RunTaskResult<T[number]>): void => {
+        const { taskId, subjectId, state } = result;
+        const key = `${taskId}_${subjectId}`;
+
+        this.stateMap.set(key, state!);
+        result.state = undefined;
+    };
 
     static async create<TT extends Task<any, any>[]>(config: Config, port: number): Promise<Executor<TT>> {
         debug('[executor]', 'launching browser...');
@@ -71,9 +97,11 @@ export default class Executor<T extends Task<any, any>[]> implements IExecutor<T
 
         await page.goto(`http://localhost:${this.port}/`);
         await page.exposeFunction('finish', (taskResults: RunTaskResult<T[number]>[]) => {
+            taskResults.forEach(this.setState);
+
             results.resolve(taskResults);
         });
-        await page.addScriptTag({ content: createInsertionScriptContent(tests) });
+        await page.addScriptTag({ content: createInsertionScriptContent(tests.map(this.decorateWithState)) });
 
         return Promise.race([
             results.promise,

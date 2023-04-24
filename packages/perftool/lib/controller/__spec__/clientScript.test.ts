@@ -1,8 +1,8 @@
 import { insertTests, createInsertionScriptContent } from '../clientScript';
 
 const tests = [
-    { subjectId: '1', taskId: '1' },
-    { subjectId: '3', taskId: 'fake' },
+    { subjectId: '1', taskId: '1', state: {} },
+    { subjectId: '3', taskId: 'fake', state: {} },
 ];
 
 describe('controller/insertTests', () => {

@@ -41,8 +41,8 @@ describe('controller/Executor', () => {
         let addScriptTagMock = {} as jest.Mock;
         let closeMock = {} as jest.Mock;
         let createInsertionScriptContentMock = {} as jest.Mock;
-        const result = {};
         const tests: Test[] = [{ subjectId: 'fakeId3', taskId: 'fakeTask3', type: 'dry' }];
+        const result = [{ ...tests[0], state: {} }];
         const insertionScriptContent = 'some script content';
         jest.unstable_mockModule('puppeteer', () => ({
             default: {
@@ -85,11 +85,19 @@ describe('controller/Executor', () => {
         expect(addScriptTagMock).toHaveBeenCalledWith({ content: insertionScriptContent });
 
         expect(createInsertionScriptContentMock).toHaveBeenCalledTimes(1);
-        expect(createInsertionScriptContentMock).toHaveBeenCalledWith(tests);
+        expect(createInsertionScriptContentMock).toHaveBeenCalledWith([{ ...tests[0], state: {} }]);
 
         expect(closeMock).toHaveBeenCalledTimes(1);
 
         expect(execResult).toEqual(result);
+
+        result[0].state = { changedState: true };
+
+        await executor.execute(tests);
+
+        expect(createInsertionScriptContentMock).toHaveBeenLastCalledWith([
+            { ...tests[0], state: { changedState: true } },
+        ]);
     });
 
     it('should return error on page timeout', async () => {

@@ -11,7 +11,7 @@ type CreatePerfToolClientParams<T extends Task<any, any>[]> = {
     config: Config;
 };
 
-export async function createPerfToolClient<T extends Task<any, any>[]>({
+export async function createPerfToolClient<T extends Task<any, any, any>[]>({
     subjects,
     tasks,
     config,
@@ -25,8 +25,8 @@ export async function createPerfToolClient<T extends Task<any, any>[]>({
     const resultPromises = [];
 
     debug(`Running ${tests.length} tests`);
-    for (const { task, subject } of tests) {
-        const resultPromise = runTask({ task, subject, config });
+    for (const { task, subject, state } of tests) {
+        const resultPromise = runTask<T[number]>({ task, subject, config, state });
 
         resultPromises.push(resultPromise);
     }

@@ -1,31 +1,35 @@
 import assert from '../utils/assert';
 
-import { Task } from './measurement/types';
+import { Task, TaskState } from './measurement/types';
 import { Subject } from './measurement/runner';
 
-type Test<T> = { subject: Subject; task: T };
-type RawTest = { subjectId: string; taskId: string };
+type Test<T extends Task<any, any, any>> = { subject: Subject; task: T; state: TaskState<T> };
+export type RawTest<T extends Task<any, any, any>> = {
+    subjectId: string;
+    taskId: string;
+    state: TaskState<T>;
+};
 
-type ResolveTestsParams<T extends Task<any, any>[]> = {
+type ResolveTestsParams<T extends Task<any, any, any>[]> = {
     tasks: [...T];
     subjects: Subject[];
 };
 
-export function getTests<T extends Task<any, any>[]>(
-    rawTests: RawTest[],
+export function getTests<T extends Task<any, any, any>[]>(
+    rawTests: RawTest<T[number]>[],
     { tasks, subjects }: ResolveTestsParams<T>,
 ): Test<T[number]>[] {
-    return rawTests.map(({ subjectId, taskId }) => {
+    return rawTests.map(({ subjectId, taskId, state }) => {
         const subject = subjects.find(({ id }) => subjectId === id);
         const task = tasks.find(({ id }) => taskId === id);
 
         assert(subject && task);
 
-        return { subject, task };
+        return { subject, task, state };
     });
 }
 
-export async function resolveTests<T extends Task<any, any>[]>(
+export async function resolveTests<T extends Task<any, any, any>[]>(
     params: ResolveTestsParams<T>,
 ): Promise<Test<T[number]>[]> {
     /**
@@ -37,7 +41,7 @@ export async function resolveTests<T extends Task<any, any>[]>(
 
     return new Promise((resolve, reject) => {
         window.tests = {
-            push: (...items: RawTest[]) => {
+            push: (...items) => {
                 try {
                     resolve(getTests(items, params));
                 } catch (err) {

@@ -8,7 +8,7 @@ export type MeasurerConfig = {
 
 export type TaskAim = 'increase' | 'decrease';
 
-export type RunParams<C extends MeasurerConfig | void> = {
+type RunParams<C extends MeasurerConfig | void, S extends object> = {
     /**
      * Component to test
      */
@@ -21,9 +21,16 @@ export type RunParams<C extends MeasurerConfig | void> = {
      * Task config
      */
     config: C;
+    /**
+     * Unique stored state for each (TaskId, SubjectId) pair. State is only changed by task itself.
+     */
+    state: S;
 };
 
-export type Task<T extends JSONSerializable, C extends MeasurerConfig | void> = {
+export type TaskState<T extends Task<any, any, any>> = T extends Task<any, any, infer S> ? S : never;
+
+// eslint-disable-next-line @typescript-eslint/ban-types
+export type Task<T extends JSONSerializable, C extends MeasurerConfig | void, S extends object = {}> = {
     /**
      * Internal id (for JSON reports)
      */
@@ -47,7 +54,7 @@ export type Task<T extends JSONSerializable, C extends MeasurerConfig | void> = 
     /**
      * Default config
      */
-    defaultConfig: C;
+    defaultConfig?: C;
     /**
      * Description (for UI reports)
      */
@@ -59,5 +66,5 @@ export type Task<T extends JSONSerializable, C extends MeasurerConfig | void> = 
     /**
      * Task itself (measurer function)
      */
-    run: (params: RunParams<C>) => Promise<T>;
+    run: (params: RunParams<C, S>) => Promise<T>;
 };

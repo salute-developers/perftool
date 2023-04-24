@@ -13,9 +13,29 @@ type RerenderConfig = {
     renderWaitTimeout: number;
 };
 
+type State = {
+    /**
+     * Iteratively decreasing wait interval for rerender, always more than maxResult.
+     * Tnext = (Tprev + maxResult) / 2
+     */
+    cumulativeWaitTimeout?: number;
+    /**
+     * Max rerender result for current subject
+     */
+    maxResult?: number;
+    /**
+     * Iteratively decreasing wait interval for first render, always more than maxRenderResult.
+     */
+    cumulativeRenderWaitTimeout?: number;
+    /**
+     * Max rerender result for current subject
+     */
+    maxRenderResult?: number;
+};
+
 function noop() {}
 
-const rerender: Task<number, RerenderConfig> = {
+const rerender: Task<number, RerenderConfig, State> = {
     id: 'rerender',
     isIdempotent: false,
     name: 'Rerender',
@@ -24,18 +44,21 @@ const rerender: Task<number, RerenderConfig> = {
     defaultConfig: {
         renderWaitTimeout: 1000,
     },
-    async run({ Subject, container, config }) {
+    async run({ Subject, container, config, state }) {
+        const renderWaitTimeout = state.cumulativeRenderWaitTimeout || config.renderWaitTimeout;
+        const waitTimeout = state.cumulativeWaitTimeout || config.renderWaitTimeout;
         const task = new Deferred<number>();
-        const renderFinish = new Deferred<void>();
-        const debouncedFinish = debounce(task.resolve, config.renderWaitTimeout);
-        const debouncedRenderFinish = debounce(renderFinish.resolve, config.renderWaitTimeout);
+        const renderFinish = new Deferred<number>();
+        const debouncedFinish = debounce(task.resolve, waitTimeout);
+        const debouncedRenderFinish = debounce(renderFinish.resolve, renderWaitTimeout);
         let startTime = 0;
         let forceRender = noop;
         let isRendered = false;
 
         function measure(): void {
             if (!isRendered) {
-                debouncedRenderFinish();
+                const result = performance.now() - startTime;
+                debouncedRenderFinish(result);
                 return;
             }
 
@@ -55,7 +78,7 @@ const rerender: Task<number, RerenderConfig> = {
             container,
         );
 
-        await renderFinish.promise;
+        const renderResult = await renderFinish.promise;
 
         await waitForIdle();
 
@@ -65,7 +88,15 @@ const rerender: Task<number, RerenderConfig> = {
         startTime = performance.now();
         forceRender();
 
-        return task.promise;
+        const result = await task.promise;
+
+        state.maxResult = Math.max(result, state.maxResult || 0);
+        state.cumulativeWaitTimeout = (state.maxResult + (state.cumulativeWaitTimeout || config.renderWaitTimeout)) / 2;
+        state.maxRenderResult = Math.max(renderResult, state.maxRenderResult || 0);
+        state.cumulativeRenderWaitTimeout =
+            (state.maxRenderResult + (state.cumulativeRenderWaitTimeout || config.renderWaitTimeout)) / 2;
+
+        return result;
     },
 };
 
