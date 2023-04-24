@@ -14,7 +14,6 @@ const ownNodeModules = path.relative(process.cwd(), path.resolve(dirname, '../..
 
 const defaultConfig: WebpackConfig = {
     mode: 'production',
-    externals: ['fsevents'],
     resolve: {
         extensions: ['.ts', '.tsx', '.js', '.jsx', '.mjs'],
         modules: ['node_modules', ownNodeModules],
@@ -46,13 +45,6 @@ const defaultConfig: WebpackConfig = {
                         '@babel/preset-typescript',
                     ],
                     plugins: [],
-                },
-            },
-            {
-                loader: 'url-loader',
-                test: /\.(jpg|jpeg|ico|webp|jp2|avif|png|gif|woff|eot|ttf|svg)$/,
-                options: {
-                    limit: 100000,
                 },
             },
         ],

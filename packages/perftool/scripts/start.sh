@@ -23,4 +23,4 @@ if [ -z "$PERFTOOL_DEBUG" ]; then
   OPTS="$OPTS --no-warnings"
 fi
 
-NODE_OPTIONS=$OPTS TS_NODE_PROJECT="$PROJECT_DIR/tsconfig.json" TS_NODE_FILES=true node "$PROJECT_DIR/src/index.ts" "$@"
+NODE_OPTIONS=$OPTS TS_NODE_PROJECT="$PROJECT_DIR/tsconfig.json" TS_NODE_FILES=true node "$PROJECT_DIR/lib/index.ts" "$@"

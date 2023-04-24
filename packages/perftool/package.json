@@ -12,20 +12,21 @@
         "url": "https://github.com/salute-developers/perftool/issues"
     },
     "homepage": "https://github.com/salute-developers/perftool#readme",
-    "main": "src/index.ts",
+    "main": "lib/index.ts",
+    "types": "lib/index.ts",
     "type": "module",
     "engines": {
-        "node": ">=14"
+        "node": ">=16"
     },
     "bin": {
         "perftool": "scripts/start.sh",
         "perftool-compare": "scripts/start-compare.sh"
     },
     "files": [
-        "src",
+        "lib",
         "tsconfig.json",
         "!**/__spec__/**",
-        "!src/**/*.d.ts"
+        "!lib/**/*.d.ts"
     ],
     "scripts": {
         "test": "NODE_OPTIONS=--experimental-vm-modules jest test",

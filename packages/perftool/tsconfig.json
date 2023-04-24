@@ -1,6 +1,5 @@
 {
-    "include": ["./src"],
-    "exclude": ["src/**/__spec__/**/*.test.ts"],
+    "include": ["./lib"],
     "compilerOptions": {
         "target": "ES2021",
         "module": "esnext",

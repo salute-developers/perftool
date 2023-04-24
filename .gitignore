@@ -17,7 +17,5 @@ npm-debug.log
 *.tsbuildinfo
 package-lock.json
 
-lib
-
 .cache
 coverage

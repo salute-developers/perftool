@@ -1,5 +1,5 @@
 export default {
-    roots: ['<rootDir>/src'],
+    roots: ['<rootDir>/lib'],
     transform: {
         '^.+\\.tsx?$': [
             'ts-jest',
