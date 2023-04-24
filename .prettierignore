@@ -1,6 +1,5 @@
 node_modules
 package.json
-lib
 
 # Perftool template module
-packages/perftool/src/clientEntry.ts
+packages/perftool/lib/clientEntry.ts

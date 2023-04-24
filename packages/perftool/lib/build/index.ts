@@ -42,7 +42,7 @@ function build(config: WebpackConfig) {
 }
 
 async function copyModules(target: string) {
-    const source = path.resolve(dirname, '../../src');
+    const source = path.resolve(dirname, '../../lib');
 
     debug('copying files from', source, 'to', target);
 

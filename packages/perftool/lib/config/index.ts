@@ -11,4 +11,4 @@ export const distDirectory = path.resolve('./perftoolTmpDist');
 
 export const buildDirectory = path.resolve(distDirectory, 'build');
 
-export const sourceDirectory = path.resolve(distDirectory, 'src');
+export const sourceDirectory = path.resolve(distDirectory, 'lib');
