@@ -10,8 +10,9 @@ pnpm pack
 mv *.tgz ../../spec/main-suite/perftool.tgz
 
 cd "$REPO_ROOT/spec/main-suite"
-pnpm add ./perftool.tgz
 
 if [ -n "$REACT_VERSION" ]; then
-  pnpm add "react@$REACT_VERSION" "react-dom@$REACT_VERSION"
+  pnpm add ./perftool.tgz "react@$REACT_VERSION" "react-dom@$REACT_VERSION"
+else
+  pnpm add ./perftool.tgz
 fi
