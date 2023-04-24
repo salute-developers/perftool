@@ -16,7 +16,7 @@ describe('client/createPerfToolClient', () => {
         let runTaskMock = {} as jest.Mock;
         let resolveTestsMock = {} as jest.Mock;
 
-        const fakeTest = { task: {}, subject: {} };
+        const fakeTest = { task: {}, subject: {}, state: {} };
         const fakeResult = {};
 
         jest.unstable_mockModule('../measurement/runner', () => ({
@@ -41,7 +41,12 @@ describe('client/createPerfToolClient', () => {
         expect(resolveTestsMock).toHaveBeenCalledWith({ tasks, subjects });
 
         expect(runTaskMock).toHaveBeenCalledTimes(1);
-        expect(runTaskMock).toHaveBeenCalledWith({ config, task: fakeTest.task, subject: fakeTest.subject });
+        expect(runTaskMock).toHaveBeenCalledWith({
+            config,
+            task: fakeTest.task,
+            subject: fakeTest.subject,
+            state: fakeTest.state,
+        });
 
         expect(window.finish).toHaveBeenCalledTimes(1);
         expect(window.finish).toHaveBeenCalledWith([fakeResult]);

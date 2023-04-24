@@ -6,7 +6,7 @@ import BaseError from '../../utils/baseError';
 import { defer } from '../../utils/deferred';
 import { debug } from '../../utils/logger';
 
-import { Task } from './types';
+import { Task, TaskState } from './types';
 
 class TimeoutError extends BaseError {}
 
@@ -15,18 +15,20 @@ export type Subject = {
     Component: ComponentType;
 };
 
-type RunTaskParams<T extends Task<any, any>> = {
+type RunTaskParams<T extends Task<any, any, any>> = {
     subject: Subject;
     task: T;
     config: Config;
+    state: TaskState<T>;
 };
 
-type SuccessResult<T extends Task<any, any>> = { result: PromiseFulfilledResult<ReturnType<T['run']>> };
+type SuccessResult<T extends Task<any, any, any>> = { result: PromiseFulfilledResult<ReturnType<T['run']>> };
 type ErrorResult = { error: string };
 
-export type RunTaskResult<T extends Task<any, any>> = {
+export type RunTaskResult<T extends Task<any, any, any>> = {
     taskId: string;
     subjectId: string;
+    state?: TaskState<T>;
 } & (SuccessResult<T> | ErrorResult);
 
 function createContainer(): HTMLElement {
@@ -36,8 +38,9 @@ function createContainer(): HTMLElement {
     return container;
 }
 
-export function runTask<T extends Task<any, any>>({
+export function runTask<T extends Task<any, any, any>>({
     task,
+    state,
     subject,
     config: globalConfig,
 }: RunTaskParams<T>): Promise<RunTaskResult<T>> {
@@ -51,12 +54,13 @@ export function runTask<T extends Task<any, any>>({
 
     return Promise.race([
         task
-            .run({ Subject: subject.Component, config, container })
+            .run({ Subject: subject.Component, config, container, state })
             .then((result) => {
                 debug(`Test ${meta.taskId}, ${meta.subjectId} complete. Result:`, result);
 
                 return {
                     ...meta,
+                    state,
                     result,
                 };
             })
@@ -65,6 +69,7 @@ export function runTask<T extends Task<any, any>>({
 
                 return {
                     ...meta,
+                    state,
                     error: error.toString(),
                 };
             })
@@ -76,7 +81,7 @@ export function runTask<T extends Task<any, any>>({
                 debug(`Test ${meta.taskId}, ${meta.subjectId} timed out`);
             }
 
-            return { ...meta, error: new TimeoutError().toString() };
+            return { ...meta, state, error: new TimeoutError().toString() };
         }),
     ]);
 }
