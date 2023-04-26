@@ -1,3 +1,19 @@
+# v0.7.0 (Wed Apr 26 2023)
+
+#### 🚀 Enhancement
+
+- feat(perftool): add task state, add/fix tests [#12](https://github.com/salute-developers/perftool/pull/12) ([@akhdrv](https://github.com/akhdrv))
+
+#### 🐛 Bug Fix
+
+- build(perftool): move src->lib, misc changes [#12](https://github.com/salute-developers/perftool/pull/12) ([@akhdrv](https://github.com/akhdrv))
+
+#### Authors: 1
+
+- Artem Khaydarov ([@akhdrv](https://github.com/akhdrv))
+
+---
+
 # v0.6.0 (Sat Apr 22 2023)
 
 #### 🚀 Enhancement

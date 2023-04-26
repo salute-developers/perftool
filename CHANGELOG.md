@@ -1,3 +1,22 @@
+# (Wed Apr 26 2023)
+
+#### 🚀 Enhancement
+
+- feat(main-suite): add perftest dir to gitignore, shorten preparation, fix perftool config [#12](https://github.com/salute-developers/perftool/pull/12) ([@akhdrv](https://github.com/akhdrv))
+- `@salutejs/perftool@0.7.0`
+  - feat(perftool): add task state, add/fix tests [#12](https://github.com/salute-developers/perftool/pull/12) ([@akhdrv](https://github.com/akhdrv))
+
+#### 🐛 Bug Fix
+
+- `@salutejs/perftool@0.7.0`
+  - build(perftool): move src->lib, misc changes [#12](https://github.com/salute-developers/perftool/pull/12) ([@akhdrv](https://github.com/akhdrv))
+
+#### Authors: 1
+
+- Artem Khaydarov ([@akhdrv](https://github.com/akhdrv))
+
+---
+
 # (Sat Apr 22 2023)
 
 #### 🚀 Enhancement
