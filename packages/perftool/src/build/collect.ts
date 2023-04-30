@@ -1,5 +1,7 @@
 import { readFile } from 'fs/promises';
 import fg from 'fast-glob';
+import { parse } from '@babel/parser';
+import * as _traverse from '@babel/traverse';
 
 import getSubjectId from '../utils/subjectId';
 import checkPath from '../utils/checkPath';
@@ -7,6 +9,7 @@ import { Config } from '../config';
 import { debug, info, warn } from '../utils/logger';
 
 export type ExportPickRule = 'named'; // | 'default' | 'all'
+const traverse = (_traverse.default as unknown as typeof _traverse).default;
 
 export type TestSubject = {
     id: string;
@@ -18,12 +21,46 @@ export type TestModule = {
     subjects: TestSubject[];
 };
 
+function getAst(content: string) {
+    const data = parse(content, {
+        sourceType: 'module',
+        plugins: [
+            'jsx',
+            'objectRestSpread',
+            'classProperties',
+            'optionalCatchBinding',
+            'asyncGenerators',
+            'decorators-legacy',
+            'flow',
+            'dynamicImport',
+            'estree',
+        ],
+    });
+
+    return data;
+}
+function getExportsName(ast: any) {
+    const exports: any[] = [];
+    traverse(ast, {
+        ExportNamedDeclaration(path: any) {
+            if (path.node.declaration) {
+                exports.push(path.node.declaration.id?.name || '');
+            } else {
+                path.node.specifiers.array.forEach((specifier: any) => {
+                    exports.push(specifier.exported.name);
+                });
+            }
+        },
+    });
+    return exports;
+}
+
 const PICK_RULE_METHODS: Record<ExportPickRule, (fileContents: string) => string[]> = {
     named(fileContents) {
-        const regex = /export\s+(?:const|var|let|function)\s+?([\w$_][\w\d$_]*)/g;
-        const matches = [...fileContents.matchAll(regex)];
-
-        return matches.map(([, name]) => name);
+        debug(fileContents);
+        const ast = getAst(fileContents);
+        const exportsName = getExportsName(ast);
+        return exportsName.map(([, name]) => name);
     },
 };
 

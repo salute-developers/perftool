@@ -17,9 +17,12 @@ const config: Config = {
     failOnSignificantChanges: false,
     stabilizers: ['staticTask'],
     absoluteError: 1,
+    // puppeteerOptions: {
+    //     headless: false,
+    // },
     modifyWebpackConfig(conf) {
         const babelLoaderOpts = conf.module?.rules?.find(
-            (rule) => typeof rule === 'object' && rule.loader === 'babel-loader',
+            (rule) => typeof rule === 'object' && rule.loader?.match(/babel-loader/),
         );
 
         if (typeof babelLoaderOpts === 'object' && typeof babelLoaderOpts?.options === 'object') {
