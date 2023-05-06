@@ -1,3 +1,16 @@
+# (Sat May 06 2023)
+
+#### 🐛 Bug Fix
+
+- `@salutejs/perftool@0.7.1`
+  - fix(perftool): --no-sandbox to run as root [#14](https://github.com/salute-developers/perftool/pull/14) ([@akhdrv](https://github.com/akhdrv))
+
+#### Authors: 1
+
+- Artem Khaydarov ([@akhdrv](https://github.com/akhdrv))
+
+---
+
 # (Wed Apr 26 2023)
 
 #### 🚀 Enhancement
