@@ -5,6 +5,7 @@ exports[`controller/Executor should create Executor instance with factory 1`] = 
   {
     "args": [
       "--js-flags="--maglev=false --max_opt=0"",
+      "--no-sandbox",
     ],
     "devtools": true,
     "headless": true,
