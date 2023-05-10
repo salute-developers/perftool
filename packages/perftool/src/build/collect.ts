@@ -60,7 +60,7 @@ const PICK_RULE_METHODS: Record<ExportPickRule, (fileContents: string) => string
         debug(fileContents);
         const ast = getAst(fileContents);
         const exportsName = getExportsName(ast);
-        return exportsName.map(([, name]) => name);
+        return exportsName;
     },
 };
 
@@ -88,7 +88,7 @@ async function getTestModule(path: string, exportPickRule: ExportPickRule): Prom
         return null;
     }
 
-    debug('found exports ', exports);
+    debug('found exports', exports);
 
     const subjects = exports.map((originalExportedName) => ({
         id: getSubjectId(path, originalExportedName),
@@ -108,6 +108,10 @@ export default async function collectTestSubjects(config: Config): Promise<TestM
     const paths = await fg(config.include, { ignore: config.exclude });
 
     debug('found modules: ', paths);
+    if (!paths.length) {
+        info('Component test will not run because no exports names were found');
+        return [];
+    }
     debug('parsing modules... ');
 
     const modulesPromise = Promise.all(paths.map((path) => getTestModule(path, config.exportPickRule)));
