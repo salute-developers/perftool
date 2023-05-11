@@ -19,7 +19,7 @@ const config: Config = {
     absoluteError: 1,
     modifyWebpackConfig(conf) {
         const babelLoaderOpts = conf.module?.rules?.find(
-            (rule) => typeof rule === 'object' && rule.loader === 'babel-loader',
+            (rule) => typeof rule === 'object' && rule.loader?.match(/babel-loader/),
         );
 
         if (typeof babelLoaderOpts === 'object' && typeof babelLoaderOpts?.options === 'object') {
