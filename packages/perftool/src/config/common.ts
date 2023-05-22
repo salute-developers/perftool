@@ -52,7 +52,9 @@ export type Config = {
     runWaitTimeout: number;
     dryRunTimes: number;
     modifyWebpackConfig: (defaultConfig: WebpackConfig) => WebpackConfig;
+    modifyTranspilerConfig: (defaultConfig: WebpackConfig) => WebpackConfig;
     exportPickRule: ExportPickRule;
+    transpiler: 'babel' | 'none';
 };
 
 export type ProjectConfig = Partial<Omit<Config, 'configPath' | 'logLevel'>>;
@@ -95,7 +97,9 @@ export function getConfig(cliConfig: CliConfig = {}, projectConfig: ProjectConfi
         runWaitTimeout: withDefault(mixedInputConfig.runWaitTimeout, 1000 * 60 * 2),
         dryRunTimes: withDefault(mixedInputConfig.taskWaitTimeout, 1),
         modifyWebpackConfig: withDefault(mixedInputConfig.modifyWebpackConfig, (c) => c),
+        modifyTranspilerConfig: withDefault(mixedInputConfig.modifyWebpackConfig, (c) => c),
         exportPickRule: withDefault(mixedInputConfig.exportPickRule, 'named'),
+        transpiler: withDefault(mixedInputConfig.transpiler, 'babel'),
     };
 
     debug('final config: ', result);

@@ -45,6 +45,12 @@ async function start() {
     const config = getConfig(cliConfig, importedConfig?.value);
 
     const testModules = await collectTestSubjects(config);
+
+    if (!testModules.length) {
+        info('Component test will not run because no exports names were found');
+        return;
+    }
+
     const tasks = getAllTasks(config);
 
     info(

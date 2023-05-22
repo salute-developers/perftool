@@ -6,6 +6,7 @@ import { fileURLToPath } from 'url';
 
 import { debug } from '../utils/logger';
 
+// import { getTranspilerConfig } from './transpiler';
 import { Config } from './common';
 
 const require = createRequire(import.meta.url);
@@ -36,19 +37,6 @@ const defaultConfig: WebpackConfig = {
     module: {
         rules: [
             {
-                loader: require.resolve('babel-loader'),
-                test: /\.(js|mjs|jsx|ts|tsx)$/,
-                exclude: /node_modules/,
-                options: {
-                    presets: [
-                        ['@babel/preset-env', { targets: { chrome: '90', esmodules: true } }],
-                        '@babel/preset-react',
-                        '@babel/preset-typescript',
-                    ],
-                    plugins: [],
-                },
-            },
-            {
                 loader: 'url-loader',
                 test: /\.(jpg|jpeg|ico|webp|jp2|avif|png|gif|woff|eot|ttf|svg)$/,
                 options: {
@@ -69,6 +57,24 @@ export function getWebpackConfig(entry: string, output: string, config: Config):
     debug('creating webpack config');
 
     const finalConfig = config.modifyWebpackConfig(defaultConfig);
+
+    if (config.transpiler !== 'none') {
+        // const transpiler = getTranspilerConfig(config); // пока что не похватывает настройки для babel
+        finalConfig.module?.rules?.push({
+            loader: require.resolve('babel-loader'),
+            test: /\.(js|mjs|jsx|ts|tsx)$/,
+            exclude: /node_modules/,
+            options: {
+                sourceType: 'module',
+                presets: [
+                    ['@babel/preset-env', { targets: { chrome: '90', esmodules: true } }],
+                    '@babel/preset-react',
+                    '@babel/preset-typescript',
+                ],
+                plugins: [],
+            },
+        });
+    }
 
     finalConfig.entry = entry;
     finalConfig.output!.path = output;
