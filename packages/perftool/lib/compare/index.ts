@@ -6,6 +6,7 @@ import { createCommand, createArgument, createOption } from 'commander';
 import { getConfig } from '../config';
 import { debug, error, info, setLogLevel } from '../utils/logger';
 import { importConfig } from '../config/node';
+import CWD from '../utils/cwd';
 
 import { processReports } from './process';
 
@@ -31,12 +32,12 @@ async function start() {
     const config = getConfig(options, importedConfig?.value);
 
     info('Comparing runs...');
-    const outputPath = path.resolve(cli.opts().outputFilePath || './perftest/comparison.json');
+    const outputPath = path.resolve(CWD, cli.opts().outputFilePath || './perftest/comparison.json');
     const [current, previous] = cli.processedArgs;
 
     const [currentReport, previousReport] = await Promise.all([
-        fsPromises.readFile(path.resolve(current), { encoding: 'utf-8' }).then(JSON.parse),
-        fsPromises.readFile(path.resolve(previous), { encoding: 'utf-8' }).then(JSON.parse),
+        fsPromises.readFile(path.resolve(CWD, current), { encoding: 'utf-8' }).then(JSON.parse),
+        fsPromises.readFile(path.resolve(CWD, previous), { encoding: 'utf-8' }).then(JSON.parse),
     ]);
 
     const result = await processReports(config, currentReport, previousReport);
