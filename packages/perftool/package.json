@@ -56,7 +56,8 @@
         "morgan": "1.10.0",
         "puppeteer": "19.9.1",
         "ts-node": "10.9.1",
-        "webpack": "5.79.0"
+        "webpack": "5.79.0",
+        "typescript": "5.0.4"
     },
     "devDependencies": {
         "@jest/globals": "29.5.0",
@@ -70,8 +71,7 @@
         "jest-environment-jsdom": "29.5.0",
         "react": "18.2.0",
         "react-dom": "18.2.0",
-        "ts-jest": "29.1.0",
-        "typescript": "5.0.4"
+        "ts-jest": "29.1.0"
     },
     "contributors": [
         "Artem Khaidarov (https://github.com/akhdrv)"
