@@ -5,12 +5,13 @@ import path from 'path';
 import { formatImportExpression, formatLines } from '../utils/codegen';
 import { Config } from '../config';
 import { debug } from '../utils/logger';
+import CWD from '../utils/cwd';
 
 import { TestModule } from './collect';
 
 function getModuleRelativePath(modulePath: string, importedModulePath: string): string {
-    const moduleDir = path.join(modulePath, '..');
-    const relativePath = path.relative(moduleDir, importedModulePath);
+    const moduleDir = path.dirname(modulePath);
+    const relativePath = path.relative(moduleDir, path.resolve(CWD, importedModulePath));
 
     return relativePath.replace(path.extname(importedModulePath), '');
 }

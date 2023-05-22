@@ -2,11 +2,12 @@ import path from 'path';
 
 import checkPath from '../utils/checkPath';
 import { debug, error, info } from '../utils/logger';
+import CWD from '../utils/cwd';
 
 import { ProjectConfig } from './common';
 
-const defaultJsConfigPath = path.resolve('./perftool.config.mjs');
-const defaultTsConfigPath = path.resolve('./perftool.config.mts');
+const defaultJsConfigPath = path.resolve(CWD, './perftool.config.mjs');
+const defaultTsConfigPath = path.resolve(CWD, './perftool.config.mts');
 
 type ImportedConfig = {
     path: string;
@@ -15,7 +16,7 @@ type ImportedConfig = {
 
 export async function importConfig(cliConfigPath?: string): Promise<ImportedConfig | null> {
     debug('importing project config');
-    let configPath = cliConfigPath ? path.resolve(cliConfigPath) : undefined;
+    let configPath = cliConfigPath ? path.resolve(CWD, cliConfigPath) : undefined;
     debug('cli config path is ', configPath);
 
     if (configPath && !(await checkPath(configPath))) {

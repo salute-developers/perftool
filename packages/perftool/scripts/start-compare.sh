@@ -15,12 +15,14 @@ case "$(uname -s)" in
   *)          SCRIPT_PATH="$(readlink -f "$0")";;
 esac
 
+CWD=$(pwd)
 PROJECT_DIR="$(dirname "$SCRIPT_PATH")/.."
-TS_NODE_ESM_PATH=$(cd "$PROJECT_DIR" && node -e "console.log(require.resolve('ts-node/esm'))")
+TS_NODE_ESM_PATH=$(cd "$PROJECT_DIR" && node -p "require.resolve('ts-node/esm')")
 OPTS="--loader $TS_NODE_ESM_PATH --experimental-specifier-resolution=node"
 
 if [ -z "$PERFTOOL_DEBUG" ]; then
   OPTS="$OPTS --no-warnings"
 fi
 
-NODE_OPTIONS=$OPTS TS_NODE_PROJECT="$PROJECT_DIR/tsconfig.json" TS_NODE_FILES=true node "$PROJECT_DIR/lib/compare/index.ts" "$@"
+cd "$PROJECT_DIR" && \
+ PERFTOOL_CWD=$CWD NODE_OPTIONS=$OPTS TS_NODE_FILES=true node lib/compare/index.ts "$@"

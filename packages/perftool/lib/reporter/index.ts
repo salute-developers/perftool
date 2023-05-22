@@ -1,6 +1,5 @@
 import * as os from 'os';
 import path from 'path';
-import process from 'process';
 import fsPromises from 'fs/promises';
 
 import { StatsReport } from '../statistics';
@@ -9,6 +8,7 @@ import { TestModule } from '../build/collect';
 import { Config } from '../config';
 import getCurrentVersion from '../utils/version';
 import { id as staticTaskSubjectId } from '../stabilizers/staticTask';
+import CWD from '../utils/cwd';
 
 export type ReportWithMeta = {
     version: string;
@@ -35,10 +35,9 @@ export async function report(statsStream: AsyncGenerator<StatsReport, undefined>
 }
 
 function getSubjectIdToReadableNameMap(testModules: TestModule[]) {
-    const cwd = process.cwd();
     return testModules.reduce((acc, { subjects, path: modulePath }) => {
         subjects.forEach(({ id, originalExportedName }) => {
-            acc[id] = `${path.relative(cwd, path.resolve(modulePath))}#${originalExportedName}`;
+            acc[id] = `${path.relative(CWD, path.resolve(CWD, modulePath))}#${originalExportedName}`;
         });
 
         return acc;
@@ -69,7 +68,7 @@ export async function generateReport(config: Config, data: StatsReport, testModu
     }
 
     const contents = JSON.stringify(reportWithMeta, null, 2);
-    const fileName = path.resolve(config.outputFilePath.replace('[time]', new Date().toISOString()));
+    const fileName = path.resolve(CWD, config.outputFilePath.replace('[time]', new Date().toISOString()));
 
     await fsPromises.mkdir(path.dirname(fileName), { recursive: true });
     await fsPromises.writeFile(fileName, contents, { encoding: 'utf-8' });

@@ -1,11 +1,9 @@
 import path from 'path';
-import process from 'process';
 
 import getHashCode from './hash';
+import CWD from './cwd';
 
 // kinda ok as query string value and variable name
 export default function getSubjectId(modulePath: string, namedExport: string): string {
-    const cwd = process.cwd();
-
-    return `${namedExport}_${getHashCode(path.relative(cwd, path.resolve(cwd, modulePath)))}`;
+    return `${namedExport}_${getHashCode(path.relative(CWD, path.resolve(CWD, modulePath)))}`;
 }

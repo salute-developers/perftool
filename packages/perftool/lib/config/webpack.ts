@@ -5,15 +5,17 @@ import path from 'path';
 import { fileURLToPath } from 'url';
 
 import { debug } from '../utils/logger';
+import CWD from '../utils/cwd';
 
 import { Config } from './common';
 
 const require = createRequire(import.meta.url);
 const dirname = path.dirname(fileURLToPath(import.meta.url));
-const ownNodeModules = path.relative(process.cwd(), path.resolve(dirname, '../../node_modules'));
+const ownNodeModules = path.relative(CWD, path.resolve(dirname, '../../node_modules'));
 
 const defaultConfig: WebpackConfig = {
     mode: 'production',
+    context: CWD,
     resolve: {
         extensions: ['.ts', '.tsx', '.js', '.jsx', '.mjs'],
         modules: ['node_modules', ownNodeModules],
