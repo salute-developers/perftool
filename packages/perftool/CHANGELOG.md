@@ -1,3 +1,15 @@
+# v0.8.0 (Mon May 22 2023)
+
+#### 🚀 Enhancement
+
+- feat(perftool): use (os.cpus - 1) as default jobs number [#17](https://github.com/salute-developers/perftool/pull/17) ([@akhdrv](https://github.com/akhdrv))
+
+#### Authors: 1
+
+- Artem Khaydarov ([@akhdrv](https://github.com/akhdrv))
+
+---
+
 # v0.7.1 (Sat May 06 2023)
 
 #### 🐛 Bug Fix
