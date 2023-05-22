@@ -2,7 +2,6 @@ import webpack from 'webpack';
 import type { Config } from '@salutejs/perftool';
 
 const config: Config = {
-    jobs: 2,
     retries: 30,
     taskConfiguration: {
         render: {
