@@ -1,3 +1,4 @@
+import os from 'os';
 import { Configuration as WebpackConfig } from 'webpack';
 import { PuppeteerNodeLaunchOptions } from 'puppeteer';
 import merge from 'deepmerge';
@@ -82,7 +83,7 @@ export function getConfig(cliConfig: CliConfig = {}, projectConfig: ProjectConfi
         metrics: withDefault(mixedInputConfig.metrics, []),
         include: withDefault(mixedInputConfig.include, []),
         exclude: withDefault(mixedInputConfig.exclude, []),
-        jobs: withDefault(mixedInputConfig.jobs, 1),
+        jobs: withDefault(mixedInputConfig.jobs, Math.max(os.cpus().length - 1, 1)),
         retries: withDefault(mixedInputConfig.retries, 10),
         displayIntermediateCalculations: withDefault(mixedInputConfig.displayIntermediateCalculations, true),
         intermediateRefreshInterval: withDefault(mixedInputConfig.intermediateRefreshInterval, 10000),
