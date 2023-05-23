@@ -1,3 +1,19 @@
+# v0.9.0 (Tue May 23 2023)
+
+#### 🚀 Enhancement
+
+- feat(perftool): use perftool dir as CWD, manually use original CWD internally [#15](https://github.com/salute-developers/perftool/pull/15) ([@akhdrv](https://github.com/akhdrv))
+
+#### 🐛 Bug Fix
+
+- build(perftool): use typescript as prod dependency [#15](https://github.com/salute-developers/perftool/pull/15) ([@akhdrv](https://github.com/akhdrv))
+
+#### Authors: 1
+
+- Artem Khaydarov ([@akhdrv](https://github.com/akhdrv))
+
+---
+
 # v0.8.0 (Mon May 22 2023)
 
 #### 🚀 Enhancement

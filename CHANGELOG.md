@@ -1,3 +1,22 @@
+# (Tue May 23 2023)
+
+#### 🚀 Enhancement
+
+- `@salutejs/perftool@0.9.0`
+  - feat(perftool): use perftool dir as CWD, manually use original CWD internally [#15](https://github.com/salute-developers/perftool/pull/15) ([@akhdrv](https://github.com/akhdrv))
+
+#### 🐛 Bug Fix
+
+- ci: add bad typescript integration test [#15](https://github.com/salute-developers/perftool/pull/15) ([@akhdrv](https://github.com/akhdrv))
+- `@salutejs/perftool@0.9.0`
+  - build(perftool): use typescript as prod dependency [#15](https://github.com/salute-developers/perftool/pull/15) ([@akhdrv](https://github.com/akhdrv))
+
+#### Authors: 1
+
+- Artem Khaydarov ([@akhdrv](https://github.com/akhdrv))
+
+---
+
 # (Mon May 22 2023)
 
 #### 🚀 Enhancement
