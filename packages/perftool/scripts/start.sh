@@ -1,6 +1,10 @@
 #!/usr/bin/env sh
 
-set -ex
+set -e
+
+if [ -n "$PERFTOOL_DEBUG" ]; then
+  set -x
+fi
 
 case "$(uname -s)" in
   Darwin*)

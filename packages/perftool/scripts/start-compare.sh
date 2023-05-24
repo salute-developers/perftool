@@ -2,6 +2,10 @@
 
 set -e
 
+if [ -n "$PERFTOOL_DEBUG" ]; then
+  set -x
+fi
+
 case "$(uname -s)" in
   Darwin*)
     TRAVERSED_LINK=$(readlink $0 || true)
