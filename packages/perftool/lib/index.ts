@@ -45,6 +45,12 @@ async function start() {
     const config = getConfig(cliConfig, importedConfig?.value);
 
     const testModules = await collectTestSubjects(config);
+
+    if (!testModules.length) {
+        info('No test modules found, exiting');
+        return;
+    }
+
     const tasks = getAllTasks(config);
 
     info(
