@@ -1,3 +1,17 @@
+# (Wed May 24 2023)
+
+#### 🐛 Bug Fix
+
+- `@salutejs/perftool@0.9.1`
+  - fix: conditionally show script contents on start [#18](https://github.com/salute-developers/perftool/pull/18) ([@akhdrv](https://github.com/akhdrv))
+  - fix: early exit if no tests presented [#18](https://github.com/salute-developers/perftool/pull/18) ([@akhdrv](https://github.com/akhdrv))
+
+#### Authors: 1
+
+- Artem Khaydarov ([@akhdrv](https://github.com/akhdrv))
+
+---
+
 # (Tue May 23 2023)
 
 #### 🚀 Enhancement
