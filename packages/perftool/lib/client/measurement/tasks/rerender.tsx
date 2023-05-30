@@ -35,6 +35,9 @@ type State = {
 
 function noop() {}
 
+const RENDER_CUMULATIVE_WAIT_FACTOR = 1.2;
+const RERENDER_CUMULATIVE_WAIT_FACTOR = 2;
+
 const rerender: Task<number, RerenderConfig, State> = {
     id: 'rerender',
     isIdempotent: false,
@@ -45,8 +48,17 @@ const rerender: Task<number, RerenderConfig, State> = {
         renderWaitTimeout: 1000,
     },
     async run({ Subject, container, config, state }) {
-        const renderWaitTimeout = state.cumulativeRenderWaitTimeout || config.renderWaitTimeout;
-        const waitTimeout = state.cumulativeWaitTimeout || config.renderWaitTimeout;
+        let { renderWaitTimeout } = config;
+        let waitTimeout = config.renderWaitTimeout;
+
+        if (state.cumulativeRenderWaitTimeout) {
+            renderWaitTimeout = state.cumulativeRenderWaitTimeout * RENDER_CUMULATIVE_WAIT_FACTOR;
+        }
+
+        if (state.cumulativeWaitTimeout) {
+            waitTimeout = state.cumulativeWaitTimeout * RERENDER_CUMULATIVE_WAIT_FACTOR;
+        }
+
         const task = new Deferred<number>();
         const renderFinish = new Deferred<number>();
         const debouncedFinish = debounce(task.resolve, waitTimeout);
@@ -90,11 +102,12 @@ const rerender: Task<number, RerenderConfig, State> = {
 
         const result = await task.promise;
 
-        state.maxResult = Math.max(result, state.maxResult || 0);
-        state.cumulativeWaitTimeout = (state.maxResult + (state.cumulativeWaitTimeout || config.renderWaitTimeout)) / 2;
-        state.maxRenderResult = Math.max(renderResult, state.maxRenderResult || 0);
+        state.maxResult = Math.ceil(Math.max(result, state.maxResult || 0));
+        state.cumulativeWaitTimeout =
+            Math.ceil(state.maxResult + (state.cumulativeWaitTimeout || config.renderWaitTimeout)) / 2;
+        state.maxRenderResult = Math.ceil(Math.max(renderResult, state.maxRenderResult || 0));
         state.cumulativeRenderWaitTimeout =
-            (state.maxRenderResult + (state.cumulativeRenderWaitTimeout || config.renderWaitTimeout)) / 2;
+            Math.ceil(state.maxRenderResult + (state.cumulativeRenderWaitTimeout || config.renderWaitTimeout)) / 2;
 
         return result;
     },

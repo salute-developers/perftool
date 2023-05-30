@@ -1,6 +1,7 @@
 import puppeteer, { Browser, Page } from 'puppeteer';
 
 import assert from '../utils/assert';
+import Cache from '../cache';
 import { Config } from '../config';
 import Deferred, { defer } from '../utils/deferred';
 import { RunTaskResult } from '../client/measurement/runner';
@@ -16,7 +17,11 @@ export type IExecutor<T extends Task<any, any>[]> = {
     execute(tests: Test[]): Promise<RunTaskResult<T[number]>[] | Error>;
 };
 
+const PUPPETEER_MYSTERY_ERROR_RETRIES = 5;
+
 export default class Executor<T extends Task<any, any, any>[]> implements IExecutor<T> {
+    private readonly cache: Cache;
+
     private readonly config: Config;
 
     private readonly port: number;
@@ -27,11 +32,17 @@ export default class Executor<T extends Task<any, any, any>[]> implements IExecu
 
     private readonly stateMap: Map<string, TaskState<T[number]>> = new Map();
 
+    private getStateKey(taskId: string, subjectId: string) {
+        return `${taskId}_${subjectId}`;
+    }
+
     private decorateWithState = (test: Test): RawTest<T[number]> => {
-        const key = `${test.taskId}_${test.subjectId}`;
+        const key = this.getStateKey(test.taskId, test.subjectId);
 
         if (!this.stateMap.has(key)) {
-            this.stateMap.set(key, {} as TaskState<T[number]>);
+            const cachedState = this.cache.getTaskState(test.subjectId, test.taskId);
+
+            this.stateMap.set(key, (cachedState || {}) as TaskState<T[number]>);
         }
 
         const state = this.stateMap.get(key)!;
@@ -44,13 +55,18 @@ export default class Executor<T extends Task<any, any, any>[]> implements IExecu
 
     private setState = (result: RunTaskResult<T[number]>): void => {
         const { taskId, subjectId, state } = result;
-        const key = `${taskId}_${subjectId}`;
+        const key = this.getStateKey(taskId, subjectId);
 
         this.stateMap.set(key, state!);
+        this.cache.setTaskState(subjectId, taskId, state!);
         result.state = undefined;
     };
 
-    static async create<TT extends Task<any, any>[]>(config: Config, port: number): Promise<Executor<TT>> {
+    static async create<TT extends Task<any, any>[]>(
+        config: Config,
+        cache: Cache,
+        port: number,
+    ): Promise<Executor<TT>> {
         debug('[executor]', 'launching browser...');
 
         const browserInstance = await puppeteer.launch({
@@ -60,11 +76,12 @@ export default class Executor<T extends Task<any, any, any>[]> implements IExecu
         });
         debug('[executor]', 'launched browser successfully');
 
-        return new Executor<TT>(config, port, browserInstance);
+        return new Executor<TT>(config, cache, port, browserInstance);
     }
 
-    private constructor(config: Config, port: number, browserInstance: Browser) {
+    private constructor(config: Config, cache: Cache, port: number, browserInstance: Browser) {
         this.config = config;
+        this.cache = cache;
         this.port = port;
         this.browserInstance = browserInstance;
     }
@@ -84,13 +101,18 @@ export default class Executor<T extends Task<any, any, any>[]> implements IExecu
     async execute(tests: Test[]): Promise<RunTaskResult<T[number]>[] | Error> {
         debug('[executor]', 'running tests', tests);
         assert(this.workable);
-        let page: Page;
+        let page: Page = undefined as unknown as Page;
 
-        try {
-            page = await this.browserInstance.newPage();
-        } catch (e) {
-            debug('[executor]', 'Mystery puppeteer error, retrying', e);
-            page = await this.browserInstance.newPage();
+        for (let retry = 0; !page && retry < PUPPETEER_MYSTERY_ERROR_RETRIES; ++retry) {
+            try {
+                page = await this.browserInstance.newPage();
+            } catch (e) {
+                debug('[executor]', 'Mystery puppeteer error, retrying', e);
+
+                if (retry + 1 === PUPPETEER_MYSTERY_ERROR_RETRIES) {
+                    page = await this.browserInstance.newPage();
+                }
+            }
         }
 
         const results = new Deferred<RunTaskResult<T[number]>[]>();

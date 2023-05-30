@@ -8,6 +8,8 @@ import { ExportPickRule } from '../build/collect';
 import { Metric } from '../statistics/types';
 import { debug } from '../utils/logger';
 
+import { cacheDirectory } from './paths';
+
 type MetricConfiguration = {
     enable?: boolean;
     confidenceLevel?: number;
@@ -42,6 +44,13 @@ export type Config = {
     exclude: string[];
     jobs: number;
     retries: number;
+    baseBranchRef?: string;
+    currentBranchRef?: string;
+    cache: {
+        taskState?: boolean;
+    };
+    cacheDirectory: string;
+    cacheExpirationTime: number;
     displayIntermediateCalculations: boolean;
     intermediateRefreshInterval: number;
     failOnSignificantChanges: boolean;
@@ -59,7 +68,16 @@ export type Config = {
 export type ProjectConfig = Partial<Omit<Config, 'configPath' | 'logLevel'>>;
 
 export type CliConfig = Partial<
-    Pick<Config, 'include' | 'configPath' | 'outputFilePath' | 'logLevel' | 'failOnSignificantChanges'>
+    Pick<
+        Config,
+        | 'include'
+        | 'configPath'
+        | 'outputFilePath'
+        | 'logLevel'
+        | 'failOnSignificantChanges'
+        | 'baseBranchRef'
+        | 'currentBranchRef'
+    >
 >;
 
 function withDefault<T>(value: T | undefined, defaultValue: T): T {
@@ -85,6 +103,11 @@ export function getConfig(cliConfig: CliConfig = {}, projectConfig: ProjectConfi
         exclude: withDefault(mixedInputConfig.exclude, []),
         jobs: withDefault(mixedInputConfig.jobs, Math.max(os.cpus().length - 1, 1)),
         retries: withDefault(mixedInputConfig.retries, 10),
+        baseBranchRef: withDefault(mixedInputConfig.baseBranchRef, undefined),
+        currentBranchRef: withDefault(mixedInputConfig.currentBranchRef, undefined),
+        cache: withDefault(mixedInputConfig.cache, {}),
+        cacheDirectory: withDefault(mixedInputConfig.cacheDirectory, cacheDirectory),
+        cacheExpirationTime: withDefault(mixedInputConfig.cacheExpirationTime, 0),
         displayIntermediateCalculations: withDefault(mixedInputConfig.displayIntermediateCalculations, true),
         intermediateRefreshInterval: withDefault(mixedInputConfig.intermediateRefreshInterval, 10000),
         failOnSignificantChanges: withDefault(mixedInputConfig.failOnSignificantChanges, true),

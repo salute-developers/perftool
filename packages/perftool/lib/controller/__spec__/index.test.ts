@@ -1,5 +1,6 @@
 import { jest } from '@jest/globals';
 
+import Cache from '../../cache';
 import { Config } from '../../config';
 import { Task } from '../../client/measurement/types';
 import { TestModule } from '../../build/collect';
@@ -16,6 +17,7 @@ describe('controller/runTests', () => {
         const results = ['res1', 'res2', 'res3'];
         const port = Math.trunc(Math.random() * 2 ** 16);
         const config = {} as Config;
+        const cache = {} as Cache;
         const tasks = [{ id: 'fakeTaskId2' }] as Task<any, any>[];
         const testModules = [
             { path: 'foo/bar/baz.ts', subjects: [{ id: 'fakeSubjId1', originalExportedName: 'Default' }] },
@@ -51,14 +53,14 @@ describe('controller/runTests', () => {
         const { runTests } = await import('..');
         const result = [];
 
-        for await (const r of runTests({ config, port, tasks, testModules })) {
+        for await (const r of runTests({ cache, config, port, tasks, testModules })) {
             result.push(r);
         }
 
         expect(result).toEqual(results);
 
         expect(createMock).toHaveBeenCalledTimes(1);
-        expect(createMock).toHaveBeenCalledWith(config, port);
+        expect(createMock).toHaveBeenCalledWith(config, cache, port);
 
         expect(fakePlannerCtorMock).toHaveBeenCalledTimes(1);
         expect(fakePlannerCtorMock).toHaveBeenCalledWith(config, tasks, testModules);
