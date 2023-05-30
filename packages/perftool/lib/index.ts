@@ -12,6 +12,7 @@ import { generateReport, measureStartingPoint, report } from './reporter';
 import { CliConfig } from './config/common';
 import { debug, error, info, setLogLevel } from './utils/logger';
 import getCurrentVersion from './utils/version';
+import Cache from './cache';
 
 const cli = createCommand('perftool');
 
@@ -20,6 +21,8 @@ export type { ProjectConfig as Config };
 cli.addArgument(createArgument('[include...]', 'Modules to run perftest on'))
     .addOption(createOption('-l, --logLevel <level>', 'Log level').choices(['quiet', 'normal', 'verbose']))
     .addOption(createOption('-c, --configPath <path>', 'Config path'))
+    .addOption(createOption('-b, --baseBranchRef <ref>', 'Base branch ref'))
+    .addOption(createOption('-С, --currentBranchRef <ref>', 'Current branch ref'))
     .addOption(createOption('-o, --outputFilePath <path>', 'Output file path'));
 
 function getCliConfig(include: string[], options: OptionValues): CliConfig {
@@ -43,6 +46,7 @@ async function start() {
 
     const importedConfig = await importConfig(cliConfig.configPath);
     const config = getConfig(cliConfig, importedConfig?.value);
+    const cache = await Cache.acquire(config);
 
     const testModules = await collectTestSubjects(config);
 
@@ -64,7 +68,7 @@ async function start() {
 
     measureStartingPoint();
 
-    const testResultsStream = runTests({ config, port, tasks, testModules });
+    const testResultsStream = runTests({ cache, config, port, tasks, testModules });
 
     const stats = new Statistics(config, tasks);
     const consumingPromise = stats.consume(testResultsStream);
@@ -75,6 +79,7 @@ async function start() {
         await consumingPromise;
     }
 
+    await cache.save();
     await stop();
 
     await generateReport(config, stats.getResult(), testModules);

@@ -23,6 +23,8 @@ type State = {
     maxResult?: number;
 };
 
+const CUMULATIVE_WAIT_FACTOR = 1.2;
+
 const render: Task<number, RenderConfig, State> = {
     id: 'render',
     isIdempotent: false,
@@ -33,7 +35,12 @@ const render: Task<number, RenderConfig, State> = {
         renderWaitTimeout: 1000,
     },
     async run({ Subject, container, config, state }) {
-        const waitTimeout = state.cumulativeWaitTimeout || config.renderWaitTimeout;
+        let waitTimeout = config.renderWaitTimeout;
+
+        if (state.cumulativeWaitTimeout) {
+            waitTimeout = state.cumulativeWaitTimeout * CUMULATIVE_WAIT_FACTOR;
+        }
+
         const task = new Deferred<number>();
         const debouncedFinish = debounce(task.resolve, waitTimeout);
         let startTime = 0;
@@ -49,8 +56,9 @@ const render: Task<number, RenderConfig, State> = {
 
         const result = await task.promise;
 
-        state.maxResult = Math.max(result, state.maxResult || 0);
-        state.cumulativeWaitTimeout = (state.maxResult + (state.cumulativeWaitTimeout || config.renderWaitTimeout)) / 2;
+        state.maxResult = Math.ceil(Math.max(result, state.maxResult || 0));
+        state.cumulativeWaitTimeout =
+            Math.ceil(state.maxResult + (state.cumulativeWaitTimeout || config.renderWaitTimeout)) / 2;
 
         return result;
     },

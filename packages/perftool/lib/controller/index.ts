@@ -3,12 +3,14 @@ import { Task } from '../client/measurement/types';
 import { RunTaskResult } from '../client/measurement/runner';
 import { TestModule } from '../build/collect';
 import { info } from '../utils/logger';
+import Cache from '../cache';
 
 import Executor from './executor';
 import Planner from './planner';
 import TestController from './controller';
 
 type RunTestsParams<T extends Task<any, any>[]> = {
+    cache: Cache;
     config: Config;
     port: number;
     tasks: T;
@@ -16,6 +18,7 @@ type RunTestsParams<T extends Task<any, any>[]> = {
 };
 
 export async function* runTests<T extends Task<any, any>[]>({
+    cache,
     config,
     port,
     tasks,
@@ -23,7 +26,7 @@ export async function* runTests<T extends Task<any, any>[]>({
 }: RunTestsParams<T>): AsyncGenerator<RunTaskResult<T[number]>[], undefined> {
     info('Running performance tests...');
 
-    const executor = await Executor.create<T>(config, port);
+    const executor = await Executor.create<T>(config, cache, port);
     const planner = new Planner(config, tasks, testModules);
     const controller = new TestController<T>(config, planner, executor);
 

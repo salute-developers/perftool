@@ -2,10 +2,8 @@ import webpack, { Configuration as WebpackConfig } from 'webpack';
 import fsPromises from 'fs/promises';
 import { fileURLToPath } from 'url';
 import path from 'path';
-import process from 'process';
-import fs from 'fs';
 
-import { buildDirectory, Config, distDirectory, getWebpackConfig, sourceDirectory } from '../config';
+import { buildDirectory, Config, getWebpackConfig, sourceDirectory } from '../config';
 import { debug, error, info, warn } from '../utils/logger';
 
 import { TestModule } from './collect';
@@ -76,9 +74,6 @@ type BuildClientParams = {
     testModules: TestModule[];
 };
 
-// TODO memfs unionfs
-const pathsToClean: string[] = [];
-
 export async function buildClient({ config, testModules }: BuildClientParams) {
     info('Building client...');
 
@@ -86,7 +81,6 @@ export async function buildClient({ config, testModules }: BuildClientParams) {
     debug('client entrypoint is ', entry);
 
     await copyModules(sourceDirectory);
-    pathsToClean.push(distDirectory);
 
     await modifyEntrypoint({
         modules: testModules,
@@ -100,11 +94,3 @@ export async function buildClient({ config, testModules }: BuildClientParams) {
 
     info('Build successful');
 }
-
-// TODO memfs unionfs
-process.on('exit', () => {
-    for (const p of pathsToClean) {
-        debug('cleaning up', p);
-        fs.rmSync(p, { recursive: true, force: true });
-    }
-});

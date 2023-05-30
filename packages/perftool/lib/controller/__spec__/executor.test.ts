@@ -2,6 +2,14 @@ import { jest } from '@jest/globals';
 
 import { Config } from '../../config';
 import type { Test } from '../executor';
+import Cache from '../../cache';
+
+function createFakeCache(): Cache {
+    return {
+        getTaskState: jest.fn(() => {}),
+        setTaskState: jest.fn(() => {}),
+    } as unknown as Cache;
+}
 
 describe('controller/Executor', () => {
     afterEach(() => {
@@ -26,8 +34,9 @@ describe('controller/Executor', () => {
                 devtools: true,
             },
         } as Config;
+        const cache = createFakeCache();
 
-        const executor = await Executor.create(config, port);
+        const executor = await Executor.create(config, cache, port);
 
         expect(executor).toBeInstanceOf(Executor);
         expect(launchMock).toHaveBeenCalledTimes(1);
@@ -69,8 +78,9 @@ describe('controller/Executor', () => {
             puppeteerOptions: {},
             runWaitTimeout: 1000,
         } as Config;
+        const cache = createFakeCache();
 
-        const executor = await Executor.create(config, port);
+        const executor = await Executor.create(config, cache, port);
         const execResult = await executor.execute(tests);
 
         expect(newPageMock).toHaveBeenCalledTimes(1);
@@ -125,8 +135,9 @@ describe('controller/Executor', () => {
             puppeteerOptions: {},
             runWaitTimeout: 0,
         } as Config;
+        const cache = createFakeCache();
 
-        const executor = await Executor.create(config, port);
+        const executor = await Executor.create(config, cache, port);
         const execResult = await executor.execute([]);
 
         expect(closeMock).toHaveBeenCalledTimes(1);
@@ -151,8 +162,9 @@ describe('controller/Executor', () => {
         const config = {
             puppeteerOptions: {},
         } as Config;
+        const cache = createFakeCache();
 
-        const executor = await Executor.create(config, port);
+        const executor = await Executor.create(config, cache, port);
 
         await executor.finalize();
         expect(closeMock).toHaveBeenCalledTimes(1);
