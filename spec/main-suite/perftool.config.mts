@@ -16,6 +16,10 @@ const config: Config = {
     failOnSignificantChanges: false,
     stabilizers: ['staticTask'],
     absoluteError: 1,
+    cache: {
+        taskState: true,
+    },
+    cacheExpirationTime: 1000000,
     modifyWebpackConfig(conf) {
         const babelLoaderOpts = conf.module?.rules?.find(
             (rule) => typeof rule === 'object' && rule.loader?.includes('babel-loader'),
