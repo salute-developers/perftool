@@ -1,3 +1,21 @@
+# (Fri Jun 02 2023)
+
+#### 🚀 Enhancement
+
+- feat(main-suite): use cache, update gitignore [#19](https://github.com/salute-developers/perftool/pull/19) ([@akhdrv](https://github.com/akhdrv))
+- `@salutejs/perftool@0.10.0`
+  - feat(perftool): add cache for task state, cache management [#19](https://github.com/salute-developers/perftool/pull/19) ([@akhdrv](https://github.com/akhdrv))
+
+#### 🐛 Bug Fix
+
+- ci: no integration testing run on master branch [#19](https://github.com/salute-developers/perftool/pull/19) ([@akhdrv](https://github.com/akhdrv))
+
+#### Authors: 1
+
+- Artem Khaydarov ([@akhdrv](https://github.com/akhdrv))
+
+---
+
 # (Wed May 24 2023)
 
 #### 🐛 Bug Fix

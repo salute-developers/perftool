@@ -1,3 +1,15 @@
+# v0.10.0 (Fri Jun 02 2023)
+
+#### 🚀 Enhancement
+
+- feat(perftool): add cache for task state, cache management [#19](https://github.com/salute-developers/perftool/pull/19) ([@akhdrv](https://github.com/akhdrv))
+
+#### Authors: 1
+
+- Artem Khaydarov ([@akhdrv](https://github.com/akhdrv))
+
+---
+
 # v0.9.1 (Wed May 24 2023)
 
 #### 🐛 Bug Fix
