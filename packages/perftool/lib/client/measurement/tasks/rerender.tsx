@@ -1,7 +1,7 @@
 import React from 'react';
 
 import assert from '../../../utils/assert';
-import { Task } from '../types';
+import { Task, State as BaseState } from '../types';
 import { render as reactRender } from '../../../utils/react';
 import Deferred from '../../../utils/deferred';
 import debounce from '../../../utils/debounce';
@@ -13,7 +13,7 @@ type RerenderConfig = {
     renderWaitTimeout: number;
 };
 
-type State = {
+type State = BaseState & {
     /**
      * Iteratively decreasing wait interval for rerender, always more than maxResult.
      * Tnext = (Tprev + maxResult) / 2
@@ -35,8 +35,8 @@ type State = {
 
 function noop() {}
 
-const RENDER_CUMULATIVE_WAIT_FACTOR = 1.2;
-const RERENDER_CUMULATIVE_WAIT_FACTOR = 2;
+const CACHED_RENDER_WAIT_FACTOR = 1.2;
+const CACHED_RERENDER_WAIT_FACTOR = 2;
 
 const rerender: Task<number, RerenderConfig, State> = {
     id: 'rerender',
@@ -48,15 +48,14 @@ const rerender: Task<number, RerenderConfig, State> = {
         renderWaitTimeout: 1000,
     },
     async run({ Subject, container, config, state }) {
-        let { renderWaitTimeout } = config;
-        let waitTimeout = config.renderWaitTimeout;
+        let renderWaitTimeout = state.cumulativeRenderWaitTimeout || config.renderWaitTimeout;
+        let waitTimeout = state.cumulativeWaitTimeout || config.renderWaitTimeout;
 
-        if (state.cumulativeRenderWaitTimeout) {
-            renderWaitTimeout = state.cumulativeRenderWaitTimeout * RENDER_CUMULATIVE_WAIT_FACTOR;
-        }
+        if (state.cached) {
+            renderWaitTimeout *= CACHED_RENDER_WAIT_FACTOR;
+            waitTimeout *= CACHED_RERENDER_WAIT_FACTOR;
 
-        if (state.cumulativeWaitTimeout) {
-            waitTimeout = state.cumulativeWaitTimeout * RERENDER_CUMULATIVE_WAIT_FACTOR;
+            state.cached = false;
         }
 
         const task = new Deferred<number>();
@@ -103,11 +102,9 @@ const rerender: Task<number, RerenderConfig, State> = {
         const result = await task.promise;
 
         state.maxResult = Math.ceil(Math.max(result, state.maxResult || 0));
-        state.cumulativeWaitTimeout =
-            Math.ceil(state.maxResult + (state.cumulativeWaitTimeout || config.renderWaitTimeout)) / 2;
         state.maxRenderResult = Math.ceil(Math.max(renderResult, state.maxRenderResult || 0));
-        state.cumulativeRenderWaitTimeout =
-            Math.ceil(state.maxRenderResult + (state.cumulativeRenderWaitTimeout || config.renderWaitTimeout)) / 2;
+        state.cumulativeWaitTimeout = Math.ceil((state.maxResult + waitTimeout) / 2);
+        state.cumulativeRenderWaitTimeout = Math.ceil((state.maxRenderResult + waitTimeout) / 2);
 
         return result;
     },

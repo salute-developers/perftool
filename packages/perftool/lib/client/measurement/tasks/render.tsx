@@ -1,6 +1,6 @@
 import React from 'react';
 
-import { Task } from '../types';
+import { Task, State as BaseState } from '../types';
 import { render as reactRender } from '../../../utils/react';
 import Deferred from '../../../utils/deferred';
 import debounce from '../../../utils/debounce';
@@ -11,7 +11,7 @@ type RenderConfig = {
     renderWaitTimeout: number;
 };
 
-type State = {
+type State = BaseState & {
     /**
      * Iteratively decreasing wait interval, always more than maxResult.
      * Tnext = (Tprev + maxResult) / 2
@@ -23,7 +23,7 @@ type State = {
     maxResult?: number;
 };
 
-const CUMULATIVE_WAIT_FACTOR = 1.2;
+const CACHED_WAIT_FACTOR = 1.2;
 
 const render: Task<number, RenderConfig, State> = {
     id: 'render',
@@ -35,10 +35,11 @@ const render: Task<number, RenderConfig, State> = {
         renderWaitTimeout: 1000,
     },
     async run({ Subject, container, config, state }) {
-        let waitTimeout = config.renderWaitTimeout;
+        let waitTimeout = state.cumulativeWaitTimeout || config.renderWaitTimeout;
 
-        if (state.cumulativeWaitTimeout) {
-            waitTimeout = state.cumulativeWaitTimeout * CUMULATIVE_WAIT_FACTOR;
+        if (state.cached) {
+            waitTimeout *= CACHED_WAIT_FACTOR;
+            state.cached = false;
         }
 
         const task = new Deferred<number>();
@@ -57,8 +58,7 @@ const render: Task<number, RenderConfig, State> = {
         const result = await task.promise;
 
         state.maxResult = Math.ceil(Math.max(result, state.maxResult || 0));
-        state.cumulativeWaitTimeout =
-            Math.ceil(state.maxResult + (state.cumulativeWaitTimeout || config.renderWaitTimeout)) / 2;
+        state.cumulativeWaitTimeout = Math.ceil((state.maxResult + waitTimeout) / 2);
 
         return result;
     },

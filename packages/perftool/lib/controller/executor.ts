@@ -41,8 +41,16 @@ export default class Executor<T extends Task<any, any, any>[]> implements IExecu
 
         if (!this.stateMap.has(key)) {
             const cachedState = this.cache.getTaskState(test.subjectId, test.taskId);
+            let state = {} as TaskState<T[number]>;
 
-            this.stateMap.set(key, (cachedState || {}) as TaskState<T[number]>);
+            if (cachedState) {
+                state = {
+                    ...(cachedState as TaskState<T[number]>),
+                    cached: true,
+                };
+            }
+
+            this.stateMap.set(key, state);
         }
 
         const state = this.stateMap.get(key)!;
@@ -57,8 +65,10 @@ export default class Executor<T extends Task<any, any, any>[]> implements IExecu
         const { taskId, subjectId, state } = result;
         const key = this.getStateKey(taskId, subjectId);
 
-        this.stateMap.set(key, state!);
-        this.cache.setTaskState(subjectId, taskId, state!);
+        // eslint-disable-next-line @typescript-eslint/no-unused-vars
+        const { cached: _, ...filteredState } = state || ({} as TaskState<T[number]>);
+        this.stateMap.set(key, filteredState as TaskState<T[number]>);
+        this.cache.setTaskState(subjectId, taskId, filteredState);
         result.state = undefined;
     };
 
