@@ -1,3 +1,16 @@
+# (Tue Jun 06 2023)
+
+#### 🐛 Bug Fix
+
+- `@salutejs/perftool@0.10.1`
+  - fix(perftool): use wait factor only once [#20](https://github.com/salute-developers/perftool/pull/20) ([@akhdrv](https://github.com/akhdrv))
+
+#### Authors: 1
+
+- Artem Khaydarov ([@akhdrv](https://github.com/akhdrv))
+
+---
+
 # (Fri Jun 02 2023)
 
 #### 🚀 Enhancement
