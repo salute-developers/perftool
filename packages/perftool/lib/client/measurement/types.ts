@@ -8,6 +8,10 @@ export type MeasurerConfig = {
 
 export type TaskAim = 'increase' | 'decrease';
 
+export type State = {
+    cached?: boolean;
+};
+
 type RunParams<C extends MeasurerConfig | void, S extends object> = {
     /**
      * Component to test
@@ -30,7 +34,7 @@ type RunParams<C extends MeasurerConfig | void, S extends object> = {
 export type TaskState<T extends Task<any, any, any>> = T extends Task<any, any, infer S> ? S : never;
 
 // eslint-disable-next-line @typescript-eslint/ban-types
-export type Task<T extends JSONSerializable, C extends MeasurerConfig | void, S extends object = {}> = {
+export type Task<T extends JSONSerializable, C extends MeasurerConfig | void, S extends State = {}> = {
     /**
      * Internal id (for JSON reports)
      */
