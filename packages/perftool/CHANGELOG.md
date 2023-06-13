@@ -1,3 +1,15 @@
+# v0.11.0 (Tue Jun 13 2023)
+
+#### 🚀 Enhancement
+
+- feat(perftool): add preview mode [#21](https://github.com/salute-developers/perftool/pull/21) ([@akhdrv](https://github.com/akhdrv))
+
+#### Authors: 1
+
+- Artem Khaydarov ([@akhdrv](https://github.com/akhdrv))
+
+---
+
 # v0.10.1 (Tue Jun 06 2023)
 
 #### 🐛 Bug Fix

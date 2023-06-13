@@ -1,3 +1,17 @@
+# (Tue Jun 13 2023)
+
+#### 🚀 Enhancement
+
+- fix(main-suite): fix test component appearance [#21](https://github.com/salute-developers/perftool/pull/21) ([@akhdrv](https://github.com/akhdrv))
+- `@salutejs/perftool@0.11.0`
+  - feat(perftool): add preview mode [#21](https://github.com/salute-developers/perftool/pull/21) ([@akhdrv](https://github.com/akhdrv))
+
+#### Authors: 1
+
+- Artem Khaydarov ([@akhdrv](https://github.com/akhdrv))
+
+---
+
 # (Tue Jun 06 2023)
 
 #### 🐛 Bug Fix
