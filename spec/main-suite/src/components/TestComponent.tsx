@@ -5,11 +5,14 @@ const Root = styled.div`
     display: flex;
     flex-direction: column;
     background: red;
+    height: 100%;
 `;
 
 const Node = styled.div`
     display: flex;
     background: green;
+    margin: 5px;
+    height: 100%;
 `;
 
 type Props = {
