@@ -60,9 +60,14 @@ const defaultConfig: WebpackConfig = {
 };
 
 export function getWebpackConfig(entry: string, output: string, config: Config): WebpackConfig {
-    debug('creating webpack config');
+    const env: Record<string, string> = {
+        'process.env.PERFTOOL_CLIENT_RUNTIME': JSON.stringify(true),
+        'process.env.PERFTOOL_PREVIEW_MODE': JSON.stringify(config.mode === 'preview'),
+    };
 
     const finalConfig = config.modifyWebpackConfig(defaultConfig);
+
+    finalConfig.plugins!.push(new webpack.DefinePlugin(env));
 
     finalConfig.entry = entry;
     finalConfig.output!.path = output;

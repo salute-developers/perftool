@@ -30,6 +30,7 @@ type TaskConfiguration = MeasurerConfig & {
 
 // TODO add comments
 export type Config = {
+    mode: 'normal' | 'preview';
     taskConfiguration: {
         [key: string]: TaskConfiguration;
     };
@@ -65,7 +66,7 @@ export type Config = {
     exportPickRule: ExportPickRule;
 };
 
-export type ProjectConfig = Partial<Omit<Config, 'configPath' | 'logLevel'>>;
+export type ProjectConfig = Partial<Omit<Config, 'configPath' | 'logLevel' | 'mode'>>;
 
 export type CliConfig = Partial<
     Pick<
@@ -77,6 +78,7 @@ export type CliConfig = Partial<
         | 'failOnSignificantChanges'
         | 'baseBranchRef'
         | 'currentBranchRef'
+        | 'mode'
     >
 >;
 
@@ -93,6 +95,7 @@ export function getConfig(cliConfig: CliConfig = {}, projectConfig: ProjectConfi
     const mixedInputConfig = merge(projectConfig, cliConfig);
 
     const result = {
+        mode: withDefault(mixedInputConfig.mode, 'normal'),
         taskConfiguration: withDefault(mixedInputConfig.taskConfiguration, {}),
         tasks: withDefault(mixedInputConfig.tasks, []),
         metricConfiguration: withDefault(mixedInputConfig.metricConfiguration, {}),
