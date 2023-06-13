@@ -19,9 +19,9 @@ function Selector({ style, subjectsIds, onSelect, currentIndex }: Props) {
     return (
         <div style={{ ...style, ...rootStyle }}>
             <div style={labelStyle}>Component: </div>
-            <select onChange={handleChange}>
+            <select onChange={handleChange} value={currentIndex}>
                 {subjectsIds.map((id, index) => (
-                    <option key={index} selected={index === currentIndex} value={index}>
+                    <option key={index} value={index}>
                         {id}
                     </option>
                 ))}

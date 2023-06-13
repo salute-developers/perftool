@@ -52,23 +52,22 @@ const defaultConfig: WebpackConfig = {
             },
         ],
     },
-    plugins: [
-        new HtmlWebpackPlugin(),
-        new webpack.DefinePlugin({
-            'process.env.PERFTOOL_CLIENT_RUNTIME': JSON.stringify(true),
-        }),
-    ],
+    plugins: [new HtmlWebpackPlugin()],
 };
 
 export function getWebpackConfig(entry: string, output: string, config: Config): WebpackConfig {
+    const isPreviewMode = config.mode === 'preview';
     const env: Record<string, string> = {
         'process.env.PERFTOOL_CLIENT_RUNTIME': JSON.stringify(true),
-        'process.env.PERFTOOL_PREVIEW_MODE': JSON.stringify(config.mode === 'preview'),
+        'process.env.PERFTOOL_PREVIEW_MODE': JSON.stringify(isPreviewMode),
     };
 
     const finalConfig = config.modifyWebpackConfig(defaultConfig);
 
     finalConfig.plugins!.push(new webpack.DefinePlugin(env));
+    if (isPreviewMode) {
+        finalConfig.mode = 'development';
+    }
 
     finalConfig.entry = entry;
     finalConfig.output!.path = output;
