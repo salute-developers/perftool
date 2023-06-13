@@ -13,6 +13,8 @@ import { CliConfig } from './config/common';
 import { debug, error, info, setLogLevel } from './utils/logger';
 import getCurrentVersion from './utils/version';
 import Cache from './cache';
+import openBrowser from './utils/openBrowser';
+import { waitForSigint } from './utils/interrupt';
 
 const cli = createCommand('perftool');
 
@@ -23,11 +25,16 @@ cli.addArgument(createArgument('[include...]', 'Modules to run perftest on'))
     .addOption(createOption('-c, --configPath <path>', 'Config path'))
     .addOption(createOption('-b, --baseBranchRef <ref>', 'Base branch ref'))
     .addOption(createOption('-С, --currentBranchRef <ref>', 'Current branch ref'))
+    .addOption(createOption('-p, --preview', 'Preview mode'))
     .addOption(createOption('-o, --outputFilePath <path>', 'Output file path'));
 
-function getCliConfig(include: string[], options: OptionValues): CliConfig {
+function getCliConfig(include: string[], rawOptions: OptionValues): CliConfig {
+    const { preview, ...options } = rawOptions;
+    const mode = preview ? 'preview' : undefined;
+
     return {
         include,
+        mode,
         ...options,
     };
 }
@@ -57,14 +64,26 @@ async function start() {
 
     const tasks = getAllTasks(config);
 
-    info(
-        'Tasks performed in this run: ',
-        tasks.map((t) => t.id),
-    );
+    if (config.mode === 'preview') {
+        info('Running in preview mode');
+    } else {
+        info(
+            'Tasks performed in this run: ',
+            tasks.map((t) => t.id),
+        );
+    }
 
     await buildClient({ config, testModules });
 
     const { port, stop } = await createServer(config);
+
+    if (config.mode === 'preview') {
+        await openBrowser({ port });
+        await waitForSigint();
+        await stop();
+
+        return;
+    }
 
     measureStartingPoint();
 

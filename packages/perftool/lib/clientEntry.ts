@@ -2,7 +2,6 @@
 
 import type { Config } from './config/common';
 import { getAllTasks } from './config/task';
-import { createPerfToolClient } from './client';
 import { Subject } from './client/measurement/runner';
 import { subject as staticTaskSubject } from './stabilizers/staticTask';
 import { setLogLevel } from './utils/logger';
@@ -20,11 +19,18 @@ const allTestSubjects: Subject[] = [
     // <TEST_SUBJECT_MARK>
 ];
 
-// TODO tasks in client config are serialized,
-const allTasks = getAllTasks(config);
+if (process.env.PERFTOOL_PREVIEW_MODE) {
+    const { createPreviewClient } = await import('./preview');
 
-await createPerfToolClient({
-    config,
-    tasks: allTasks,
-    subjects: allTestSubjects,
-});
+    await createPreviewClient({ config, subjects: allTestSubjects });
+} else {
+    const { createPerfToolClient } = await import('./client');
+    // TODO tasks in client config are not serialized
+    const allTasks = getAllTasks(config);
+
+    await createPerfToolClient({
+        config,
+        tasks: allTasks,
+        subjects: allTestSubjects,
+    });
+}

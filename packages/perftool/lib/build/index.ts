@@ -39,12 +39,17 @@ function build(config: WebpackConfig) {
     });
 }
 
-async function copyModules(target: string) {
+async function copyModules(config: Config) {
+    const target = sourceDirectory;
     const source = path.resolve(dirname, '../../lib');
 
     debug('copying files from', source, 'to', target);
 
     const pathsToCopy = ['client', 'config', 'utils', 'stabilizers', 'clientEntry.ts'];
+
+    if (config.mode === 'preview') {
+        pathsToCopy.push('preview');
+    }
 
     debug('will copy', pathsToCopy);
 
@@ -80,7 +85,7 @@ export async function buildClient({ config, testModules }: BuildClientParams) {
     const entry = path.join(sourceDirectory, 'clientEntry.ts');
     debug('client entrypoint is ', entry);
 
-    await copyModules(sourceDirectory);
+    await copyModules(config);
 
     await modifyEntrypoint({
         modules: testModules,

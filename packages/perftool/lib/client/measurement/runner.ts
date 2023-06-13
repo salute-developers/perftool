@@ -5,6 +5,7 @@ import { getTaskConfig } from '../../config/task';
 import BaseError from '../../utils/baseError';
 import { defer } from '../../utils/deferred';
 import { debug } from '../../utils/logger';
+import createContainer from '../../utils/createContainer';
 
 import { Task, TaskState } from './types';
 
@@ -30,13 +31,6 @@ export type RunTaskResult<T extends Task<any, any, any>> = {
     subjectId: string;
     state?: TaskState<T>;
 } & (SuccessResult<T> | ErrorResult);
-
-function createContainer(): HTMLElement {
-    const container = document.createElement('div');
-    document.body.appendChild(container);
-
-    return container;
-}
 
 export function runTask<T extends Task<any, any, any>>({
     task,
