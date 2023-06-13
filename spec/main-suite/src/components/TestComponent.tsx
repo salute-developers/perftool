@@ -36,8 +36,8 @@ export function TestComponent({ slow }: Props) {
 
     return (
         <Root ref={rootRef}>
-            {[...Array(length)].map(() => (
-                <Node />
+            {[...Array(length)].map((_, i) => (
+                <Node key={i} />
             ))}
         </Root>
     );
