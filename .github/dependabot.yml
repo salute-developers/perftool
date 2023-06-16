@@ -1,0 +1,63 @@
+version: 2
+updates:
+  - package-ecosystem: github-actions
+    directory: /
+    schedule:
+      interval: weekly
+      day: monday
+      time: 09:00
+    reviewers:
+      - akhdrv
+    commit-message:
+      prefix: ci
+      include: scope
+    open-pull-requests-limit: 1
+
+  - package-ecosystem: pnpm
+    directory: /
+    schedule:
+      interval: weekly
+      day: monday
+      time: 09:00
+    reviewers:
+      - akhdrv
+    commit-message:
+      prefix: build
+      include: scope
+    open-pull-requests-limit: 1
+    versioning-strategy: increase
+
+  - package-ecosystem: pnpm
+    directory: /packages/perftool
+    schedule:
+      interval: weekly
+      day: monday
+      time: 09:00
+    ignore:
+      - dependency-name: react
+        versions: [ ">=19" ]
+      - dependency-name: react-dom
+        versions: [ ">=19" ]
+    reviewers:
+      - akhdrv
+    commit-message:
+      prefix: build(perftool)
+      include: scope
+    open-pull-requests-limit: 1
+    versioning-strategy: increase
+
+  - package-ecosystem: pnpm
+    directory: /spec/main-suite
+    schedule:
+      interval: weekly
+      day: monday
+      time: 09:00
+    ignore:
+      - dependency-name: "@salute-developers/perftool"
+    reviewers:
+      - akhdrv
+    commit-message:
+      prefix: build(main-suite)
+      include: scope
+    open-pull-requests-limit: 1
+    versioning-strategy: increase
