@@ -144,8 +144,8 @@ importers:
         specifier: 4.17.17
         version: 4.17.17
       '@types/jest':
-        specifier: 29.5.0
-        version: 29.5.0
+        specifier: 29.5.2
+        version: 29.5.2
       '@types/morgan':
         specifier: 1.9.4
         version: 1.9.4
@@ -190,8 +190,8 @@ importers:
         specifier: workspace:*
         version: link:../../packages/perftool
       '@types/jest':
-        specifier: 29.5.0
-        version: 29.5.0
+        specifier: 29.5.2
+        version: 29.5.2
       '@types/node':
         specifier: 18.15.11
         version: 18.15.11
@@ -3187,8 +3187,8 @@ packages:
       '@types/istanbul-lib-report': 3.0.0
     dev: true
 
-  /@types/jest@29.5.0:
-    resolution: {integrity: sha512-3Emr5VOl/aoBwnWcH/EFQvlSAmjV+XtV9GGu5mwdYew5vhQh0IUZx/60x0TzHDu09Bi7HMx10t/namdJw5QIcg==}
+  /@types/jest@29.5.2:
+    resolution: {integrity: sha512-mSoZVJF5YzGVCk+FsDxzDuH7s+SCkzrgKZzf0Z0T2WudhBUPoF6ktoTPC4R0ZoCPCV5xUvuU6ias5NvxcBcMMg==}
     dependencies:
       expect: 29.5.0
       pretty-format: 29.5.0
