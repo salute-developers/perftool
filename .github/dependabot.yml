@@ -5,7 +5,7 @@ updates:
     schedule:
       interval: weekly
       day: monday
-      time: 09:00
+      time: "09:00"
     reviewers:
       - akhdrv
     commit-message:
@@ -13,12 +13,12 @@ updates:
       include: scope
     open-pull-requests-limit: 1
 
-  - package-ecosystem: pnpm
+  - package-ecosystem: npm
     directory: /
     schedule:
       interval: weekly
       day: monday
-      time: 09:00
+      time: "09:00"
     reviewers:
       - akhdrv
     commit-message:
@@ -27,12 +27,12 @@ updates:
     open-pull-requests-limit: 1
     versioning-strategy: increase
 
-  - package-ecosystem: pnpm
+  - package-ecosystem: npm
     directory: /packages/perftool
     schedule:
       interval: weekly
       day: monday
-      time: 09:00
+      time: "09:00"
     ignore:
       - dependency-name: react
         versions: [ ">=19" ]
@@ -46,12 +46,12 @@ updates:
     open-pull-requests-limit: 1
     versioning-strategy: increase
 
-  - package-ecosystem: pnpm
+  - package-ecosystem: npm
     directory: /spec/main-suite
     schedule:
       interval: weekly
       day: monday
-      time: 09:00
+      time: "09:00"
     ignore:
       - dependency-name: "@salute-developers/perftool"
     reviewers:
