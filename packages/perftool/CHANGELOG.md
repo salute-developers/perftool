@@ -1,3 +1,15 @@
+# v0.11.1 (Mon Jun 19 2023)
+
+#### 🐛 Bug Fix
+
+- fix(perftool): cure webpack module resolution with pnpm grouping [#39](https://github.com/salute-developers/perftool/pull/39) ([@akhdrv](https://github.com/akhdrv))
+
+#### Authors: 1
+
+- Artem Khaydarov ([@akhdrv](https://github.com/akhdrv))
+
+---
+
 # v0.11.0 (Tue Jun 13 2023)
 
 #### 🚀 Enhancement

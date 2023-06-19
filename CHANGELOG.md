@@ -1,3 +1,22 @@
+# (Mon Jun 19 2023)
+
+#### 🐛 Bug Fix
+
+- docs: code of conduct, contributing [#39](https://github.com/salute-developers/perftool/pull/39) ([@akhdrv](https://github.com/akhdrv))
+- build: disable pnpm hoisting, update pnpm version [#39](https://github.com/salute-developers/perftool/pull/39) ([@akhdrv](https://github.com/akhdrv))
+- ci: update dependabot rules, use merge queue [#39](https://github.com/salute-developers/perftool/pull/39) ([@akhdrv](https://github.com/akhdrv))
+- ci: fix dependabot [#28](https://github.com/salute-developers/perftool/pull/28) ([@akhdrv](https://github.com/akhdrv))
+- build: fix dependabot config [#24](https://github.com/salute-developers/perftool/pull/24) ([@akhdrv](https://github.com/akhdrv))
+- build: add dependabot configuration [#23](https://github.com/salute-developers/perftool/pull/23) ([@akhdrv](https://github.com/akhdrv))
+- `@salutejs/perftool@0.11.1`
+  - fix(perftool): cure webpack module resolution with pnpm grouping [#39](https://github.com/salute-developers/perftool/pull/39) ([@akhdrv](https://github.com/akhdrv))
+
+#### Authors: 1
+
+- Artem Khaydarov ([@akhdrv](https://github.com/akhdrv))
+
+---
+
 # (Tue Jun 13 2023)
 
 #### 🚀 Enhancement
