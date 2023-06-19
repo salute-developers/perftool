@@ -1,6 +1,7 @@
 name: Integration testing
 
 on:
+  merge_group:
   pull_request:
     branches:
       - master
