@@ -12,13 +12,14 @@ import { Config } from './common';
 const require = createRequire(import.meta.url);
 const dirname = path.dirname(fileURLToPath(import.meta.url));
 const ownNodeModules = path.relative(CWD, path.resolve(dirname, '../../node_modules'));
+const ownNodeModulesPnpmTreatment = path.relative(CWD, path.resolve(dirname, '../../../..'));
 
 const defaultConfig: WebpackConfig = {
     mode: 'production',
     context: CWD,
     resolve: {
         extensions: ['.ts', '.tsx', '.js', '.jsx', '.mjs'],
-        modules: ['node_modules', ownNodeModules],
+        modules: ['node_modules', ownNodeModules, ownNodeModulesPnpmTreatment],
         fallback: {
             'react-dom/client': false,
         },
