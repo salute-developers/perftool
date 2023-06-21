@@ -1,14 +1,13 @@
-import React, { ComponentType, CSSProperties } from 'react';
+import React, { ComponentType } from 'react';
 
 type PreviewProps = {
     Component: ComponentType;
     background: string;
-    style: CSSProperties;
 };
 
-function Preview({ style, Component, background }: PreviewProps) {
+function Preview({ Component, background }: PreviewProps) {
     return (
-        <div style={{ ...style, background }}>
+        <div style={{ background }}>
             <Component />
         </div>
     );

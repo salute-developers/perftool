@@ -11,32 +11,53 @@ type Props = {
 };
 
 const headerStyle = {
+    position: 'absolute',
+    width: '100%',
+    background: '#fff',
     display: 'flex',
     flexDirection: 'column',
-    margin: '1rem',
+    padding: '1rem',
     borderBottom: '1px solid black',
+    color: '#222',
+    zIndex: 99999,
 } as const;
-const itemStyle = { marginBottom: '0.5rem' } as const;
-const previewStyle = { margin: '0.5rem 1rem', border: 'none', width: 'calc(100% - 2rem)', height: '75vh' };
+const hiddenButtonStyle = {
+    position: 'absolute',
+    zIndex: 99999,
+} as const;
+const itemStyle = { marginTop: 0, marginBottom: '0.5rem' } as const;
 
 function Root({ subjects }: Props) {
+    const [isPanelVisible, setPanelVisibility] = useState(true);
     const [currentIndex, setIndex] = useState<number>(0);
     const [background, setBackground] = useState<string>('#ffffff');
     const { Component } = subjects[currentIndex];
 
     return (
         <>
-            <header style={headerStyle}>
-                <h1 style={itemStyle}>Test components preview</h1>
-                <Selector
-                    style={itemStyle}
-                    subjectsIds={subjects.map(({ id }) => id)}
-                    onSelect={setIndex}
-                    currentIndex={currentIndex}
-                />
-                <ColorPicker style={itemStyle} onSelect={setBackground} current={background} />
-            </header>
-            <Preview style={previewStyle} Component={Component} background={background} />
+            {isPanelVisible && (
+                <header style={headerStyle}>
+                    <h1 style={itemStyle}>Test components preview</h1>
+                    <Selector
+                        style={itemStyle}
+                        subjectsIds={subjects.map(({ id }) => id)}
+                        onSelect={setIndex}
+                        currentIndex={currentIndex}
+                    />
+                    <ColorPicker style={itemStyle} onSelect={setBackground} current={background} />
+                    <div>
+                        <button type="button" onClick={() => setPanelVisibility(false)}>
+                            Hide
+                        </button>
+                    </div>
+                </header>
+            )}
+            {!isPanelVisible && (
+                <button style={hiddenButtonStyle} type="button" onClick={() => setPanelVisibility(true)}>
+                    Show preview panel
+                </button>
+            )}
+            <Preview Component={Component} background={background} />
         </>
     );
 }

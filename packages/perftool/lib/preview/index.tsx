@@ -16,6 +16,7 @@ type Params = {
 export async function createPreviewClient({ subjects }: Params): Promise<void> {
     const filteredSubjects = subjects.filter(({ id }) => id !== subject.id);
     const container = createContainer();
+    document.body.style.margin = '0';
 
     await render(<Root subjects={filteredSubjects} />, container);
 }
