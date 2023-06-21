@@ -1,3 +1,16 @@
+# v0.11.2 (Wed Jun 21 2023)
+
+#### 🐛 Bug Fix
+
+- fix(perftool): use absolute positioned panel [#22](https://github.com/salute-developers/perftool/pull/22) ([@akhdrv](https://github.com/akhdrv))
+- fix(perftool): use own babel core, use webpack dev mode on preview mode [#22](https://github.com/salute-developers/perftool/pull/22) ([@akhdrv](https://github.com/akhdrv))
+
+#### Authors: 1
+
+- Artem Khaydarov ([@akhdrv](https://github.com/akhdrv))
+
+---
+
 # v0.11.1 (Mon Jun 19 2023)
 
 #### 🐛 Bug Fix

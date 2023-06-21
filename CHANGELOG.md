@@ -1,3 +1,24 @@
+# (Wed Jun 21 2023)
+
+#### 🐛 Bug Fix
+
+- docs: add license [#22](https://github.com/salute-developers/perftool/pull/22) ([@akhdrv](https://github.com/akhdrv))
+- fix(main-suite): add key prop [#22](https://github.com/salute-developers/perftool/pull/22) ([@akhdrv](https://github.com/akhdrv))
+- `@salutejs/perftool@0.11.2`
+  - fix(perftool): use absolute positioned panel [#22](https://github.com/salute-developers/perftool/pull/22) ([@akhdrv](https://github.com/akhdrv))
+  - fix(perftool): use own babel core, use webpack dev mode on preview mode [#22](https://github.com/salute-developers/perftool/pull/22) ([@akhdrv](https://github.com/akhdrv))
+
+#### 🔩 Dependency Updates
+
+- build: bump prettier from 2.8.7 to 2.8.8 [#30](https://github.com/salute-developers/perftool/pull/30) ([@dependabot[bot]](https://github.com/dependabot[bot]))
+
+#### Authors: 2
+
+- [@dependabot[bot]](https://github.com/dependabot[bot])
+- Artem Khaydarov ([@akhdrv](https://github.com/akhdrv))
+
+---
+
 # (Mon Jun 19 2023)
 
 #### 🐛 Bug Fix
