@@ -9,8 +9,8 @@ importers:
   .:
     devDependencies:
       '@auto-it/conventional-commits':
-        specifier: 10.44.0
-        version: 10.44.0(@types/node@20.3.1)(typescript@5.0.4)
+        specifier: 10.46.0
+        version: 10.46.0(@types/node@20.3.1)(typescript@5.0.4)
       '@auto-it/npm':
         specifier: 10.44.0
         version: 10.44.0(@types/node@20.3.1)(typescript@5.0.4)
@@ -243,10 +243,10 @@ packages:
     engines: {node: '>=10.x'}
     dev: true
 
-  /@auto-it/conventional-commits@10.44.0(@types/node@20.3.1)(typescript@5.0.4):
-    resolution: {integrity: sha512-FNd+Hv6J+ou0424coxuTvgM5oumGi7SGSMXdQITlJ0lrhmvUkR6/ojBJEiXiMvGvmjcARjZ4jTZ8VlPUI+TDkg==}
+  /@auto-it/conventional-commits@10.46.0(@types/node@20.3.1)(typescript@5.0.4):
+    resolution: {integrity: sha512-hMtGTkumjZSY31T/t2zI5lHyKjNbZy/fpeE0NukRbi7+UJu4RM2cH/dTj3hoGv43ohMn54hwqfNjJipHu8TETA==}
     dependencies:
-      '@auto-it/core': 10.44.0(@types/node@20.3.1)(typescript@5.0.4)
+      '@auto-it/core': 10.46.0(@types/node@20.3.1)(typescript@5.0.4)
       array.prototype.flatmap: 1.3.1
       conventional-changelog-core: 4.2.4
       conventional-changelog-preset-loader: 2.3.4
