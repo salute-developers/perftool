@@ -50,7 +50,7 @@
         "deepmerge": "4.3.1",
         "express": "4.18.2",
         "fast-glob": "3.2.12",
-        "html-webpack-plugin": "5.5.0",
+        "html-webpack-plugin": "5.5.3",
         "jstat": "1.9.6",
         "loglevel": "1.8.1",
         "loglevel-plugin-prefix": "0.8.4",
