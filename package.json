@@ -23,7 +23,7 @@
     "release": "auto shipit"
   },
   "devDependencies": {
-    "@auto-it/conventional-commits": "10.44.0",
+    "@auto-it/conventional-commits": "10.46.0",
     "@auto-it/npm": "10.44.0",
     "@commitlint/cli": "17.5.1",
     "@commitlint/config-conventional": "17.6.6",
