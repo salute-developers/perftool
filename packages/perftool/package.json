@@ -57,7 +57,7 @@
         "morgan": "1.10.0",
         "open": "9.1.0",
         "puppeteer": "19.9.1",
-        "simple-git": "3.18.0",
+        "simple-git": "3.19.1",
         "ts-node": "10.9.1",
         "typescript": "5.0.4",
         "webpack": "5.79.0"
