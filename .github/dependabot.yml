@@ -3,8 +3,7 @@ updates:
   - package-ecosystem: github-actions
     directory: /
     schedule:
-      interval: weekly
-      day: monday
+      interval: daily
       time: "09:00"
     reviewers:
       - akhdrv
@@ -15,8 +14,7 @@ updates:
   - package-ecosystem: npm
     directory: /
     schedule:
-      interval: weekly
-      day: monday
+      interval: daily
       time: "09:00"
     reviewers:
       - akhdrv
