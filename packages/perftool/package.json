@@ -39,7 +39,7 @@
         "react-dom": ">=16.8.0"
     },
     "dependencies": {
-        "@babel/core": "7.22.5",
+        "@babel/core": "7.22.9",
         "@babel/preset-env": "7.22.9",
         "@babel/preset-react": "7.22.5",
         "@babel/preset-typescript": "7.21.4",
