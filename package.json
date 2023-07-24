@@ -26,7 +26,7 @@
     "@auto-it/conventional-commits": "10.46.0",
     "@auto-it/npm": "10.46.0",
     "@commitlint/cli": "17.6.7",
-    "@commitlint/config-conventional": "17.6.6",
+    "@commitlint/config-conventional": "17.6.7",
     "@typescript-eslint/eslint-plugin": "5.62.0",
     "@typescript-eslint/parser": "5.58.0",
     "auto": "10.46.0",
