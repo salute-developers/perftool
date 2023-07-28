@@ -15,39 +15,35 @@ type ResolveTestsParams<T extends Task<any, any, any>[]> = {
     subjects: Subject[];
 };
 
-export function getTests<T extends Task<any, any, any>[]>(
-    rawTests: RawTest<T[number]>[],
+export function getTest<T extends Task<any, any, any>[]>(
+    { subjectId, taskId, state }: RawTest<T[number]>,
     { tasks, subjects }: ResolveTestsParams<T>,
-): Test<T[number]>[] {
-    return rawTests.map(({ subjectId, taskId, state }) => {
-        const subject = subjects.find(({ id }) => subjectId === id);
-        const task = tasks.find(({ id }) => taskId === id);
+): Test<T[number]> {
+    const subject = subjects.find(({ id }) => subjectId === id);
+    const task = tasks.find(({ id }) => taskId === id);
 
-        assert(subject && task);
+    assert(subject && task);
 
-        return { subject, task, state };
-    });
+    return { subject, task, state };
 }
 
-export async function resolveTests<T extends Task<any, any, any>[]>(
+export async function resolveTest<T extends Task<any, any, any>[]>(
     params: ResolveTestsParams<T>,
-): Promise<Test<T[number]>[]> {
+): Promise<Test<T[number]>> {
     /**
      * @see utils/window.d.ts
      */
-    if (Array.isArray(window.tests)) {
-        return getTests(window.tests, params);
+    if (window._perftool_test) {
+        return getTest(window._perftool_test, params);
     }
 
     return new Promise((resolve, reject) => {
-        window.tests = {
-            push: (...items) => {
-                try {
-                    resolve(getTests(items, params));
-                } catch (err) {
-                    reject(err);
-                }
-            },
+        window._perftool_api_ready = () => {
+            try {
+                resolve(getTest(window._perftool_test!, params));
+            } catch (err) {
+                reject(err);
+            }
         };
     });
 }

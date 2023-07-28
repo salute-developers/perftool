@@ -8,18 +8,11 @@ import BaseError from '../../utils/baseError';
 
 describe('controller/TestController', () => {
     it('should request a schedule from planner and execute tasks in parallel yielding the result', async () => {
-        const tests: Test[][] = [
-            [
-                { subjectId: 'fakeId1', taskId: 'fakeTask1' },
-                { subjectId: 'fakeId2', taskId: 'fakeTask2' },
-                { subjectId: 'fakeId3', taskId: 'fakeTask3' },
-            ],
-            [
-                { subjectId: 'fakeId2', taskId: 'fakeTask2' },
-                { subjectId: 'fakeId3', taskId: 'fakeTask3' },
-            ],
-            [{ subjectId: 'fakeId3', taskId: 'fakeTask3' }],
-            [{ subjectId: 'fakeId4', taskId: 'fakeTask5' }],
+        const tests: Test[] = [
+            { subjectId: 'fakeId1', taskId: 'fakeTask1' },
+            { subjectId: 'fakeId2', taskId: 'fakeTask2' },
+            { subjectId: 'fakeId3', taskId: 'fakeTask3' },
+            { subjectId: 'fakeId4', taskId: 'fakeTask5' },
         ];
 
         const config = {
@@ -57,18 +50,11 @@ describe('controller/TestController', () => {
     });
 
     it('should not pass dry runs to the result', async () => {
-        const tests: Test[][] = [
-            [
-                { subjectId: 'fakeId1', taskId: 'fakeTask1', type: 'dry' },
-                { subjectId: 'fakeId2', taskId: 'fakeTask2' },
-                { subjectId: 'fakeId3', taskId: 'fakeTask3' },
-            ],
-            [
-                { subjectId: 'fakeId2', taskId: 'fakeTask2', type: 'dry' },
-                { subjectId: 'fakeId3', taskId: 'fakeTask3' },
-            ],
-            [{ subjectId: 'fakeId3', taskId: 'fakeTask3', type: 'dry' }],
-            [{ subjectId: 'fakeId4', taskId: 'fakeTask5' }],
+        const tests: Test[] = [
+            { subjectId: 'fakeId1', taskId: 'fakeTask1', type: 'dry' },
+            { subjectId: 'fakeId2', taskId: 'fakeTask2' },
+            { subjectId: 'fakeId3', taskId: 'fakeTask3', type: 'dry' },
+            { subjectId: 'fakeId4', taskId: 'fakeTask5' },
         ];
 
         const config = {
@@ -96,13 +82,13 @@ describe('controller/TestController', () => {
             generatorResult.push(result);
         }
 
-        expect(new Set(generatorResult)).toEqual(new Set(tests.filter((test) => test[0]?.type !== 'dry')));
+        expect(new Set(generatorResult)).toEqual(new Set(tests.filter((test) => test?.type !== 'dry')));
     });
 
     it('should throw if execute returns an error', async () => {
-        const tests: Test[][] = [
-            [{ subjectId: 'fakeId3', taskId: 'fakeTask3', type: 'dry' }],
-            [{ subjectId: 'fakeId4', taskId: 'fakeTask5' }],
+        const tests: Test[] = [
+            { subjectId: 'fakeId3', taskId: 'fakeTask3', type: 'dry' },
+            { subjectId: 'fakeId4', taskId: 'fakeTask5' },
         ];
 
         const config = {

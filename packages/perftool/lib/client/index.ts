@@ -3,7 +3,7 @@ import { debug } from '../utils/logger';
 
 import type { Task } from './measurement/types';
 import { runTask, Subject } from './measurement/runner';
-import { resolveTests } from './input';
+import { resolveTest } from './input';
 
 type CreatePerfToolClientParams<T extends Task<any, any>[]> = {
     subjects: Subject[];
@@ -21,19 +21,10 @@ export async function createPerfToolClient<T extends Task<any, any, any>[]>({
     debug('Available tasks: ', tasks);
     debug('Config: ', config);
 
-    const tests = await resolveTests({ tasks, subjects });
-    const resultPromises = [];
+    const { task, subject, state } = await resolveTest({ tasks, subjects });
 
-    debug(`Running ${tests.length} tests`);
-    for (const { task, subject, state } of tests) {
-        const resultPromise = runTask<T[number]>({ task, subject, config, state });
+    debug(`Running...`);
 
-        resultPromises.push(resultPromise);
-    }
-
-    debug('Waiting for all tests to complete...');
-    const results = await Promise.all(resultPromises);
-
-    debug('All tests complete, calling window.finish');
-    await window.finish(results);
+    const result = await runTask<T[number]>({ task, subject, config, state });
+    await window._perftool_finish!(result);
 }

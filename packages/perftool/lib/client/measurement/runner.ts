@@ -13,7 +13,7 @@ class TimeoutError extends BaseError {}
 
 export type Subject = {
     id: string;
-    Component: ComponentType;
+    Component: ComponentType & { beforeTest?: () => Promise<void> | void };
 };
 
 type RunTaskParams<T extends Task<any, any, any>> = {
@@ -32,7 +32,7 @@ export type RunTaskResult<T extends Task<any, any, any>> = {
     state?: TaskState<T>;
 } & (SuccessResult<T> | ErrorResult);
 
-export function runTask<T extends Task<any, any, any>>({
+export async function runTask<T extends Task<any, any, any>>({
     task,
     state,
     subject,
@@ -45,6 +45,11 @@ export function runTask<T extends Task<any, any, any>>({
 
     debug('Running test\n', `TaskId: ${meta.taskId}\n`, `SubjectId: ${meta.subjectId}`);
     debug('Task config: ', config);
+
+    if (typeof subject.Component.beforeTest === 'function') {
+        debug('Running beforeTest');
+        await subject.Component.beforeTest();
+    }
 
     return Promise.race([
         task

@@ -70,7 +70,7 @@ describe('controller/Planner', () => {
         jest.resetModules();
     });
 
-    it('should yield idempotent tasks once and in one group', async () => {
+    it('should yield idempotent tasks once', async () => {
         const config = {
             dryRunTimes: 3,
             retries: 10,
@@ -96,13 +96,9 @@ describe('controller/Planner', () => {
 
         const planner = new Planner(config, tasks, modules);
 
-        const result = [];
+        const result = [...planner.plan()];
 
-        for (const testGroup of planner.plan()) {
-            result.push(testGroup);
-        }
-
-        expect(new Set(result[0])).toEqual(new Set(expectedResult));
+        expect(new Set(result)).toEqual(new Set(expectedResult));
     });
 
     it('should yield non-idempotent tasks given number of times', async () => {
@@ -120,14 +116,10 @@ describe('controller/Planner', () => {
 
         const planner = new Planner(config, tasks, modules);
 
-        const result = [];
+        const result = [...planner.plan()];
 
-        for (const testGroup of planner.plan()) {
-            result.push(testGroup);
-        }
-
-        expect(result.filter((tests) => tests[0].taskId === tasks[0].id)).toHaveLength(1);
-        expect(result.filter((tests) => tests[0].taskId === tasks[1].id && tests[0].type !== 'dry')).toHaveLength(
+        expect(result.filter((test) => test.taskId === tasks[0].id)).toHaveLength(1);
+        expect(result.filter((test) => test.taskId === tasks[1].id && test.type !== 'dry')).toHaveLength(
             config.retries,
         );
     });
@@ -153,10 +145,10 @@ describe('controller/Planner', () => {
             result.push(testGroup);
         }
 
-        expect(result.filter((tests) => tests[0].taskId === tasks[0].id && tests[0].type !== 'dry')).toHaveLength(
+        expect(result.filter((test) => test.taskId === tasks[0].id && test.type !== 'dry')).toHaveLength(
             config.retries,
         );
-        expect(result.filter((tests) => tests[0].taskId === tasks[0].id && tests[0].type === 'dry')).toHaveLength(
+        expect(result.filter((test) => test.taskId === tasks[0].id && test.type === 'dry')).toHaveLength(
             config.dryRunTimes,
         );
     });

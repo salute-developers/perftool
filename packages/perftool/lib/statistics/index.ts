@@ -63,17 +63,15 @@ export default class Statistics<T extends Task<any, any>[]> {
         this.computableObservations.get(subjectId)?.get(taskId)?.push(rest.result);
     }
 
-    async consume(source: AsyncGenerator<RunTaskResult<T[number]>[], undefined>): Promise<void> {
+    async consume(source: AsyncGenerator<RunTaskResult<T[number]>, undefined>): Promise<void> {
         this.isConsuming = true;
 
-        for await (const resultGroup of source) {
+        for await (const result of source) {
             if (!this.isConsuming) {
                 break;
             }
 
-            for (const result of resultGroup) {
-                this.addObservation(result);
-            }
+            this.addObservation(result);
         }
 
         this.isConsuming = false;

@@ -50,8 +50,9 @@ describe('controller/Executor', () => {
         let addScriptTagMock = {} as jest.Mock;
         let closeMock = {} as jest.Mock;
         let createInsertionScriptContentMock = {} as jest.Mock;
-        const tests: Test[] = [{ subjectId: 'fakeId3', taskId: 'fakeTask3', type: 'dry' }];
-        const result = [{ ...tests[0], state: {} }];
+        let useInterceptApiMock = {} as jest.Mock;
+        const test: Test = { subjectId: 'fakeId3', taskId: 'fakeTask3', type: 'dry' };
+        const result = { ...test, state: {} };
         const insertionScriptContent = 'some script content';
         jest.unstable_mockModule('puppeteer', () => ({
             default: {
@@ -70,6 +71,9 @@ describe('controller/Executor', () => {
         jest.unstable_mockModule('../clientScript', () => ({
             createInsertionScriptContent: (createInsertionScriptContentMock = jest.fn(() => insertionScriptContent)),
         }));
+        jest.unstable_mockModule('../../api/intercept', () => ({
+            useInterceptApi: (useInterceptApiMock = jest.fn()),
+        }));
 
         const { default: Executor } = await import('../executor');
 
@@ -81,7 +85,7 @@ describe('controller/Executor', () => {
         const cache = createFakeCache();
 
         const executor = await Executor.create(config, cache, port);
-        const execResult = await executor.execute(tests);
+        const execResult = await executor.execute(test);
 
         expect(newPageMock).toHaveBeenCalledTimes(1);
 
@@ -89,25 +93,25 @@ describe('controller/Executor', () => {
         expect(gotoMock).toHaveBeenCalledWith(`http://localhost:${port}/`);
 
         expect(exposeFunctionMock).toHaveBeenCalledTimes(1);
-        expect(exposeFunctionMock.mock.calls[0][0]).toEqual('finish');
+        expect(exposeFunctionMock.mock.calls[0][0]).toEqual('_perftool_finish');
+
+        expect(useInterceptApiMock).toHaveBeenCalledTimes(1);
 
         expect(addScriptTagMock).toHaveBeenCalledTimes(1);
         expect(addScriptTagMock).toHaveBeenCalledWith({ content: insertionScriptContent });
 
         expect(createInsertionScriptContentMock).toHaveBeenCalledTimes(1);
-        expect(createInsertionScriptContentMock).toHaveBeenCalledWith([{ ...tests[0], state: {} }]);
+        expect(createInsertionScriptContentMock).toHaveBeenCalledWith({ ...test, state: {} });
 
         expect(closeMock).toHaveBeenCalledTimes(1);
 
         expect(execResult).toEqual(result);
 
-        result[0].state = { changedState: true };
+        result.state = { changedState: true };
 
-        await executor.execute(tests);
+        await executor.execute(test);
 
-        expect(createInsertionScriptContentMock).toHaveBeenLastCalledWith([
-            { ...tests[0], state: { changedState: true } },
-        ]);
+        expect(createInsertionScriptContentMock).toHaveBeenLastCalledWith({ ...test, state: { changedState: true } });
     });
 
     it('should return error on page timeout', async () => {
@@ -138,7 +142,7 @@ describe('controller/Executor', () => {
         const cache = createFakeCache();
 
         const executor = await Executor.create(config, cache, port);
-        const execResult = await executor.execute([]);
+        const execResult = await executor.execute({ subjectId: 'fakeId3', taskId: 'fakeTask3' });
 
         expect(closeMock).toHaveBeenCalledTimes(1);
         expect(execResult).toBeInstanceOf(Error);
@@ -169,7 +173,7 @@ describe('controller/Executor', () => {
         await executor.finalize();
         expect(closeMock).toHaveBeenCalledTimes(1);
 
-        expect(executor.execute([])).rejects.toThrow();
+        expect(executor.execute({ subjectId: 'fakeId3', taskId: 'fakeTask3', type: 'dry' })).rejects.toThrow();
         expect(newPageMock).toHaveBeenCalledTimes(0);
 
         await executor.finalize();

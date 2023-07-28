@@ -24,10 +24,10 @@ describe('client/createPerfToolClient', () => {
         }));
 
         jest.unstable_mockModule('../input', () => ({
-            resolveTests: (resolveTestsMock = jest.fn(() => [fakeTest])),
+            resolveTest: (resolveTestsMock = jest.fn(() => fakeTest)),
         }));
 
-        window.finish = jest.fn() as typeof window.finish;
+        window._perftool_finish = jest.fn() as typeof window._perftool_finish;
 
         const config = {} as Config;
         const subjects = [{}] as Subject[];
@@ -48,7 +48,7 @@ describe('client/createPerfToolClient', () => {
             state: fakeTest.state,
         });
 
-        expect(window.finish).toHaveBeenCalledTimes(1);
-        expect(window.finish).toHaveBeenCalledWith([fakeResult]);
+        expect(window._perftool_finish).toHaveBeenCalledTimes(1);
+        expect(window._perftool_finish).toHaveBeenCalledWith(fakeResult);
     });
 });
