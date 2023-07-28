@@ -1,18 +1,21 @@
 import type { RawTest } from '../client/input';
 import { Task } from '../client/measurement/types';
 
-export function insertTests(serializedTests: string) {
-    const tests: RawTest<any>[] = JSON.parse(serializedTests);
+export function bootstrapTest(serializedTest: string) {
+    const test: RawTest<any> = JSON.parse(serializedTest);
 
     /**
      * @see utils/window.d.ts
      */
-    window.tests = window.tests || [];
-    window.tests.push(...tests);
+    window._perftool_test = test;
+
+    if (window._perftool_api_ready) {
+        window._perftool_api_ready();
+    }
 }
 
-export function createInsertionScriptContent<T extends Task<any, any, any>>(tests: RawTest<T>[]) {
-    return `${insertTests.toString()}
-    insertTests('${JSON.stringify(tests)}');
+export function createInsertionScriptContent<T extends Task<any, any, any>>(test: RawTest<T>) {
+    return `${bootstrapTest.toString()}
+    bootstrapTest('${JSON.stringify(test)}');
     `;
 }

@@ -1,35 +1,30 @@
-import { insertTests, createInsertionScriptContent } from '../clientScript';
+import { bootstrapTest, createInsertionScriptContent } from '../clientScript';
 
-const tests = [
-    { subjectId: '1', taskId: '1', state: {} },
-    { subjectId: '3', taskId: 'fake', state: {} },
-];
+const test = { subjectId: '3', taskId: 'fake', state: {} };
 
 describe('controller/insertTests', () => {
     afterEach(() => {
-        delete window.tests;
+        delete window._perftool_test;
     });
 
-    it('should parse JSON serialized tests and push in window.tests if present', () => {
-        window.tests = [];
+    it('should call window._perftool_api_ready if present', () => {
+        bootstrapTest(JSON.stringify(test));
 
-        insertTests(JSON.stringify(tests));
-
-        expect(window.tests).toEqual(tests);
+        expect(window._perftool_test).toEqual(test);
     });
 
-    it('should parse JSON serialized tests and push in window.tests if not present', () => {
-        insertTests(JSON.stringify(tests));
+    it('should parse JSON serialized test and set in window._perftool_test', () => {
+        bootstrapTest(JSON.stringify(test));
 
-        expect(window.tests).toEqual(tests);
+        expect(window._perftool_test).toEqual(test);
     });
 });
 
 describe('controller/createInsertionScriptContent', () => {
     it('should have insertTests body and call with serialized tests', () => {
-        const insertionScript = createInsertionScriptContent(tests);
+        const insertionScript = createInsertionScriptContent(test);
 
-        expect(insertionScript.includes(insertTests.toString())).toEqual(true);
-        expect(insertionScript.includes(`insertTests('${JSON.stringify(tests)}')`)).toEqual(true);
+        expect(insertionScript.includes(bootstrapTest.toString())).toEqual(true);
+        expect(insertionScript.includes(`bootstrapTest('${JSON.stringify(test)}')`)).toEqual(true);
     });
 });

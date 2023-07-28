@@ -16,9 +16,10 @@ import Cache from './cache';
 import openBrowser from './utils/openBrowser';
 import { waitForSigint } from './utils/interrupt';
 
-const cli = createCommand('perftool');
-
+export { intercept } from './api/external';
 export type { ProjectConfig as Config };
+
+const cli = createCommand('perftool');
 
 cli.addArgument(createArgument('[include...]', 'Modules to run perftest on'))
     .addOption(createOption('-l, --logLevel <level>', 'Log level').choices(['quiet', 'normal', 'verbose']))

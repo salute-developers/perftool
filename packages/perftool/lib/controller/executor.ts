@@ -8,13 +8,14 @@ import { RunTaskResult } from '../client/measurement/runner';
 import { Task, TaskState } from '../client/measurement/types';
 import { debug } from '../utils/logger';
 import { RawTest } from '../client/input';
+import { useInterceptApi } from '../api/intercept';
 
 import { createInsertionScriptContent } from './clientScript';
 
 export type Test = { taskId: string; subjectId: string; type?: 'dry' };
 
 export type IExecutor<T extends Task<any, any>[]> = {
-    execute(tests: Test[]): Promise<RunTaskResult<T[number]>[] | Error>;
+    execute(test: Test): Promise<RunTaskResult<T[number]> | Error>;
 };
 
 const PUPPETEER_MYSTERY_ERROR_RETRIES = 5;
@@ -108,8 +109,8 @@ export default class Executor<T extends Task<any, any, any>[]> implements IExecu
         await this.browserInstance.close();
     }
 
-    async execute(tests: Test[]): Promise<RunTaskResult<T[number]>[] | Error> {
-        debug('[executor]', 'running tests', tests);
+    async execute(test: Test): Promise<RunTaskResult<T[number]> | Error> {
+        debug('[executor]', 'running test', test);
         assert(this.workable);
         let page: Page = undefined as unknown as Page;
 
@@ -125,21 +126,23 @@ export default class Executor<T extends Task<any, any, any>[]> implements IExecu
             }
         }
 
-        const results = new Deferred<RunTaskResult<T[number]>[]>();
+        const result = new Deferred<RunTaskResult<T[number]>>();
 
         await page.goto(`http://localhost:${this.port}/`);
-        await page.exposeFunction('finish', (taskResults: RunTaskResult<T[number]>[]) => {
-            taskResults.forEach(this.setState);
+        await page.exposeFunction('_perftool_finish', (taskResult: RunTaskResult<T[number]>) => {
+            this.setState(taskResult);
 
-            results.resolve(taskResults);
+            result.resolve(taskResult);
         });
-        await page.addScriptTag({ content: createInsertionScriptContent(tests.map(this.decorateWithState)) });
+        await useInterceptApi(page);
+        await page.addScriptTag({ content: createInsertionScriptContent(this.decorateWithState(test)) });
 
         return Promise.race([
-            results.promise,
-            defer(this.config.runWaitTimeout).then(() => {
-                return new Error(`timeout ${this.config.runWaitTimeout}ms reached waiting for run to end`);
-            }),
+            result.promise,
+            defer(
+                this.config.runWaitTimeout,
+                () => new Error(`timeout ${this.config.runWaitTimeout}ms reached waiting for run to end`),
+            ),
         ]).finally(() => {
             return page.close();
         });

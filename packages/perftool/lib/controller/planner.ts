@@ -8,7 +8,7 @@ import type { TestModule } from '../build/collect';
 import type { Test } from './executor';
 
 export type IPlanner = {
-    plan(): Generator<Test[], undefined>;
+    plan(): Generator<Test, undefined>;
 };
 
 export function getTests<T extends Task<any, any>[]>(
@@ -52,7 +52,7 @@ export default class Planner<T extends Task<any, any>[]> implements IPlanner {
         this.testModules = testModules;
     }
 
-    *plan(): Generator<Test[], undefined> {
+    *plan(): Generator<Test, undefined> {
         const idempotentTasks = this.tasks.filter(({ isIdempotent }) => isIdempotent);
         const nonIdempotentTasks = this.tasks.filter(({ isIdempotent }) => !isIdempotent);
 
@@ -60,7 +60,9 @@ export default class Planner<T extends Task<any, any>[]> implements IPlanner {
             debug('[planner]', 'running idempotent tasks');
             const tests = getTests(this.config, idempotentTasks, this.testModules);
 
-            yield tests;
+            for (const test of tests) {
+                yield test;
+            }
         }
 
         if (nonIdempotentTasks.length) {
@@ -74,7 +76,7 @@ export default class Planner<T extends Task<any, any>[]> implements IPlanner {
             }
             for (let i = 0; i < this.config.dryRunTimes; ++i) {
                 for (const test of tests) {
-                    yield [{ ...test, type: 'dry' }];
+                    yield { ...test, type: 'dry' };
                 }
             }
 
@@ -82,7 +84,7 @@ export default class Planner<T extends Task<any, any>[]> implements IPlanner {
 
             for (let i = 0; i < this.config.retries; ++i) {
                 for (const test of tests) {
-                    yield [test];
+                    yield test;
                 }
             }
         }

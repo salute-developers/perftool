@@ -15,7 +15,9 @@
         "@typescript-eslint/no-non-null-assertion": "off",
         "@typescript-eslint/camelcase": "off",
         "no-bitwise": "off",
+        "eqeqeq": ["error", "always"],
         "no-restricted-syntax": "off",
+        "no-underscore-dangle": "off",
         "func-names": "off",
         "no-return-assign": "off",
         "generator-star-spacing": "off",
@@ -39,6 +41,7 @@
             }
         ],
         "padding-line-between-statements": "off",
+        "default-param-last": "off",
         "implicit-arrow-linebreak": "off",
         "no-plusplus": "off",
         "max-classes-per-file": "off",
@@ -50,6 +53,7 @@
         "function-paren-newline": "off",
         "no-param-reassign": "off",
         "no-shadow": "warn",
+        "no-eval": "warn",
         "consistent-return": "off",
         "prettier/prettier": "error",
         "@typescript-eslint/explicit-function-return-type": "off",
@@ -66,6 +70,7 @@
         "react/sort-comp": "off",
         "react/no-array-index-key": "off",
         "react-hooks/exhaustive-deps": "warn",
+        "react-hooks/rules-of-hooks": "off",
         "import/prefer-default-export": "off",
         "import/order": [
             "error",
