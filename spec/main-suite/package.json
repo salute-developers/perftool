@@ -9,7 +9,7 @@
     "devDependencies": {
         "@salutejs/perftool": "workspace:*",
         "@types/jest": "29.5.0",
-        "@types/node": "20.4.3",
+        "@types/node": "20.4.5",
         "@types/react": "18.2.14",
         "@types/styled-components": "5.1.26",
         "ajv": "8.12.0",
