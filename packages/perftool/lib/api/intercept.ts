@@ -29,8 +29,8 @@ export type InterceptParams = {
     source: string;
 } & (
     | { responseType: FakeResponseType.Abort; response: undefined }
-    | { responseType: FakeResponseType.File; response: string }
-    | { responseType?: FakeResponseType.JSON; response: JSONSerializable }
+    | { responseType?: FakeResponseType.File; response: string }
+    | { responseType: FakeResponseType.JSON; response: JSONSerializable }
 );
 
 type FakeResponse = { mimeType: string; data: string | Buffer };
