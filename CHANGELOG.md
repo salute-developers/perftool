@@ -1,3 +1,57 @@
+# (Tue Aug 01 2023)
+
+#### 🚀 Enhancement
+
+- `@salutejs/perftool@0.12.0`
+  - feat(perftool): add beforeTest callback support, add request interception [#89](https://github.com/salute-developers/perftool/pull/89) ([@akhdrv](https://github.com/akhdrv))
+
+#### 🐛 Bug Fix
+
+- build: restore previous prettier version [#92](https://github.com/salute-developers/perftool/pull/92) ([@akhdrv](https://github.com/akhdrv))
+- ci: update dependabot prs daily [#77](https://github.com/salute-developers/perftool/pull/77) ([@akhdrv](https://github.com/akhdrv))
+- `@salutejs/perftool@0.12.0`
+  - fix(perftool): fix intercept types [#92](https://github.com/salute-developers/perftool/pull/92) ([@akhdrv](https://github.com/akhdrv))
+
+#### 🔩 Dependency Updates
+
+- build: bump eslint from 8.38.0 to 8.45.0 [#72](https://github.com/salute-developers/perftool/pull/72) ([@dependabot[bot]](https://github.com/dependabot[bot]))
+- build: bump prettier from 2.8.8 to 3.0.0 [#81](https://github.com/salute-developers/perftool/pull/81) ([@dependabot[bot]](https://github.com/dependabot[bot]))
+- build: bump @typescript-eslint/parser from 5.58.0 to 5.62.0 [#73](https://github.com/salute-developers/perftool/pull/73) ([@dependabot[bot]](https://github.com/dependabot[bot]))
+- build: bump @commitlint/config-conventional from 17.6.6 to 17.6.7 [#75](https://github.com/salute-developers/perftool/pull/75) ([@dependabot[bot]](https://github.com/dependabot[bot]))
+- build: bump @auto-it/npm from 10.44.0 to 10.46.0 [#52](https://github.com/salute-developers/perftool/pull/52) ([@dependabot[bot]](https://github.com/dependabot[bot]))
+- build: bump @commitlint/cli from 17.5.1 to 17.6.7 [#66](https://github.com/salute-developers/perftool/pull/66) ([@dependabot[bot]](https://github.com/dependabot[bot]))
+- build: bump semver from 7.3.8 to 7.5.4 [#55](https://github.com/salute-developers/perftool/pull/55) ([@dependabot[bot]](https://github.com/dependabot[bot]))
+- build: bump @typescript-eslint/eslint-plugin from 5.60.0 to 5.62.0 [#61](https://github.com/salute-developers/perftool/pull/61) ([@dependabot[bot]](https://github.com/dependabot[bot]))
+- build: bump lint-staged from 13.2.1 to 13.2.2 [#33](https://github.com/salute-developers/perftool/pull/33) ([@dependabot[bot]](https://github.com/dependabot[bot]))
+- build: bump @auto-it/conventional-commits from 10.44.0 to 10.46.0 [#34](https://github.com/salute-developers/perftool/pull/34) ([@dependabot[bot]](https://github.com/dependabot[bot]))
+- build: bump eslint-plugin-jest from 27.2.1 to 27.2.2 [#35](https://github.com/salute-developers/perftool/pull/35) ([@dependabot[bot]](https://github.com/dependabot[bot]))
+- build: bump @commitlint/config-conventional from 17.4.4 to 17.6.6 [#43](https://github.com/salute-developers/perftool/pull/43) ([@dependabot[bot]](https://github.com/dependabot[bot]))
+- build: bump auto from 10.44.0 to 10.46.0 [#42](https://github.com/salute-developers/perftool/pull/42) ([@dependabot[bot]](https://github.com/dependabot[bot]))
+- build: bump @typescript-eslint/eslint-plugin from 5.58.0 to 5.60.0 [#44](https://github.com/salute-developers/perftool/pull/44) ([@dependabot[bot]](https://github.com/dependabot[bot]))
+- `@salutejs/perftool@0.12.0`
+  - build: bump @jest/globals from 29.5.0 to 29.6.1 [#70](https://github.com/salute-developers/perftool/pull/70) ([@dependabot[bot]](https://github.com/dependabot[bot]))
+  - build: bump babel-loader from 9.1.2 to 9.1.3 [#78](https://github.com/salute-developers/perftool/pull/78) ([@dependabot[bot]](https://github.com/dependabot[bot]))
+  - build: bump @babel/core from 7.22.5 to 7.22.9 [#71](https://github.com/salute-developers/perftool/pull/71) ([@dependabot[bot]](https://github.com/dependabot[bot]))
+  - build: bump @swc/core from 1.3.69 to 1.3.70 [#74](https://github.com/salute-developers/perftool/pull/74) ([@dependabot[bot]](https://github.com/dependabot[bot]))
+  - build: bump chalk from 5.2.0 to 5.3.0 [#76](https://github.com/salute-developers/perftool/pull/76) ([@dependabot[bot]](https://github.com/dependabot[bot]))
+  - build: bump @types/node from 20.3.1 to 20.4.3 [#64](https://github.com/salute-developers/perftool/pull/64) ([@dependabot[bot]](https://github.com/dependabot[bot]))
+  - build: bump @babel/preset-env from 7.21.4 to 7.22.9 [#65](https://github.com/salute-developers/perftool/pull/65) ([@dependabot[bot]](https://github.com/dependabot[bot]))
+  - build: bump simple-git from 3.18.0 to 3.19.1 [#45](https://github.com/salute-developers/perftool/pull/45) ([@dependabot[bot]](https://github.com/dependabot[bot]))
+  - build: bump @babel/preset-react from 7.18.6 to 7.22.5 [#51](https://github.com/salute-developers/perftool/pull/51) ([@dependabot[bot]](https://github.com/dependabot[bot]))
+  - build: bump @swc/core from 1.3.50 to 1.3.69 [#62](https://github.com/salute-developers/perftool/pull/62) ([@dependabot[bot]](https://github.com/dependabot[bot]))
+  - build: bump @types/react-dom from 18.0.11 to 18.2.7 [#63](https://github.com/salute-developers/perftool/pull/63) ([@dependabot[bot]](https://github.com/dependabot[bot]))
+  - build: bump commander from 9.5.0 to 11.0.0 [#29](https://github.com/salute-developers/perftool/pull/29) ([@dependabot[bot]](https://github.com/dependabot[bot]))
+  - build: bump html-webpack-plugin from 5.5.0 to 5.5.3 [#32](https://github.com/salute-developers/perftool/pull/32) ([@dependabot[bot]](https://github.com/dependabot[bot]))
+  - build: bump @types/node from 18.15.11 to 20.3.1 [#36](https://github.com/salute-developers/perftool/pull/36) ([@dependabot[bot]](https://github.com/dependabot[bot]))
+  - build: bump @types/react from 18.0.34 to 18.2.14 [#41](https://github.com/salute-developers/perftool/pull/41) ([@dependabot[bot]](https://github.com/dependabot[bot]))
+
+#### Authors: 2
+
+- [@dependabot[bot]](https://github.com/dependabot[bot])
+- Artem Khaydarov ([@akhdrv](https://github.com/akhdrv))
+
+---
+
 # (Wed Jun 21 2023)
 
 #### 🐛 Bug Fix
