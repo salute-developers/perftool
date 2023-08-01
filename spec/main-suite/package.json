@@ -1,6 +1,6 @@
 {
     "name": "perftool-main-suite",
-    "version": "0.7.2",
+    "version": "0.8.0",
     "dependencies": {
         "react": "18.2.0",
         "react-dom": "18.2.0",
