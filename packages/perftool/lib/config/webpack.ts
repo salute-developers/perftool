@@ -24,9 +24,6 @@ const defaultConfig: WebpackConfig = {
             'react-dom/client': false,
         },
     },
-    experiments: {
-        topLevelAwait: true,
-    },
     performance: {
         hints: false,
         maxAssetSize: 1024 * 1024,

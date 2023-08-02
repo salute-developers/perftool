@@ -18,6 +18,8 @@ describe('utils/waitForIdle', () => {
             }
         });
 
+        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+        // @ts-ignore
         windowSpy = jest.spyOn(global, 'window', 'get');
     });
 
@@ -25,7 +27,7 @@ describe('utils/waitForIdle', () => {
         jest.restoreAllMocks();
     });
 
-    it('should call window.requestIdleCallback', () => {
+    it('should call window.requestIdleCallback', async () => {
         const requestIdleCallback = jest.fn((callback: IdleRequestCallback): number => {
             callback({} as IdleDeadline);
             return 0;
@@ -35,7 +37,7 @@ describe('utils/waitForIdle', () => {
             requestIdleCallback,
         }));
 
-        expect(waitForIdle()).resolves.toBeUndefined();
+        expect(await waitForIdle()).toBeUndefined();
         expect(requestIdleCallback).toBeCalledTimes(1);
         expect(assert).toBeCalledTimes(1);
     });
