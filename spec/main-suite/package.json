@@ -1,22 +1,24 @@
 {
     "name": "perftool-main-suite",
     "version": "0.8.0",
+    "license": "MIT",
     "dependencies": {
         "react": "18.2.0",
         "react-dom": "18.2.0",
-        "styled-components": "5.3.0"
+        "styled-components": "6.0.6"
     },
     "devDependencies": {
         "@salutejs/perftool": "workspace:*",
-        "@types/jest": "29.5.0",
-        "@types/node": "20.4.3",
-        "@types/react": "18.2.14",
+        "@types/jest": "29.5.3",
+        "@types/node": "20.4.5",
+        "@types/react": "18.2.18",
         "@types/styled-components": "5.1.26",
         "ajv": "8.12.0",
-        "jest": "29.5.0",
-        "ts-jest": "29.1.0",
-        "typescript": "5.0.4",
-        "webpack": "5.79.0"
+        "babel-plugin-styled-components": "2.1.4",
+        "jest": "29.6.2",
+        "ts-jest": "29.1.1",
+        "typescript": "5.1.6",
+        "webpack": "5.88.2"
     },
     "scripts": {
         "integration:prepare": "./start.sh",
