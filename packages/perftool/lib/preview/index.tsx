@@ -1,20 +1,25 @@
 import React from 'react';
 
 import { Config } from '../config';
-import { Subject } from '../client/measurement/runner';
 import { render } from '../utils/react';
 import { subject } from '../stabilizers/staticTask';
 import createContainer from '../utils/createContainer';
+import { EntrySubject } from '../client/input';
 
 import Root from './components/Root';
 
 type Params = {
     config: Config;
-    subjects: Subject[];
+    subjects: EntrySubject[];
 };
 
 export async function createPreviewClient({ subjects }: Params): Promise<void> {
-    const filteredSubjects = subjects.filter(({ id }) => id !== subject.id);
+    // TODO beforeTest
+    const filteredSubjects = await Promise.all(
+        subjects
+            .filter(({ id }) => id !== subject.id)
+            .map(async ({ id, loadComponent }) => ({ id, Component: await loadComponent() })),
+    );
     const container = createContainer();
     document.body.style.margin = '0';
 

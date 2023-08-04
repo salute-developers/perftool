@@ -9,15 +9,19 @@ import getCurrentVersion from '../utils/version';
 import { debug, info, warn } from '../utils/logger';
 
 type TaskState = { [subjectId: string]: { [taskId: string]: JSONSerializable } };
+type SubjectsDepsHashMap = { [subjectId: string]: string };
 
 type CacheFileContent = {
     timestamp: number;
     version: string;
     taskState: TaskState;
+    subjectDeps: SubjectsDepsHashMap;
 };
 
 class Cache {
     private taskState: TaskState = {};
+
+    private subjectDeps: SubjectsDepsHashMap = {};
 
     private readonly config: Config;
 
@@ -37,8 +41,12 @@ class Cache {
         return Boolean(this.config.cache.taskState);
     }
 
+    protected withTestSubjectsCache(): boolean {
+        return Boolean(this.config.cache.testSubjectsDeps);
+    }
+
     protected withAnyCache(): boolean {
-        const caches = [this.withTaskStateCache()];
+        const caches = [this.withTaskStateCache(), this.withTestSubjectsCache()];
 
         return caches.some((v) => v);
     }
@@ -129,13 +137,14 @@ class Cache {
     }
 
     protected async setContents(contents: string): Promise<void> {
-        const { version, taskState } = JSON.parse(contents) as CacheFileContent;
+        const { version, taskState, subjectDeps } = JSON.parse(contents) as CacheFileContent;
 
         if (version !== (await getCurrentVersion())) {
             return;
         }
 
         this.taskState = taskState;
+        this.subjectDeps = subjectDeps;
     }
 
     protected async load(): Promise<void> {
@@ -184,6 +193,7 @@ class Cache {
             timestamp: Date.now(),
             version: await getCurrentVersion(),
             taskState: this.taskState,
+            subjectDeps: this.subjectDeps,
         };
 
         if (!(await checkPath(cacheDirectory))) {
@@ -213,6 +223,26 @@ class Cache {
         }
 
         this.taskState[subjectId][taskId] = state;
+    }
+
+    getSubjectDepsHash(subjectId: string): string | undefined {
+        if (!this.withTestSubjectsCache()) {
+            return;
+        }
+
+        return this.subjectDeps[subjectId];
+    }
+
+    setSubjectsDepsHash(subjectsDepsHashMap: Map<string, string>): void {
+        if (!this.withTestSubjectsCache()) {
+            return;
+        }
+
+        this.subjectDeps = {};
+
+        for (const [subjectId, hash] of subjectsDepsHashMap) {
+            this.subjectDeps[subjectId] = hash;
+        }
     }
 }
 

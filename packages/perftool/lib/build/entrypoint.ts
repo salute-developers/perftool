@@ -2,7 +2,7 @@ import fsPromises from 'fs/promises';
 import { constants } from 'fs';
 import path from 'path';
 
-import { formatImportExpression, formatLines } from '../utils/codegen';
+import { formatLines } from '../utils/codegen';
 import { Config } from '../config';
 import { debug } from '../utils/logger';
 import CWD from '../utils/cwd';
@@ -25,21 +25,15 @@ type ModifyEntrypointParams = {
 export async function modifyEntrypoint({ modules, entrypointPath, config }: ModifyEntrypointParams): Promise<void> {
     debug('modifying entrypoint', entrypointPath);
 
-    debug('adding imports for modules', modules);
-    const imports = modules.map((module) =>
-        formatImportExpression(getModuleRelativePath(entrypointPath, module.path), {
-            namedImports: module.subjects.map(({ id: alias, originalExportedName: original }) => ({
-                original,
-                alias,
-            })),
-        }),
-    );
-
-    debug('entry imports', imports);
-
     const clientTestSubjects = modules
-        .map(({ subjects }) => {
-            return subjects.map(({ id }) => `{ id: '${id}', Component: ${id} },`);
+        .map(({ subjects, path: modulePath }) => {
+            return subjects.map(
+                ({ id, originalExportedName }) => `{ id: '${id}', loadComponent: async () => (await import(
+    /* webpackMode: "lazy" */
+    /* webpackChunkName: "subject~${id}" */
+    /* webpackExports: ["${originalExportedName}"] */
+    '${getModuleRelativePath(entrypointPath, modulePath)}'))['${originalExportedName}'] },`,
+            );
         })
         .flat();
 
@@ -51,7 +45,6 @@ export async function modifyEntrypoint({ modules, entrypointPath, config }: Modi
 
     // TODO comments
     const formattedContents = contents
-        .replace('// <IMPORT_MARK>', formatLines(imports))
         .replace('// <TEST_SUBJECT_MARK>', formatLines(clientTestSubjects))
         .replace('// <CONFIG_ARGS_MARK>', JSON.stringify(config));
 

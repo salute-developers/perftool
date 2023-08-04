@@ -11,8 +11,12 @@ import { modifyEntrypoint } from './entrypoint';
 
 const dirname = path.dirname(fileURLToPath(import.meta.url));
 
+type BuildResult = {
+    subjectsDepsHashMap: Map<string, string>;
+};
+
 // TODO memfs unionfs
-function build(config: WebpackConfig) {
+function build(config: WebpackConfig): Promise<BuildResult> {
     info('Running Webpack...');
 
     return new Promise((resolve, reject) => {
@@ -32,9 +36,15 @@ function build(config: WebpackConfig) {
                 return;
             }
 
-            if (stats) {
-                resolve(stats);
-            }
+            resolve({
+                subjectsDepsHashMap: new Map(
+                    [...(stats?.compilation?.chunks || [])]
+                        .filter((chunk) => chunk.name?.startsWith('subject~'))
+                        .map((chunk) => [chunk.name!.replace('subject~', ''), chunk.contentHash.javascript]),
+                ),
+            });
+
+            info('Build successful');
         });
     });
 }
@@ -79,7 +89,7 @@ type BuildClientParams = {
     testModules: TestModule[];
 };
 
-export async function buildClient({ config, testModules }: BuildClientParams) {
+export async function buildClient({ config, testModules }: BuildClientParams): Promise<BuildResult> {
     info('Building client...');
 
     const entry = path.join(sourceDirectory, 'clientEntry.ts');
@@ -95,7 +105,5 @@ export async function buildClient({ config, testModules }: BuildClientParams) {
 
     const webpackConfig = getWebpackConfig(entry, buildDirectory, config);
 
-    await build(webpackConfig);
-
-    info('Build successful');
+    return build(webpackConfig);
 }

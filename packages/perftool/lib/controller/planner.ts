@@ -29,7 +29,7 @@ export function getTests<T extends Task<any, any>[]>(
             module.subjects.map(({ id: subjectId }) => ({ taskId, subjectId })),
         );
 
-        if (intersectStabilizers(config, availableStabilizers).includes(staticTaskSubjectId)) {
+        if (testGroup.length && intersectStabilizers(config, availableStabilizers).includes(staticTaskSubjectId)) {
             testGroup.push([{ taskId, subjectId: staticTaskSubjectId }]);
         }
 

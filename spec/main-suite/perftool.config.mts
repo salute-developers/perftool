@@ -22,7 +22,7 @@ const config: Config = {
     cacheExpirationTime: 1000000,
     modifyWebpackConfig(conf) {
         const babelLoaderOpts = conf.module?.rules?.find(
-            (rule) => typeof rule === 'object' && rule.loader?.includes('babel-loader'),
+            (rule) => rule && typeof rule === 'object' && rule.loader?.includes('babel-loader'),
         );
 
         if (typeof babelLoaderOpts === 'object' && typeof babelLoaderOpts?.options === 'object') {

@@ -11,9 +11,11 @@ import { Task, TaskState } from './types';
 
 class TimeoutError extends BaseError {}
 
+export type PerftoolComponent = ComponentType & { beforeTest?: () => Promise<void> | void };
+
 export type Subject = {
     id: string;
-    Component: ComponentType & { beforeTest?: () => Promise<void> | void };
+    Component: PerftoolComponent;
 };
 
 type RunTaskParams<T extends Task<any, any, any>> = {

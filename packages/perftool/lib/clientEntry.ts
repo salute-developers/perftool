@@ -2,11 +2,9 @@
 
 import type { Config } from './config/common';
 import { getAllTasks } from './config/task';
-import { Subject } from './client/measurement/runner';
 import { subject as staticTaskSubject } from './stabilizers/staticTask';
 import { setLogLevel } from './utils/logger';
-
-// <IMPORT_MARK>
+import { EntrySubject } from "./client/input";
 
 const config = ((v) => v)(
     // <CONFIG_ARGS_MARK>
@@ -14,17 +12,23 @@ const config = ((v) => v)(
 
 setLogLevel(config.logLevel);
 
-const allTestSubjects: Subject[] = [
+const allTestSubjects: EntrySubject[] = [
     staticTaskSubject,
     // <TEST_SUBJECT_MARK>
 ];
 
 if (process.env.PERFTOOL_PREVIEW_MODE) {
-    const { createPreviewClient } = await import('./preview');
+    const { createPreviewClient } = await import(
+        /* webpackMode: "eager" */
+        './preview'
+    );
 
     await createPreviewClient({ config, subjects: allTestSubjects });
 } else {
-    const { createPerfToolClient } = await import('./client');
+    const { createPerfToolClient } = await import(
+        /* webpackMode: "eager" */
+        './client'
+    );
     // TODO tasks in client config are not serialized
     const allTasks = getAllTasks(config);
 
