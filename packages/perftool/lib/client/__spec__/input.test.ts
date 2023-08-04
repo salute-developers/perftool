@@ -1,7 +1,8 @@
 import { jest } from '@jest/globals';
+import React from 'react';
 
 import type { Task } from '../measurement/types';
-import type { Subject } from '../measurement/runner';
+import { EntrySubject } from '../input';
 
 describe('client/input/getTest', () => {
     let assertMock = {} as jest.Mock;
@@ -21,47 +22,46 @@ describe('client/input/getTest', () => {
     });
 
     it('should transform raw test with ids into test with component and task', async () => {
+        let loadComponentMock;
         const fakeTasks = [{ id: 'fakeTaskId1' }, { id: 'fakeTaskId2' }, { id: 'fakeTaskId3' }] as Task<any, any>[];
         const fakeSubjects = [
-            { id: 'fakeSubjectId1' },
-            { id: 'fakeSubjectId2' },
-            { id: 'fakeSubjectId3' },
-        ] as Subject[];
+            {
+                id: 'fakeSubjectId1',
+                loadComponent: (loadComponentMock = jest.fn(async () => ({}) as React.ComponentType)),
+            },
+        ] as EntrySubject[];
         const state = { state: '' };
         const fakeRawTest = { subjectId: fakeSubjects[0].id, taskId: fakeTasks[0].id, state };
 
         const { getTest } = await import('../input');
 
-        const result = getTest(fakeRawTest, { tasks: fakeTasks, subjects: fakeSubjects });
+        const result = await getTest(fakeRawTest, { tasks: fakeTasks, subjects: fakeSubjects });
 
-        expect(result).toEqual({ subject: fakeSubjects[0], task: fakeTasks[0], state });
+        expect(result).toEqual({ subject: { id: fakeSubjects[0].id, Component: {} }, task: fakeTasks[0], state });
         expect(assertMock).toHaveBeenCalledTimes(1);
+        expect(loadComponentMock).toHaveBeenCalledTimes(1);
     });
 
     it('should throw if task not found', async () => {
         const fakeTasks = [{ id: 'fakeTaskId1' }] as Task<any, any>[];
-        const fakeSubjects = [{ id: 'fakeSubjectId1' }] as Subject[];
+        const fakeSubjects = [{ id: 'fakeSubjectId1' }] as EntrySubject[];
         const fakeRawTest = { subjectId: fakeSubjects[0].id, taskId: 'fakeTaskId2', state: {} };
 
         const { getTest } = await import('../input');
 
-        expect(() => {
-            getTest(fakeRawTest, { tasks: fakeTasks, subjects: fakeSubjects });
-        }).toThrow();
+        expect(() => getTest(fakeRawTest, { tasks: fakeTasks, subjects: fakeSubjects })).rejects.toThrow();
 
         expect(assertMock).toHaveBeenCalledTimes(1);
     });
 
     it('should throw if subject not found', async () => {
         const fakeTasks = [{ id: 'fakeTaskId1' }] as Task<any, any>[];
-        const fakeSubjects = [{ id: 'fakeSubjectId1' }] as Subject[];
+        const fakeSubjects = [{ id: 'fakeSubjectId1' }] as EntrySubject[];
         const fakeRawTest = { subjectId: 'fakeSubjectId2', taskId: fakeTasks[0].id, state: {} };
 
         const { getTest } = await import('../input');
 
-        expect(() => {
-            getTest(fakeRawTest, { tasks: fakeTasks, subjects: fakeSubjects });
-        }).toThrow();
+        expect(() => getTest(fakeRawTest, { tasks: fakeTasks, subjects: fakeSubjects })).rejects.toThrow();
 
         expect(assertMock).toHaveBeenCalledTimes(1);
     });
@@ -78,9 +78,9 @@ describe('client/input/resolveTest', () => {
 
     it('should call getTests if window._perftool_test is present', async () => {
         const tasks = [{ id: 'fakeTaskId' }] as any[];
-        const subjects = [{ id: 'fakeSubjectId2' }] as any[];
+        const subjects = [{ id: 'fakeSubjectId2', loadComponent: async () => ({}) }] as any[];
         const fakeRawTest = { subjectId: 'fakeSubjectId2', taskId: 'fakeTaskId', state: {} };
-        const fakeResult = { subject: subjects[0], task: tasks[0], state: fakeRawTest.state };
+        const fakeResult = { subject: { id: subjects[0].id, Component: {} }, task: tasks[0], state: fakeRawTest.state };
 
         window._perftool_test = fakeRawTest;
 
@@ -93,9 +93,9 @@ describe('client/input/resolveTest', () => {
 
     it("should create window._perftool_api_ready if test isn't present", async () => {
         const tasks = [{ id: 'fakeTaskId' }] as any[];
-        const subjects = [{ id: 'fakeSubjectId2' }] as any[];
+        const subjects = [{ id: 'fakeSubjectId2', loadComponent: async () => ({}) }] as any[];
         const fakeRawTest = { subjectId: 'fakeSubjectId2', taskId: 'fakeTaskId', state: {} };
-        const fakeResult = { subject: subjects[0], task: tasks[0], state: fakeRawTest.state };
+        const fakeResult = { subject: { id: subjects[0].id, Component: {} }, task: tasks[0], state: fakeRawTest.state };
 
         const { resolveTest } = await import('../input');
         const resultPromise = resolveTest({ tasks, subjects });
@@ -108,7 +108,7 @@ describe('client/input/resolveTest', () => {
 
     it('should reject if error while transforming tests', async () => {
         const tasks = [] as Task<any, any>[];
-        const subjects = [] as Subject[];
+        const subjects = [] as EntrySubject[];
         const fakeRawTest = { subjectId: 'fakeSubjectId2', taskId: 'fakeTaskId', state: {} };
 
         const { resolveTest } = await import('../input');

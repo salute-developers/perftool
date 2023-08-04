@@ -2,11 +2,11 @@ import type { Config } from '../config/common';
 import { debug } from '../utils/logger';
 
 import type { Task } from './measurement/types';
-import { runTask, Subject } from './measurement/runner';
-import { resolveTest } from './input';
+import { runTask } from './measurement/runner';
+import { EntrySubject, resolveTest } from './input';
 
 type CreatePerfToolClientParams<T extends Task<any, any>[]> = {
-    subjects: Subject[];
+    subjects: EntrySubject[];
     tasks: T;
     config: Config;
 };

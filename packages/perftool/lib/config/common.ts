@@ -49,6 +49,7 @@ export type Config = {
     currentBranchRef?: string;
     cache: {
         taskState?: boolean;
+        testSubjectsDeps?: boolean;
     };
     cacheDirectory: string;
     cacheExpirationTime: number;

@@ -40,5 +40,5 @@ export function overrideMetric<T extends number | [number, number]>(staticTaskRe
 
 export const subject = {
     id,
-    Component,
+    loadComponent: async () => Component,
 };

@@ -11,15 +11,22 @@ let ReactDOMClient: typeof ReactDOMClientType = {} as any;
 let ReactDOM: typeof ReactDOMType = {} as any;
 if (process.env.PERFTOOL_CLIENT_RUNTIME) {
     if (isReact18AndNewer()) {
-        ReactDOMClient = await import(`react-dom/client`);
+        ReactDOMClient = await import(
+            /* webpackMode: "eager" */
+            `react-dom/client`
+        );
     } else {
-        ReactDOM = await import(`react-dom`);
+        ReactDOM = await import(
+            /* webpackMode: "eager" */
+            `react-dom`
+        );
     }
 }
 
 export async function render(element: React.ReactElement, container: HTMLElement): Promise<void> {
     return new Promise((resolve) => {
         if (!isReact18AndNewer()) {
+            // eslint-disable-next-line react/no-deprecated
             ReactDOM.render(element, container, resolve);
             return;
         }
@@ -35,6 +42,7 @@ export async function render(element: React.ReactElement, container: HTMLElement
 export async function hydrate(element: React.ReactElement, container: HTMLElement): Promise<void> {
     return new Promise((resolve) => {
         if (!isReact18AndNewer()) {
+            // eslint-disable-next-line react/no-deprecated
             ReactDOM.hydrate(element, container, resolve);
             return;
         }

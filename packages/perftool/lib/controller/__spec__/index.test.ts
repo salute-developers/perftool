@@ -16,7 +16,7 @@ describe('controller/runTests', () => {
         let executorInstance;
         const results = ['res1', 'res2', 'res3'];
         const port = Math.trunc(Math.random() * 2 ** 16);
-        const config = {} as Config;
+        const config = { cache: {} } as Config;
         const cache = {} as Cache;
         const tasks = [{ id: 'fakeTaskId2' }] as Task<any, any>[];
         const testModules = [

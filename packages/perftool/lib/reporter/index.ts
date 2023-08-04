@@ -18,8 +18,16 @@ export type ReportWithMeta = {
     duration: number;
     averageLoad: number[];
     freeMemory: number;
+    cachedTestIds: string[];
     staticTaskResult?: StatsReport[string];
     result: StatsReport;
+};
+
+type GenerateReportParams = {
+    config: Config;
+    data: StatsReport;
+    testModules: TestModule[];
+    actualTestModules: TestModule[];
 };
 
 let startTime: number;
@@ -35,16 +43,32 @@ export async function report(statsStream: AsyncGenerator<StatsReport, undefined>
 }
 
 function getSubjectIdToReadableNameMap(testModules: TestModule[]) {
-    return testModules.reduce((acc, { subjects, path: modulePath }) => {
-        subjects.forEach(({ id, originalExportedName }) => {
-            acc[id] = `${path.relative(CWD, path.resolve(CWD, modulePath))}#${originalExportedName}`;
-        });
+    return testModules.reduce(
+        (acc, { subjects, path: modulePath }) => {
+            subjects.forEach(({ id, originalExportedName }) => {
+                acc[id] = `${path.relative(CWD, path.resolve(CWD, modulePath))}#${originalExportedName}`;
+            });
 
-        return acc;
-    }, {} as { [k: string]: string });
+            return acc;
+        },
+        {} as { [k: string]: string },
+    );
 }
 
-export async function generateReport(config: Config, data: StatsReport, testModules: TestModule[]) {
+function getCachedTestIds(allTestModules: TestModule[], actualTestModules: TestModule[]): string[] {
+    const allSubjectIds = allTestModules.reduce((acc, { subjects }) => {
+        acc.push(...subjects.map(({ id }) => id));
+        return acc;
+    }, [] as string[]);
+    const actualSubjectIds = actualTestModules.reduce((acc, { subjects }) => {
+        acc.push(...subjects.map(({ id }) => id));
+        return acc;
+    }, [] as string[]);
+
+    return allSubjectIds.filter((id) => !actualSubjectIds.includes(id));
+}
+
+export async function generateReport({ config, data, testModules, actualTestModules }: GenerateReportParams) {
     debug('writing report');
     const subjectIdToReadableNameMap = getSubjectIdToReadableNameMap(testModules);
 
@@ -56,6 +80,7 @@ export async function generateReport(config: Config, data: StatsReport, testModu
         duration: Math.round(performance.now() - startTime),
         averageLoad: os.loadavg(),
         freeMemory: os.freemem(),
+        cachedTestIds: getCachedTestIds(testModules, actualTestModules).map((id) => subjectIdToReadableNameMap[id]),
         result: Object.fromEntries(
             Object.entries(data)
                 .filter(([k]) => k !== staticTaskSubjectId)

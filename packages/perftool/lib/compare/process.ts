@@ -121,7 +121,7 @@ function processTaskResult(
     }
 
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    const { __statsMap, ...restReport } = current;
+    const { __statsMap, observations, ...restReport } = current;
     const result = { __comparable: true } as ComparableResultMap;
 
     for (const [currentMetricId, currentMetricResult] of Object.entries(restReport)) {

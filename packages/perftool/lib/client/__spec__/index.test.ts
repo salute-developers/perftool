@@ -1,8 +1,8 @@
 import { jest } from '@jest/globals';
 
 import { Config } from '../../config';
-import { Subject } from '../measurement/runner';
 import { Task } from '../measurement/types';
+import { EntrySubject } from '../input';
 
 describe('client/createPerfToolClient', () => {
     afterEach(() => {
@@ -30,7 +30,7 @@ describe('client/createPerfToolClient', () => {
         window._perftool_finish = jest.fn() as typeof window._perftool_finish;
 
         const config = {} as Config;
-        const subjects = [{}] as Subject[];
+        const subjects = [{}] as EntrySubject[];
         const tasks = [{}] as Task<any, any>[];
 
         const { createPerfToolClient } = await import('..');

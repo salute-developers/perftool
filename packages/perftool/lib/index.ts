@@ -15,6 +15,7 @@ import getCurrentVersion from './utils/version';
 import Cache from './cache';
 import openBrowser from './utils/openBrowser';
 import { waitForSigint } from './utils/interrupt';
+import { filterTestModulesByCachedDepsHash } from './utils/subjectDeps';
 
 export { intercept } from './api/external';
 export type { ProjectConfig as Config };
@@ -74,7 +75,7 @@ async function start() {
         );
     }
 
-    await buildClient({ config, testModules });
+    const { subjectsDepsHashMap } = await buildClient({ config, testModules });
 
     const { port, stop } = await createServer(config);
 
@@ -86,9 +87,16 @@ async function start() {
         return;
     }
 
+    const filteredTestModulesByDepsCache = filterTestModulesByCachedDepsHash({
+        config,
+        cache,
+        subjectsDepsHashMap,
+        testModules,
+    });
+
     measureStartingPoint();
 
-    const testResultsStream = runTests({ cache, config, port, tasks, testModules });
+    const testResultsStream = runTests({ cache, config, port, tasks, testModules: filteredTestModulesByDepsCache });
 
     const stats = new Statistics(config, tasks);
     const consumingPromise = stats.consume(testResultsStream);
@@ -99,10 +107,16 @@ async function start() {
         await consumingPromise;
     }
 
+    cache.setSubjectsDepsHash(subjectsDepsHashMap);
     await cache.save();
     await stop();
 
-    await generateReport(config, stats.getResult(), testModules);
+    await generateReport({
+        config,
+        data: stats.getResult(),
+        testModules,
+        actualTestModules: filteredTestModulesByDepsCache,
+    });
 }
 
 await start()

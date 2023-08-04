@@ -29,9 +29,7 @@ const defaultConfig: WebpackConfig = {
         maxAssetSize: 1024 * 1024,
         maxEntrypointSize: 1024 * 1024,
     },
-    output: {
-        filename: 'bundle.[chunkhash].js',
-    },
+    output: {},
     module: {
         rules: [
             {
@@ -50,6 +48,11 @@ const defaultConfig: WebpackConfig = {
         ],
     },
     plugins: [new HtmlWebpackPlugin()],
+    optimization: {
+        splitChunks: false,
+        mergeDuplicateChunks: false,
+        usedExports: true,
+    },
 };
 
 export function getWebpackConfig(entry: string, output: string, config: Config): WebpackConfig {

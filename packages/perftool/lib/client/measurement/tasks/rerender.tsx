@@ -36,7 +36,7 @@ type State = BaseState & {
 function noop() {}
 
 const CACHED_RENDER_WAIT_FACTOR = 1.2;
-const CACHED_RERENDER_WAIT_FACTOR = 2;
+const CACHED_RERENDER_WAIT_FACTOR = 4;
 
 const rerender: Task<number, RerenderConfig, State> = {
     id: 'rerender',

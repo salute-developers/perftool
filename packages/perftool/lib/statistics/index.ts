@@ -8,7 +8,7 @@ import { id as staticTaskSubjectId } from '../stabilizers/staticTask';
 import metrics from './metrics';
 import { MetricResult } from './types';
 
-export type StatsMap = { __statsMap: true } & {
+export type StatsMap = { __statsMap: true; observations?: number[] } & {
     [statKey: string]: MetricResult;
 };
 export type StatsReport = {
@@ -99,7 +99,7 @@ export default class Statistics<T extends Task<any, any>[]> {
             report[subjectId] = report[subjectId] || {};
 
             for (const [taskId, results] of tasksResult) {
-                report[subjectId][taskId] = report[subjectId][taskId] || { __statsMap: true };
+                report[subjectId][taskId] = report[subjectId][taskId] || { __statsMap: true, observations: results };
 
                 // Presort for faster median and quantiles
                 // eslint-disable-next-line no-nested-ternary

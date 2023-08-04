@@ -1,7 +1,7 @@
 import assert from '../utils/assert';
 
 import { Task, TaskState } from './measurement/types';
-import { Subject } from './measurement/runner';
+import { PerftoolComponent, Subject } from './measurement/runner';
 
 type Test<T extends Task<any, any, any>> = { subject: Subject; task: T; state: TaskState<T> };
 export type RawTest<T extends Task<any, any, any>> = {
@@ -10,19 +10,26 @@ export type RawTest<T extends Task<any, any, any>> = {
     state: TaskState<T>;
 };
 
-type ResolveTestsParams<T extends Task<any, any, any>[]> = {
-    tasks: [...T];
-    subjects: Subject[];
+export type EntrySubject = {
+    id: string;
+    loadComponent: () => Promise<PerftoolComponent>;
 };
 
-export function getTest<T extends Task<any, any, any>[]>(
+type ResolveTestsParams<T extends Task<any, any, any>[]> = {
+    tasks: [...T];
+    subjects: EntrySubject[];
+};
+
+export async function getTest<T extends Task<any, any, any>[]>(
     { subjectId, taskId, state }: RawTest<T[number]>,
     { tasks, subjects }: ResolveTestsParams<T>,
-): Test<T[number]> {
-    const subject = subjects.find(({ id }) => subjectId === id);
+): Promise<Test<T[number]>> {
+    const entrySubject = subjects.find(({ id }) => subjectId === id);
     const task = tasks.find(({ id }) => taskId === id);
 
-    assert(subject && task);
+    assert(entrySubject && task);
+
+    const subject: Subject = { id: entrySubject.id, Component: await entrySubject.loadComponent() };
 
     return { subject, task, state };
 }
