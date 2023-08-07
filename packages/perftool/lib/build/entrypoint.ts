@@ -43,9 +43,10 @@ export async function modifyEntrypoint({ modules, entrypointPath, config }: Modi
     const contents = await fsPromises.readFile(entrypointPath, { encoding: 'utf-8' });
     debug('reading initial contents of entry succeed');
 
-    // TODO comments
     const formattedContents = contents
+        // Insert generated code that creates subjects into entrypoint
         .replace('// <TEST_SUBJECT_MARK>', formatLines(clientTestSubjects))
+        // Insert serialized config
         .replace('// <CONFIG_ARGS_MARK>', JSON.stringify(config));
 
     debug('writing modified contents');

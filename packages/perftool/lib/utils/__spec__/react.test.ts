@@ -2,6 +2,12 @@ import { jest } from '@jest/globals';
 import type React from 'react';
 
 describe('utils/react/isReact18AndNewer', () => {
+    beforeEach(() => {
+        jest.unstable_mockModule('../ErrorBoundary', () => ({
+            withErrorBoundary: jest.fn(),
+        }));
+    });
+
     afterEach(() => {
         jest.restoreAllMocks();
         jest.resetModules();
@@ -35,11 +41,15 @@ describe('utils/render', () => {
 
     it('should call ReactDOM.render if react version is under 18', async () => {
         let renderMock = {} as jest.Mock;
+        let withErrorBoundaryMock;
         let res = () => undefined;
 
         jest.unstable_mockModule('react', () => ({ version: '17.3.0' }));
         jest.unstable_mockModule('react-dom', () => ({
             render: (renderMock = jest.fn((_, __, resolve: any) => (res = resolve)())),
+        }));
+        jest.unstable_mockModule('../ErrorBoundary', () => ({
+            withErrorBoundary: (withErrorBoundaryMock = jest.fn((err) => err)),
         }));
 
         const { render } = await import('../react');
@@ -50,14 +60,19 @@ describe('utils/render', () => {
 
         expect(renderMock).toHaveBeenCalledTimes(1);
         expect(renderMock).toHaveBeenCalledWith(fakeElement, fakeContainer, res);
+        expect(withErrorBoundaryMock).toHaveBeenCalledWith(fakeElement);
     });
 
     it('should call ReactDOMClient.createRoot if react version is 18 and higher', async () => {
         let createRootMock = {} as jest.Mock;
         let rootRenderMock = {} as jest.Mock;
+        let withErrorBoundaryMock;
         jest.unstable_mockModule('react', () => ({ version: '18.2.0' }));
         jest.unstable_mockModule('react-dom/client', () => ({
             createRoot: (createRootMock = jest.fn(() => ({ render: (rootRenderMock = jest.fn()) }))),
+        }));
+        jest.unstable_mockModule('../ErrorBoundary', () => ({
+            withErrorBoundary: (withErrorBoundaryMock = jest.fn((err) => err)),
         }));
 
         const { render } = await import('../react');
@@ -70,6 +85,7 @@ describe('utils/render', () => {
         expect(rootRenderMock).toHaveBeenCalledTimes(1);
         expect(createRootMock).toHaveBeenCalledWith(fakeContainer);
         expect(rootRenderMock).toHaveBeenCalledWith(fakeElement);
+        expect(withErrorBoundaryMock).toHaveBeenCalledWith(fakeElement);
     });
 });
 
@@ -86,10 +102,14 @@ describe('utils/hydrate', () => {
 
     it('should call ReactDOM.hydrate if react version is under 18', async () => {
         let hydrateMock = {} as jest.Mock;
+        let withErrorBoundaryMock;
         let res = () => undefined;
         jest.unstable_mockModule('react', () => ({ version: '17.3.0' }));
         jest.unstable_mockModule('react-dom', () => ({
             hydrate: (hydrateMock = jest.fn((_, __, resolve: any) => (res = resolve)())),
+        }));
+        jest.unstable_mockModule('../ErrorBoundary', () => ({
+            withErrorBoundary: (withErrorBoundaryMock = jest.fn((err) => err)),
         }));
 
         const { hydrate } = await import('../react');
@@ -100,13 +120,18 @@ describe('utils/hydrate', () => {
 
         expect(hydrateMock).toHaveBeenCalledTimes(1);
         expect(hydrateMock).toHaveBeenCalledWith(fakeElement, fakeContainer, res);
+        expect(withErrorBoundaryMock).toHaveBeenCalledWith(fakeElement);
     });
 
     it('should call ReactDOMClient.hydrateRoot if react version is 18 and higher', async () => {
         let hydrateRootMock = {} as jest.Mock;
+        let withErrorBoundaryMock;
         jest.unstable_mockModule('react', () => ({ version: '18.2.0' }));
         jest.unstable_mockModule('react-dom/client', () => ({
             hydrateRoot: (hydrateRootMock = jest.fn()),
+        }));
+        jest.unstable_mockModule('../ErrorBoundary', () => ({
+            withErrorBoundary: (withErrorBoundaryMock = jest.fn((err) => err)),
         }));
 
         const { hydrate } = await import('../react');
@@ -117,5 +142,6 @@ describe('utils/hydrate', () => {
 
         expect(hydrateRootMock).toHaveBeenCalledTimes(1);
         expect(hydrateRootMock).toHaveBeenCalledWith(fakeContainer, fakeElement);
+        expect(withErrorBoundaryMock).toHaveBeenCalledWith(fakeElement);
     });
 });

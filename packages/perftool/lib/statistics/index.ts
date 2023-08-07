@@ -4,8 +4,8 @@ import { RunTaskResult } from '../client/measurement/runner';
 import { JSONSerializable } from '../utils/types';
 import { defer } from '../utils/deferred';
 import { id as staticTaskSubjectId } from '../stabilizers/staticTask';
+import { getAllMetrics } from '../config/metric';
 
-import metrics from './metrics';
 import { MetricResult } from './types';
 
 export type StatsMap = { __statsMap: true; observations?: number[] } & {
@@ -104,9 +104,7 @@ export default class Statistics<T extends Task<any, any>[]> {
                 // Presort for faster median and quantiles
                 // eslint-disable-next-line no-nested-ternary
                 results.sort((a, b) => (a > b ? 1 : a < b ? -1 : 0));
-                for (const metric of metrics) {
-                    // TODO exclude metrics by task id
-                    this.config;
+                for (const metric of getAllMetrics(this.config)) {
                     const metricResult = metric.compute(results);
 
                     if (Array.isArray(metricResult) && subjectId !== staticTaskSubjectId) {

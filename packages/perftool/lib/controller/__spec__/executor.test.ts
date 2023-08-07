@@ -92,8 +92,9 @@ describe('controller/Executor', () => {
         expect(gotoMock).toHaveBeenCalledTimes(1);
         expect(gotoMock).toHaveBeenCalledWith(`http://localhost:${port}/`);
 
-        expect(exposeFunctionMock).toHaveBeenCalledTimes(1);
+        expect(exposeFunctionMock).toHaveBeenCalledTimes(2);
         expect(exposeFunctionMock.mock.calls[0][0]).toEqual('_perftool_finish');
+        expect(exposeFunctionMock.mock.calls[1][0]).toEqual('_perftool_on_error');
 
         expect(useInterceptApiMock).toHaveBeenCalledTimes(1);
 

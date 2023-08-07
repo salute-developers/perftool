@@ -3,7 +3,6 @@ import { ReportWithMeta } from '../reporter';
 import { JSONSerializable } from '../utils/types';
 import { Comparator, CompareResult, MetricResult } from '../statistics/types';
 import { StatsMap, StatsReport } from '../statistics';
-import metrics from '../statistics/metrics';
 import { compareSimpleMetricResults } from '../statistics/comparators';
 import { Config, getAllTasks } from '../config';
 import { TaskAim } from '../client/measurement/types';
@@ -12,6 +11,7 @@ import { isStatsMap } from '../utils/statsMap';
 import getCurrentVersion from '../utils/version';
 import { id as staticTaskSubjectId, overrideMetric } from '../stabilizers/staticTask';
 import { intersectStabilizers } from '../utils/stabilizers';
+import { getAllMetrics } from '../config/metric';
 
 type IncomparableResult = {
     old?: JSONSerializable;
@@ -41,8 +41,6 @@ type CompareReport = {
     stabilizers: string[];
     result: Report;
 };
-
-const metricIdToMetricMap = Object.fromEntries(metrics.map((metric) => [metric.id, metric]));
 
 function isNegativeChange(aim: TaskAim, { difference }: CompareResult): boolean {
     return (aim === 'decrease' && difference > 0) || (aim === 'increase' && difference < 0);
@@ -101,10 +99,12 @@ function processMetricResult<T extends MetricResult>(
 }
 
 function processTaskResult(
+    config: Config,
     current: JSONSerializable | StatsMap,
     previous?: JSONSerializable | StatsMap,
 ): IncomparableResult | ComparableResultMap {
     const isCurrentNumber = typeof current === 'number';
+    const metricIdToMetricMap = Object.fromEntries(getAllMetrics(config).map((metric) => [metric.id, metric]));
 
     if (!isStatsMap(current) && !isCurrentNumber) {
         const result: IncomparableResult = { new: current };
@@ -181,13 +181,14 @@ function processStaticTaskStabilizer(
 }
 
 function processSubjectResult(
+    config: Config,
     current: StatsReport[keyof StatsReport],
     previous?: StatsReport[keyof StatsReport],
 ): Report[keyof Report] {
     const result: Report[keyof Report] = {};
 
     for (const [currentTaskId, currentTaskReport] of Object.entries(current)) {
-        result[currentTaskId] = processTaskResult(currentTaskReport, previous?.[currentTaskId]);
+        result[currentTaskId] = processTaskResult(config, currentTaskReport, previous?.[currentTaskId]);
     }
 
     return result;
@@ -220,10 +221,10 @@ export async function processReports(
 
     const result: Report = {};
     for (const [currentSubjectId, currentSubjectReport] of Object.entries(currentResult)) {
-        result[currentSubjectId] = processSubjectResult(currentSubjectReport, previousResult[currentSubjectId]);
+        result[currentSubjectId] = processSubjectResult(config, currentSubjectReport, previousResult[currentSubjectId]);
     }
     const staticTaskChange = currentStaticTaskResult
-        ? processSubjectResult(currentStaticTaskResult, previousStaticTaskResult)
+        ? processSubjectResult(config, currentStaticTaskResult, previousStaticTaskResult)
         : undefined;
 
     const hasSignificantNegativeChanges = findSignificantNegativeChanges(config, result);
