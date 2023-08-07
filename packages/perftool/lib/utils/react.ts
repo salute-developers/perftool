@@ -2,6 +2,8 @@ import { version } from 'react';
 import type * as ReactDOMType from 'react-dom';
 import type * as ReactDOMClientType from 'react-dom/client';
 
+import { withErrorBoundary } from './ErrorBoundary';
+
 export function isReact18AndNewer() {
     return Number(version.split('.')[0]) >= 18;
 }
@@ -23,8 +25,10 @@ if (process.env.PERFTOOL_CLIENT_RUNTIME) {
     }
 }
 
-export async function render(element: React.ReactElement, container: HTMLElement): Promise<void> {
+export async function render(rawElement: React.ReactElement, container: HTMLElement): Promise<void> {
     return new Promise((resolve) => {
+        const element = withErrorBoundary(rawElement);
+
         if (!isReact18AndNewer()) {
             // eslint-disable-next-line react/no-deprecated
             ReactDOM.render(element, container, resolve);
@@ -39,8 +43,10 @@ export async function render(element: React.ReactElement, container: HTMLElement
     });
 }
 
-export async function hydrate(element: React.ReactElement, container: HTMLElement): Promise<void> {
+export async function hydrate(rawElement: React.ReactElement, container: HTMLElement): Promise<void> {
     return new Promise((resolve) => {
+        const element = withErrorBoundary(rawElement);
+
         if (!isReact18AndNewer()) {
             // eslint-disable-next-line react/no-deprecated
             ReactDOM.hydrate(element, container, resolve);

@@ -1,4 +1,5 @@
-import React, { ReactNode, ErrorInfo, Component, ComponentType } from 'react';
+import React, { ReactNode, ErrorInfo, Component } from 'react';
+import { serializeError } from 'serialize-error';
 
 import BaseError from './baseError';
 
@@ -7,7 +8,6 @@ type ErrorBoundaryProps = {
     children: ReactNode;
 };
 
-// TODO use
 class ErrorBoundary extends Component<ErrorBoundaryProps> {
     componentDidCatch(error: Error, errorInfo: ErrorInfo) {
         this.props.onError(new BaseError(`${error && error.toString()} ${errorInfo.componentStack}`));
@@ -18,21 +18,12 @@ class ErrorBoundary extends Component<ErrorBoundaryProps> {
     }
 }
 
-export function withErrorBoundary<P extends object>(
-    Subject: ComponentType<P>,
-    onError: (error: BaseError) => void,
-): ComponentType<P> {
-    const WrappedComponent: ComponentType<P> = function (props) {
-        return (
-            <ErrorBoundary onError={onError}>
-                <Subject {...props} />
-            </ErrorBoundary>
-        );
-    };
+export function withErrorBoundary(element: React.ReactElement): React.ReactElement {
+    return <ErrorBoundary onError={onError}>{element}</ErrorBoundary>;
+}
 
-    WrappedComponent.displayName = `withErrorBoundary(${Subject.displayName})`;
-
-    return WrappedComponent;
+export function onError(error: unknown) {
+    window._perftool_on_error?.(serializeError(error));
 }
 
 export default ErrorBoundary;

@@ -1,4 +1,5 @@
 import puppeteer, { Browser, Page } from 'puppeteer';
+import { deserializeError, ErrorObject } from 'serialize-error';
 
 import assert from '../utils/assert';
 import Cache from '../cache';
@@ -126,13 +127,16 @@ export default class Executor<T extends Task<any, any, any>[]> implements IExecu
             }
         }
 
-        const result = new Deferred<RunTaskResult<T[number]>>();
+        const result = new Deferred<RunTaskResult<T[number]> | Error>();
 
         await page.goto(`http://localhost:${this.port}/`);
         await page.exposeFunction('_perftool_finish', (taskResult: RunTaskResult<T[number]>) => {
             this.setState(taskResult);
 
             result.resolve(taskResult);
+        });
+        await page.exposeFunction('_perftool_on_error', (error: ErrorObject) => {
+            result.resolve(deserializeError(error));
         });
         await useInterceptApi(page);
         await page.addScriptTag({ content: createInsertionScriptContent(this.decorateWithState(test)) });

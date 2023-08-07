@@ -17,15 +17,7 @@ export function getTests<T extends Task<any, any>[]>(
     modules: TestModule[],
 ): Test[] {
     const testGroups = tasks.map(({ id: taskId, availableStabilizers }) => {
-        const suitableTestModules = modules.filter(({ path }) => {
-            // TODO filter modules by task config rule (minimatch)
-            config;
-            taskId;
-            path;
-            return true;
-        });
-
-        const testGroup: Test[][] = suitableTestModules.map((module) =>
+        const testGroup: Test[][] = modules.map((module) =>
             module.subjects.map(({ id: subjectId }) => ({ taskId, subjectId })),
         );
 
