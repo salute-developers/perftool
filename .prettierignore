@@ -2,5 +2,6 @@ node_modules
 package.json
 pnpm-lock.yaml
 pnpm-workspace.yaml
+
 # Perftool template module
 packages/perftool/lib/clientEntry.ts
