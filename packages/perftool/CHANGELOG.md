@@ -1,3 +1,35 @@
+# v0.13.0 (Wed Aug 09 2023)
+
+#### 🚀 Enhancement
+
+- feat(perftool): add comments, fix config, add client error handling [#102](https://github.com/salute-developers/perftool/pull/102) ([@akhdrv](https://github.com/akhdrv))
+- feat(perftool): add test subject deps caching [#102](https://github.com/salute-developers/perftool/pull/102) ([@akhdrv](https://github.com/akhdrv))
+
+#### 🐛 Bug Fix
+
+- build(perftool): update deps, add license to package [#94](https://github.com/salute-developers/perftool/pull/94) ([@akhdrv](https://github.com/akhdrv))
+
+#### 🔩 Dependency Updates
+
+- build: bump @types/node from 20.4.8 to 20.4.9 [#113](https://github.com/salute-developers/perftool/pull/113) ([@dependabot[bot]](https://github.com/dependabot[bot]))
+- build: bump puppeteer from 21.0.1 to 21.0.2 [#112](https://github.com/salute-developers/perftool/pull/112) ([@dependabot[bot]](https://github.com/dependabot[bot]))
+- build: bump @babel/preset-env from 7.22.9 to 7.22.10 [#110](https://github.com/salute-developers/perftool/pull/110) ([@dependabot[bot]](https://github.com/dependabot[bot]))
+- build: bump @babel/core from 7.22.9 to 7.22.10 [#108](https://github.com/salute-developers/perftool/pull/108) ([@dependabot[bot]](https://github.com/dependabot[bot]))
+- build: bump @types/react from 18.2.18 to 18.2.19 [#107](https://github.com/salute-developers/perftool/pull/107) ([@dependabot[bot]](https://github.com/dependabot[bot]))
+- build: bump @swc/core from 1.3.74 to 1.3.75 [#106](https://github.com/salute-developers/perftool/pull/106) ([@dependabot[bot]](https://github.com/dependabot[bot]))
+- build: bump @types/node from 20.4.7 to 20.4.8 [#104](https://github.com/salute-developers/perftool/pull/104) ([@dependabot[bot]](https://github.com/dependabot[bot]))
+- build: bump @types/node from 20.4.6 to 20.4.7 [#100](https://github.com/salute-developers/perftool/pull/100) ([@dependabot[bot]](https://github.com/dependabot[bot]))
+- build: bump puppeteer from 21.0.0 to 21.0.1 [#101](https://github.com/salute-developers/perftool/pull/101) ([@dependabot[bot]](https://github.com/dependabot[bot]))
+- build: bump @swc/core from 1.3.73 to 1.3.74 [#95](https://github.com/salute-developers/perftool/pull/95) ([@dependabot[bot]](https://github.com/dependabot[bot]))
+- build: bump @types/node from 20.4.5 to 20.4.6 [#98](https://github.com/salute-developers/perftool/pull/98) ([@dependabot[bot]](https://github.com/dependabot[bot]))
+
+#### Authors: 2
+
+- [@dependabot[bot]](https://github.com/dependabot[bot])
+- Artem Khaydarov ([@akhdrv](https://github.com/akhdrv))
+
+---
+
 # v0.12.0 (Tue Aug 01 2023)
 
 #### 🚀 Enhancement
