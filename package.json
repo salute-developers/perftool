@@ -28,7 +28,7 @@
     "@auto-it/npm": "11.0.0",
     "@commitlint/cli": "17.7.0",
     "@commitlint/config-conventional": "17.7.0",
-    "@typescript-eslint/eslint-plugin": "6.3.0",
+    "@typescript-eslint/eslint-plugin": "6.4.0",
     "@typescript-eslint/parser": "6.3.0",
     "auto": "11.0.0",
     "eslint": "8.46.0",
