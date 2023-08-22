@@ -1,21 +1,20 @@
 import { jest } from '@jest/globals';
 import { constants } from 'fs';
 
-let accessMock: jest.Mock;
-jest.unstable_mockModule('fs/promises', () => ({ access: (accessMock = jest.fn()) }));
-
-const { default: checkPath } = await import('../checkPath');
-const { access } = await import('fs/promises');
+import type CheckPathType from '../checkPath';
 
 describe('utils/checkPath', () => {
-    beforeEach(() => {
-        accessMock.mockImplementation(() => {
-            return Promise.resolve();
-        });
+    let accessMock: jest.Mock;
+    let checkPath: typeof CheckPathType;
+
+    beforeEach(async () => {
+        jest.unstable_mockModule('fs/promises', () => ({ access: (accessMock = jest.fn(() => Promise.resolve())) }));
+        checkPath = (await import('../checkPath')).default;
     });
 
     afterEach(() => {
         jest.restoreAllMocks();
+        jest.resetModules();
     });
 
     it('should resolve to false if called with falsy path', () => {
@@ -30,13 +29,13 @@ describe('utils/checkPath', () => {
 
         await checkPath(path, mode);
 
-        expect(access).toBeCalledTimes(1);
-        expect(access).toBeCalledWith(path, mode);
+        expect(accessMock).toBeCalledTimes(1);
+        expect(accessMock).toBeCalledWith(path, mode);
     });
 
     it('should resolve to true if access call resolves', () => {
         expect(checkPath('/fake/path')).resolves.toEqual(true);
-        expect(access).toBeCalledTimes(1);
+        expect(accessMock).toBeCalledTimes(1);
     });
 
     it('should resolve to false if access call rejects', () => {
@@ -45,6 +44,6 @@ describe('utils/checkPath', () => {
         });
 
         expect(checkPath('/fake/path')).resolves.toEqual(false);
-        expect(access).toBeCalledTimes(1);
+        expect(accessMock).toBeCalledTimes(1);
     });
 });
