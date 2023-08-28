@@ -13,9 +13,8 @@ import { CliConfig } from './config/common';
 import { debug, error, info, setLogLevel } from './utils/logger';
 import getCurrentVersion from './utils/version';
 import Cache from './cache';
-import openBrowser from './utils/openBrowser';
-import { waitForSigint } from './utils/interrupt';
 import { filterTestModulesByCachedDepsHash } from './utils/subjectDeps';
+import PreviewController from './preview/controller';
 
 export { intercept } from './api/external';
 export type { ProjectConfig as Config };
@@ -80,8 +79,10 @@ async function start() {
     const { port, stop } = await createServer(config);
 
     if (config.mode === 'preview') {
-        await openBrowser({ port });
-        await waitForSigint();
+        const previewController = await PreviewController.create(port);
+        await previewController.start();
+
+        await previewController.finalize();
         await stop();
 
         return;

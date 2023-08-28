@@ -37,6 +37,7 @@ const defaultConfig: WebpackConfig = {
                 test: /\.(js|mjs|jsx|ts|tsx)$/,
                 exclude: /node_modules/,
                 options: {
+                    cwd: CWD,
                     presets: [
                         ['@babel/preset-env', { targets: { chrome: '90', esmodules: true } }],
                         '@babel/preset-react',

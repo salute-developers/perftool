@@ -11,7 +11,7 @@ declare global {
         _perftool_test?: RawTest<Task<any, any, any>>;
         /** Function for sending test result back to server **/
         _perftool_finish?: <T extends Task<any, any, any>[]>(result: RunTaskResult<T[number]>) => Promise<void>;
-        /** Intercept API bridge **/
+        /** Intercept API **/
         _perftool_intercept?: (params: InterceptParams) => Promise<void>;
         /**
          * Function created when client is ready and waiting for test input,
