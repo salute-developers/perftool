@@ -1,3 +1,32 @@
+# (Mon Aug 28 2023)
+
+#### 🚀 Enhancement
+
+- `@salutejs/perftool@0.14.0`
+  - feat(perftool): support beforeTest in preview mode [#137](https://github.com/salute-developers/perftool/pull/137) ([@akhdrv](https://github.com/akhdrv))
+
+#### 🐛 Bug Fix
+
+- `@salutejs/perftool@0.14.0`
+  - build: update pkgs [#137](https://github.com/salute-developers/perftool/pull/137) ([@akhdrv](https://github.com/akhdrv))
+
+#### 🔩 Dependency Updates
+
+- build: bump lint-staged from 13.2.3 to 14.0.0 [#126](https://github.com/salute-developers/perftool/pull/126) ([@dependabot[bot]](https://github.com/dependabot[bot]))
+- build: bump lerna from 7.1.4 to 7.1.5 [#119](https://github.com/salute-developers/perftool/pull/119) ([@dependabot[bot]](https://github.com/dependabot[bot]))
+- `@salutejs/perftool@0.14.0`
+  - build: bump lru-cache from 10.0.0 to 10.0.1 [#121](https://github.com/salute-developers/perftool/pull/121) ([@dependabot[bot]](https://github.com/dependabot[bot]))
+  - build: bump puppeteer from 21.0.2 to 21.0.3 [#125](https://github.com/salute-developers/perftool/pull/125) ([@dependabot[bot]](https://github.com/dependabot[bot]))
+  - build: bump @types/react from 18.2.19 to 18.2.20 [#120](https://github.com/salute-developers/perftool/pull/120) ([@dependabot[bot]](https://github.com/dependabot[bot]))
+  - build: bump @swc/core from 1.3.75 to 1.3.76 [#117](https://github.com/salute-developers/perftool/pull/117) ([@dependabot[bot]](https://github.com/dependabot[bot]))
+
+#### Authors: 2
+
+- [@dependabot[bot]](https://github.com/dependabot[bot])
+- Artem Khaydarov ([@akhdrv](https://github.com/akhdrv))
+
+---
+
 # (Wed Aug 09 2023)
 
 #### 🚀 Enhancement

@@ -1,3 +1,27 @@
+# v0.14.0 (Mon Aug 28 2023)
+
+#### 🚀 Enhancement
+
+- feat(perftool): support beforeTest in preview mode [#137](https://github.com/salute-developers/perftool/pull/137) ([@akhdrv](https://github.com/akhdrv))
+
+#### 🐛 Bug Fix
+
+- build: update pkgs [#137](https://github.com/salute-developers/perftool/pull/137) ([@akhdrv](https://github.com/akhdrv))
+
+#### 🔩 Dependency Updates
+
+- build: bump lru-cache from 10.0.0 to 10.0.1 [#121](https://github.com/salute-developers/perftool/pull/121) ([@dependabot[bot]](https://github.com/dependabot[bot]))
+- build: bump puppeteer from 21.0.2 to 21.0.3 [#125](https://github.com/salute-developers/perftool/pull/125) ([@dependabot[bot]](https://github.com/dependabot[bot]))
+- build: bump @types/react from 18.2.19 to 18.2.20 [#120](https://github.com/salute-developers/perftool/pull/120) ([@dependabot[bot]](https://github.com/dependabot[bot]))
+- build: bump @swc/core from 1.3.75 to 1.3.76 [#117](https://github.com/salute-developers/perftool/pull/117) ([@dependabot[bot]](https://github.com/dependabot[bot]))
+
+#### Authors: 2
+
+- [@dependabot[bot]](https://github.com/dependabot[bot])
+- Artem Khaydarov ([@akhdrv](https://github.com/akhdrv))
+
+---
+
 # v0.13.0 (Wed Aug 09 2023)
 
 #### 🚀 Enhancement
