@@ -1,4 +1,4 @@
-import puppeteer, { Browser, Page } from 'puppeteer';
+import puppeteer, { Browser } from 'puppeteer';
 import { deserializeError, ErrorObject } from 'serialize-error';
 
 import assert from '../utils/assert';
@@ -10,6 +10,7 @@ import { Task, TaskState } from '../client/measurement/types';
 import { debug } from '../utils/logger';
 import { RawTest } from '../client/input';
 import { useInterceptApi } from '../api/intercept';
+import { createNewPage } from '../utils/puppeteer';
 
 import { createInsertionScriptContent } from './clientScript';
 
@@ -18,8 +19,6 @@ export type Test = { taskId: string; subjectId: string; type?: 'dry' };
 export type IExecutor<T extends Task<any, any>[]> = {
     execute(test: Test): Promise<RunTaskResult<T[number]> | Error>;
 };
-
-const PUPPETEER_MYSTERY_ERROR_RETRIES = 5;
 
 export default class Executor<T extends Task<any, any, any>[]> implements IExecutor<T> {
     private readonly cache: Cache;
@@ -113,20 +112,8 @@ export default class Executor<T extends Task<any, any, any>[]> implements IExecu
     async execute(test: Test): Promise<RunTaskResult<T[number]> | Error> {
         debug('[executor]', 'running test', test);
         assert(this.workable);
-        let page: Page = undefined as unknown as Page;
 
-        for (let retry = 0; !page && retry < PUPPETEER_MYSTERY_ERROR_RETRIES; ++retry) {
-            try {
-                page = await this.browserInstance.newPage();
-            } catch (e) {
-                debug('[executor]', 'Mystery puppeteer error, retrying', e);
-
-                if (retry + 1 === PUPPETEER_MYSTERY_ERROR_RETRIES) {
-                    page = await this.browserInstance.newPage();
-                }
-            }
-        }
-
+        const page = await createNewPage(this.browserInstance);
         const result = new Deferred<RunTaskResult<T[number]> | Error>();
 
         await page.goto(`http://localhost:${this.port}/`);

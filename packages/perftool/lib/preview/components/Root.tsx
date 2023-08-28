@@ -7,7 +7,8 @@ import ColorPicker from './ColorPicker';
 import Preview from './Preview';
 
 type Props = {
-    subjects: Subject[];
+    subjectIds: string[];
+    currentSubject?: Subject;
 };
 
 const headerStyle = {
@@ -27,11 +28,11 @@ const hiddenButtonStyle = {
 } as const;
 const itemStyle = { marginTop: 0, marginBottom: '0.5rem' } as const;
 
-function Root({ subjects }: Props) {
+function Root({ subjectIds, currentSubject }: Props) {
     const [isPanelVisible, setPanelVisibility] = useState(true);
-    const [currentIndex, setIndex] = useState<number>(0);
+    const [currentIndex, setIndex] = useState<number>(currentSubject ? subjectIds.indexOf(currentSubject.id) : -1);
     const [background, setBackground] = useState<string>('#ffffff');
-    const { Component } = subjects[currentIndex];
+    const { Component } = currentSubject || {};
 
     return (
         <>
@@ -40,8 +41,12 @@ function Root({ subjects }: Props) {
                     <h1 style={itemStyle}>Test components preview</h1>
                     <Selector
                         style={itemStyle}
-                        subjectsIds={subjects.map(({ id }) => id)}
-                        onSelect={setIndex}
+                        subjectsIds={subjectIds}
+                        onSelect={(index) => {
+                            window.location.href = `/?subjectId=${encodeURIComponent(subjectIds[index])}`;
+
+                            setIndex(index);
+                        }}
                         currentIndex={currentIndex}
                     />
                     <ColorPicker style={itemStyle} onSelect={setBackground} current={background} />
@@ -57,7 +62,7 @@ function Root({ subjects }: Props) {
                     Show preview panel
                 </button>
             )}
-            <Preview Component={Component} background={background} />
+            {Component && <Preview Component={Component} background={background} />}
         </>
     );
 }

@@ -24,7 +24,12 @@ if (process.env.PERFTOOL_PREVIEW_MODE) {
         './preview'
     );
 
-    await createPreviewClient({ config, subjects: allTestSubjects });
+    await createPreviewClient({
+        config,
+        subjects: allTestSubjects.filter(
+            (s) => s !== staticTaskSubject
+        )
+    });
 } else {
     const { createPerfToolClient } = await import(
         /* webpackMode: "eager" */
