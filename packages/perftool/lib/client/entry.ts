@@ -1,11 +1,11 @@
 /* eslint-disable */
 
-import type { Config } from './config/common';
-import { getAllTasks } from './config/task';
-import { subject as staticTaskSubject } from './stabilizers/staticTask';
-import { setLogLevel } from './utils/logger';
-import { EntrySubject } from "./client/input";
-import { onError } from "./utils/ErrorBoundary";
+import type { Config } from '../config/common';
+import { getAllTasks } from '../config/task';
+import { subject as staticTaskSubject } from '../stabilizers/staticTask';
+import { setLogLevel } from '../utils/logger';
+import { EntrySubject } from './input';
+import { onError } from '../utils/ErrorBoundary';
 
 const config = ((v) => v)(
     // <CONFIG_ARGS_MARK>
@@ -21,7 +21,7 @@ const allTestSubjects: EntrySubject[] = [
 if (process.env.PERFTOOL_PREVIEW_MODE) {
     const { createPreviewClient } = await import(
         /* webpackMode: "eager" */
-        './preview'
+        '../preview'
     );
 
     await createPreviewClient({
@@ -33,7 +33,7 @@ if (process.env.PERFTOOL_PREVIEW_MODE) {
 } else {
     const { createPerfToolClient } = await import(
         /* webpackMode: "eager" */
-        './client'
+        '.'
     );
     // TODO tasks in client config are not serialized
     const allTasks = getAllTasks(config);

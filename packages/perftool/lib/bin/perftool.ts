@@ -1,23 +1,20 @@
 import process from 'process';
 import { createArgument, createCommand, createOption, OptionValues } from 'commander';
 
-import { getConfig, getAllTasks, ProjectConfig } from './config';
-import { importConfig } from './config/node';
-import collectTestSubjects from './build/collect';
-import { buildClient } from './build';
-import { createServer } from './server';
-import { runTests } from './controller';
-import Statistics from './statistics';
-import { generateReport, measureStartingPoint, report } from './reporter';
-import { CliConfig } from './config/common';
-import { debug, error, info, setLogLevel } from './utils/logger';
-import getCurrentVersion from './utils/version';
-import Cache from './cache';
-import { filterTestModulesByCachedDepsHash } from './utils/subjectDeps';
-import PreviewController from './preview/controller';
-
-export { intercept } from './api/external';
-export type { ProjectConfig as Config };
+import { getConfig, getAllTasks } from '../config';
+import { importConfig } from '../config/node';
+import collectTestSubjects from '../build/collect';
+import { buildClient } from '../build';
+import { createServer } from '../server';
+import { runTests } from '../controller';
+import Statistics from '../statistics';
+import { generateReport, measureStartingPoint, report } from '../reporter';
+import { CliConfig } from '../config/common';
+import { debug, error, info, setLogLevel } from '../utils/logger';
+import getCurrentVersion from '../utils/version';
+import Cache from '../cache';
+import { filterTestModulesByCachedDepsHash } from '../utils/subjectDeps';
+import PreviewController from '../preview/controller';
 
 const cli = createCommand('perftool');
 

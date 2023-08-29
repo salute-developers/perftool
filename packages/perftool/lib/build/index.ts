@@ -55,7 +55,7 @@ async function copyModules(config: Config) {
 
     debug('copying files from', source, 'to', target);
 
-    const pathsToCopy = ['client', 'config', 'utils', 'stabilizers', 'clientEntry.ts'];
+    const pathsToCopy = ['client', 'config', 'utils', 'stabilizers'];
 
     if (config.mode === 'preview') {
         pathsToCopy.push('preview');
@@ -92,7 +92,7 @@ type BuildClientParams = {
 export async function buildClient({ config, testModules }: BuildClientParams): Promise<BuildResult> {
     info('Building client...');
 
-    const entry = path.join(sourceDirectory, 'clientEntry.ts');
+    const entry = path.join(sourceDirectory, 'client/entry.ts');
     debug('client entrypoint is ', entry);
 
     await copyModules(config);

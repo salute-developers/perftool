@@ -1,5 +1,5 @@
 {
-    "include": ["./lib"],
+    "include": ["lib"],
     "compilerOptions": {
         "target": "ES2021",
         "module": "esnext",

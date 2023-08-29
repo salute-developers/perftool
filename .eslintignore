@@ -1,4 +1,4 @@
 node_modules
 
 # Perftool template module
-packages/perftool/lib/clientEntry.ts
+packages/perftool/lib/client/entry.ts

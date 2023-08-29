@@ -13,8 +13,12 @@
         "url": "https://github.com/salute-developers/perftool/issues"
     },
     "homepage": "https://github.com/salute-developers/perftool#readme",
-    "main": "lib/index.ts",
-    "types": "lib/index.ts",
+    "module": "dist/index.js",
+    "types": "dist/index.d.ts",
+    "exports": {
+        "types": "./dist/index.d.ts",
+        "import": "./dist/index.js"
+    },
     "type": "module",
     "engines": {
         "node": ">=16"
@@ -24,15 +28,23 @@
         "perftool-compare": "scripts/start-compare.sh"
     },
     "files": [
+        "dist/**/*.d.ts",
+        "dist/index.js",
+        "dist/api/external.js",
         "lib",
+        "!lib/index.ts",
+        "scripts",
         "tsconfig.json",
-        "!**/__spec__/**",
-        "!lib/**/*.d.ts"
+        "!**/__spec__/**"
     ],
     "scripts": {
+        "prepare": "pnpm run build",
+        "prebuild": "pnpm run clean",
+        "build": "tsc --project tsconfig.build.json",
+        "clean": "rm -rf dist",
         "test": "NODE_OPTIONS=\"--experimental-vm-modules --no-warnings\" jest test",
         "test:coverage": "NODE_OPTIONS=\"--experimental-vm-modules --no-warnings\" jest test --coverage",
-        "test:coverage:serve": "npx http-server ./coverage/lcov-report",
+        "test:coverage:serve": "pnpm exec http-server ./coverage/lcov-report",
         "typecheck": "tsc --noEmit"
     },
     "peerDependencies": {
