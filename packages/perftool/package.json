@@ -38,8 +38,8 @@
         "!**/__spec__/**"
     ],
     "scripts": {
-        "prepare": "pnpm run build",
         "prebuild": "pnpm run clean",
+        "prepare": "pnpm run build",
         "build": "tsc --project tsconfig.build.json",
         "clean": "rm -rf dist",
         "test": "NODE_OPTIONS=\"--experimental-vm-modules --no-warnings\" jest test",
