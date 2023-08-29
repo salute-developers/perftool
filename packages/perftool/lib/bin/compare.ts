@@ -7,8 +7,7 @@ import { getConfig } from '../config';
 import { debug, error, info, setLogLevel } from '../utils/logger';
 import { importConfig } from '../config/node';
 import CWD from '../utils/cwd';
-
-import { processReports } from './process';
+import { processReports } from '../compare/process';
 
 const cli = createCommand('perftool-compare');
 

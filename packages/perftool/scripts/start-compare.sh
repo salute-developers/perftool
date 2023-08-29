@@ -29,4 +29,4 @@ if [ -z "$PERFTOOL_DEBUG" ]; then
 fi
 
 cd "$PROJECT_DIR" && \
- PERFTOOL_CWD=$CWD NODE_OPTIONS=$OPTS TS_NODE_FILES=true node lib/compare/index.ts "$@"
+ PERFTOOL_CWD=$CWD NODE_OPTIONS=$OPTS TS_NODE_FILES=true node lib/bin/compare.ts "$@"

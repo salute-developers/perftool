@@ -4,4 +4,4 @@ pnpm-lock.yaml
 pnpm-workspace.yaml
 
 # Perftool template module
-packages/perftool/lib/clientEntry.ts
+packages/perftool/lib/client/entry.ts

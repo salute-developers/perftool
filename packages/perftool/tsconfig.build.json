@@ -1,0 +1,9 @@
+{
+    "extends": "./tsconfig.json",
+    "include": ["lib/index.ts", "lib/typings/window.d.ts"],
+    "compilerOptions": {
+        "rootDir": "./lib",
+        "outDir": "dist",
+        "declaration": true
+    }
+}
