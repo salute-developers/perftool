@@ -1,3 +1,21 @@
+# v0.15.0 (Wed Aug 30 2023)
+
+#### 🚀 Enhancement
+
+- feat(perftool): update pkgs, trigger release [#146](https://github.com/salute-developers/perftool/pull/146) ([@akhdrv](https://github.com/akhdrv))
+
+#### 🐛 Bug Fix
+
+- refactor(perftool): trigger release [#145](https://github.com/salute-developers/perftool/pull/145) ([@akhdrv](https://github.com/akhdrv))
+- refactor: after-move stuff [#144](https://github.com/salute-developers/perftool/pull/144) ([@akhdrv](https://github.com/akhdrv))
+- refactor: build external api modules [#144](https://github.com/salute-developers/perftool/pull/144) ([@akhdrv](https://github.com/akhdrv))
+
+#### Authors: 1
+
+- Artem Khaydarov ([@akhdrv](https://github.com/akhdrv))
+
+---
+
 # v0.14.0 (Mon Aug 28 2023)
 
 #### 🚀 Enhancement
