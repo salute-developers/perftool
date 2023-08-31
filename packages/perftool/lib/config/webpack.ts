@@ -33,6 +33,12 @@ const defaultConfig: WebpackConfig = {
     module: {
         rules: [
             {
+                test: /\.m?js$/,
+                resolve: {
+                    fullySpecified: false,
+                },
+            },
+            {
                 loader: require.resolve('babel-loader'),
                 test: /\.(js|mjs|jsx|ts|tsx)$/,
                 exclude: /node_modules/,
