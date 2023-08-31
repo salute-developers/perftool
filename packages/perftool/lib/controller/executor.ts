@@ -11,6 +11,7 @@ import { debug } from '../utils/logger';
 import { RawTest } from '../client/input';
 import { useInterceptApi } from '../api/intercept';
 import { createNewPage } from '../utils/puppeteer';
+import { useViewportApi } from '../api/viewport';
 
 import { createInsertionScriptContent } from './clientScript';
 
@@ -126,6 +127,7 @@ export default class Executor<T extends Task<any, any, any>[]> implements IExecu
             result.resolve(deserializeError(error));
         });
         await useInterceptApi(page);
+        await useViewportApi(page);
         await page.addScriptTag({ content: createInsertionScriptContent(this.decorateWithState(test)) });
 
         return Promise.race([
