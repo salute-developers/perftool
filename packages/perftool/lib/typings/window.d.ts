@@ -4,6 +4,7 @@ import type { Task } from '../client/measurement/types';
 import type { RunTaskResult } from '../client/measurement/runner';
 import type { RawTest } from '../client/input';
 import { InterceptParams } from '../api/intercept';
+import { SetViewportParams } from '../api/viewport';
 
 declare global {
     interface Window {
@@ -13,6 +14,9 @@ declare global {
         _perftool_finish?: <T extends Task<any, any, any>[]>(result: RunTaskResult<T[number]>) => Promise<void>;
         /** Intercept API **/
         _perftool_intercept?: (params: InterceptParams) => Promise<void>;
+        /** Viewport API **/
+        _perftool_set_viewport?: (viewport: SetViewportParams) => Promise<void>;
+        _perftool_preview_loaded?: true;
         /**
          * Function created when client is ready and waiting for test input,
          * called by insertion script after filling _perftool_test property.

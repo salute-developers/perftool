@@ -51,6 +51,7 @@ describe('controller/Executor', () => {
         let closeMock = {} as jest.Mock;
         let createInsertionScriptContentMock = {} as jest.Mock;
         let useInterceptApiMock = {} as jest.Mock;
+        let useViewportApiMock = {} as jest.Mock;
         const test: Test = { subjectId: 'fakeId3', taskId: 'fakeTask3', type: 'dry' };
         const result = { ...test, state: {} };
         const insertionScriptContent = 'some script content';
@@ -73,6 +74,9 @@ describe('controller/Executor', () => {
         }));
         jest.unstable_mockModule('../../api/intercept', () => ({
             useInterceptApi: (useInterceptApiMock = jest.fn()),
+        }));
+        jest.unstable_mockModule('../../api/viewport', () => ({
+            useViewportApi: (useViewportApiMock = jest.fn()),
         }));
 
         const { default: Executor } = await import('../executor');
@@ -97,6 +101,7 @@ describe('controller/Executor', () => {
         expect(exposeFunctionMock.mock.calls[1][0]).toEqual('_perftool_on_error');
 
         expect(useInterceptApiMock).toHaveBeenCalledTimes(1);
+        expect(useViewportApiMock).toHaveBeenCalledTimes(1);
 
         expect(addScriptTagMock).toHaveBeenCalledTimes(1);
         expect(addScriptTagMock).toHaveBeenCalledWith({ content: insertionScriptContent });

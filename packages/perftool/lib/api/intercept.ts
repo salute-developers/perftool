@@ -12,7 +12,7 @@ import CWD from '../utils/cwd';
 type Method = string;
 
 const fileCache = new LRUCache({
-    maxSize: 100 * 1024 ** 2,
+    maxSize: 100 * 1024 ** 2, // 100MB
     sizeCalculation: (value: Buffer) => {
         return value.length;
     },

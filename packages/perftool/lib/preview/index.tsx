@@ -24,6 +24,16 @@ function getCurrentSubjectId() {
     return searchParams.get(decodeURIComponent(paramName));
 }
 
+function waitForApiReady(): Promise<void> {
+    if (window._perftool_preview_loaded) {
+        return Promise.resolve();
+    }
+
+    return new Promise((resolve) => {
+        window._perftool_api_ready = resolve;
+    });
+}
+
 export async function createPreviewClient({ subjects }: Params): Promise<void> {
     const currentSubjectId = getCurrentSubjectId() || subjects[0]?.id;
     const subjectIds = subjects.map(({ id }) => id);
@@ -38,6 +48,8 @@ export async function createPreviewClient({ subjects }: Params): Promise<void> {
         id: currentEntrySubject.id,
         Component: await currentEntrySubject.loadComponent(),
     };
+
+    await waitForApiReady();
 
     if (typeof currentSubject.Component.beforeTest === 'function') {
         debug('Running beforeTest');

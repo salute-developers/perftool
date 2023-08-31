@@ -3,6 +3,7 @@ import puppeteer, { Browser, Page } from 'puppeteer';
 import { debug } from '../utils/logger';
 import { createNewPage } from '../utils/puppeteer';
 import { useInterceptApi } from '../api/intercept';
+import { useViewportApi } from '../api/viewport';
 
 class PreviewController {
     private readonly browserInstance: Browser;
@@ -54,6 +55,12 @@ class PreviewController {
         await page.goto(baseUrl);
 
         await useInterceptApi(page);
+        await useViewportApi(page);
+
+        await page.evaluate(() => {
+            window._perftool_preview_loaded = true;
+            window._perftool_api_ready?.();
+        });
 
         await this.waitForPageClose(page);
     }
