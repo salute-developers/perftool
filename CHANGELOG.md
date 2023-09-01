@@ -1,3 +1,28 @@
+# (Fri Sep 01 2023)
+
+#### 🚀 Enhancement
+
+- `@salutejs/perftool@0.16.0`
+  - feat(perftool): add viewport api [#149](https://github.com/salute-developers/perftool/pull/149) ([@akhdrv](https://github.com/akhdrv))
+
+#### 🐛 Bug Fix
+
+- `@salutejs/perftool@0.16.0`
+  - fix(perftool): remove exports, fix mandatory extension specification for (m)js modules [#149](https://github.com/salute-developers/perftool/pull/149) ([@akhdrv](https://github.com/akhdrv))
+
+#### 🔩 Dependency Updates
+
+- `@salutejs/perftool@0.16.0`
+  - build: bump @swc/core from 1.3.80 to 1.3.81 [#147](https://github.com/salute-developers/perftool/pull/147) ([@dependabot[bot]](https://github.com/dependabot[bot]))
+  - build: bump @babel/preset-env from 7.22.10 to 7.22.14 [#148](https://github.com/salute-developers/perftool/pull/148) ([@dependabot[bot]](https://github.com/dependabot[bot]))
+
+#### Authors: 2
+
+- [@dependabot[bot]](https://github.com/dependabot[bot])
+- Artem Khaydarov ([@akhdrv](https://github.com/akhdrv))
+
+---
+
 # (Wed Aug 30 2023)
 
 #### 🚀 Enhancement
