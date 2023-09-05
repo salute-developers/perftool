@@ -8,10 +8,7 @@ export function bootstrapTest(serializedTest: string) {
      * @see utils/window.d.ts
      */
     window._perftool_test = test;
-
-    if (window._perftool_api_ready) {
-        window._perftool_api_ready();
-    }
+    window._perftool_api_ready?.();
 }
 
 export function createInsertionScriptContent<T extends Task<any, any, any>>(test: RawTest<T>) {

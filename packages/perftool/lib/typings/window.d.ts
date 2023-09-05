@@ -14,6 +14,7 @@ declare global {
         _perftool_finish?: <T extends Task<any, any, any>[]>(result: RunTaskResult<T[number]>) => Promise<void>;
         /** Intercept API **/
         _perftool_intercept?: (params: InterceptParams) => Promise<void>;
+        _perftool_reset_interception?: () => Promise<void>;
         /** Viewport API **/
         _perftool_set_viewport?: (viewport: SetViewportParams) => Promise<void>;
         _perftool_preview_loaded?: true;
