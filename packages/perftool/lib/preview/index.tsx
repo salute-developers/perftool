@@ -50,6 +50,7 @@ export async function createPreviewClient({ subjects }: Params): Promise<void> {
     };
 
     await waitForApiReady();
+    await window._perftool_reset_interception?.();
 
     if (typeof currentSubject.Component.beforeTest === 'function') {
         debug('Running beforeTest');

@@ -56,6 +56,10 @@ export async function useInterceptApi(page: Page): Promise<void> {
         }
     }
 
+    function resetRequestReplacement() {
+        requestReplacementByMethodMap.clear();
+    }
+
     async function setRequestReplacement({
         method = ANY_METHOD,
         response,
@@ -146,6 +150,7 @@ export async function useInterceptApi(page: Page): Promise<void> {
     }
 
     await page.exposeFunction('_perftool_intercept', setRequestReplacement);
+    await page.exposeFunction('_perftool_reset_interception', resetRequestReplacement);
     await page.setRequestInterception(true);
 
     page.on('request', handleInterceptedRequest);

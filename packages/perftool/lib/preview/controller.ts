@@ -52,15 +52,18 @@ class PreviewController {
         const baseUrl = `http://localhost:${this.port}`;
 
         const page = await createNewPage(this.browserInstance);
-        await page.goto(baseUrl);
+
+        page.on('load', async () => {
+            await page.evaluate(() => {
+                window._perftool_preview_loaded = true;
+                window._perftool_api_ready?.();
+            });
+        });
 
         await useInterceptApi(page);
         await useViewportApi(page);
 
-        await page.evaluate(() => {
-            window._perftool_preview_loaded = true;
-            window._perftool_api_ready?.();
-        });
+        await page.goto(baseUrl);
 
         await this.waitForPageClose(page);
     }
