@@ -1,3 +1,22 @@
+# (Wed Sep 06 2023)
+
+#### 🐛 Bug Fix
+
+- `@salutejs/perftool@0.16.1`
+  - fix(perftool): switch components in preview mode [#159](https://github.com/salute-developers/perftool/pull/159) ([@akhdrv](https://github.com/akhdrv))
+
+#### 🔩 Dependency Updates
+
+- `@salutejs/perftool@0.16.1`
+  - build: bump @swc/core from 1.3.81 to 1.3.82 [#150](https://github.com/salute-developers/perftool/pull/150) ([@dependabot[bot]](https://github.com/dependabot[bot]))
+
+#### Authors: 2
+
+- [@dependabot[bot]](https://github.com/dependabot[bot])
+- Artem Khaydarov ([@akhdrv](https://github.com/akhdrv))
+
+---
+
 # (Fri Sep 01 2023)
 
 #### 🚀 Enhancement
