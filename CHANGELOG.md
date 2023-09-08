@@ -1,3 +1,26 @@
+# (Fri Sep 08 2023)
+
+#### 🚀 Enhancement
+
+- `@salutejs/perftool@0.17.0`
+  - feat(perftool): use readable name in preview mode [#163](https://github.com/salute-developers/perftool/pull/163) ([@akhdrv](https://github.com/akhdrv))
+
+#### 🐛 Bug Fix
+
+- `@salutejs/perftool@0.17.0`
+  - build(perftool): update pkgs [#163](https://github.com/salute-developers/perftool/pull/163) ([@akhdrv](https://github.com/akhdrv))
+
+#### 🔩 Dependency Updates
+
+- ci: bump actions/checkout from 3 to 4 [#152](https://github.com/salute-developers/perftool/pull/152) ([@dependabot[bot]](https://github.com/dependabot[bot]))
+
+#### Authors: 2
+
+- [@dependabot[bot]](https://github.com/dependabot[bot])
+- Artem Khaydarov ([@akhdrv](https://github.com/akhdrv))
+
+---
+
 # (Wed Sep 06 2023)
 
 #### 🐛 Bug Fix

@@ -1,3 +1,19 @@
+# v0.17.0 (Fri Sep 08 2023)
+
+#### 🚀 Enhancement
+
+- feat(perftool): use readable name in preview mode [#163](https://github.com/salute-developers/perftool/pull/163) ([@akhdrv](https://github.com/akhdrv))
+
+#### 🐛 Bug Fix
+
+- build(perftool): update pkgs [#163](https://github.com/salute-developers/perftool/pull/163) ([@akhdrv](https://github.com/akhdrv))
+
+#### Authors: 1
+
+- Artem Khaydarov ([@akhdrv](https://github.com/akhdrv))
+
+---
+
 # v0.16.1 (Wed Sep 06 2023)
 
 #### 🐛 Bug Fix
