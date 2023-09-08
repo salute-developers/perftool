@@ -37,11 +37,11 @@ function waitForApiReady(): Promise<void> {
 export async function createPreviewClient({ subjects }: Params): Promise<void> {
     const currentSubjectId = getCurrentSubjectId() || subjects[0]?.id;
     const subjectIds = subjects.map(({ id }) => id);
-    const currentEntrySubject = subjects.find(({ id }) => id === currentSubjectId);
+    let currentEntrySubject = subjects.find(({ id }) => id === currentSubjectId);
 
     if (!currentEntrySubject) {
-        error('No test subjects found or subjectId is invalid');
-        return;
+        error('subjectId is invalid');
+        [currentEntrySubject] = subjects;
     }
 
     const currentSubject = currentEntrySubject && {
