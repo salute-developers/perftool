@@ -7,6 +7,7 @@ type Props = {
     style: CSSProperties;
 };
 
+const readableNamesMap = process.env.PERFTOOL_PREVIEW_READABLE_NAMES as unknown as Record<string, string>;
 const rootStyle = { display: 'flex', flexDirection: 'row' } as const;
 const labelStyle = { paddingRight: '1rem' } as const;
 
@@ -22,7 +23,7 @@ function Selector({ style, subjectsIds, onSelect, currentIndex }: Props) {
             <select onChange={handleChange} value={currentIndex}>
                 {subjectsIds.map((id, index) => (
                     <option key={index} value={index}>
-                        {id}
+                        {readableNamesMap[id]}
                     </option>
                 ))}
             </select>

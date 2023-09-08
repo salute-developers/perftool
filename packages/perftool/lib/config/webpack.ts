@@ -6,6 +6,8 @@ import { fileURLToPath } from 'url';
 
 import { debug } from '../utils/logger';
 import CWD from '../utils/cwd';
+import { getSubjectIdToReadableNameMap } from '../utils/subjectId';
+import type { TestModule } from '../build/collect';
 
 import { Config } from './common';
 
@@ -62,7 +64,14 @@ const defaultConfig: WebpackConfig = {
     },
 };
 
-export function getWebpackConfig(entry: string, output: string, config: Config): WebpackConfig {
+type GetWebpackConfigParams = {
+    entry: string;
+    output: string;
+    config: Config;
+    testModules: TestModule[];
+};
+
+export function getWebpackConfig({ entry, output, config, testModules }: GetWebpackConfigParams): WebpackConfig {
     const isPreviewMode = config.mode === 'preview';
     const env: Record<string, string> = {
         'process.env.PERFTOOL_CLIENT_RUNTIME': JSON.stringify(true),
@@ -70,11 +79,14 @@ export function getWebpackConfig(entry: string, output: string, config: Config):
     };
 
     const finalConfig = config.modifyWebpackConfig(defaultConfig);
+    const readableNames = getSubjectIdToReadableNameMap(testModules);
 
-    finalConfig.plugins!.push(new webpack.DefinePlugin(env));
     if (isPreviewMode) {
+        env['process.env.PERFTOOL_PREVIEW_READABLE_NAMES'] = JSON.stringify(readableNames);
         finalConfig.mode = 'development';
     }
+
+    finalConfig.plugins!.push(new webpack.DefinePlugin(env));
 
     finalConfig.entry = entry;
     finalConfig.output!.path = output;

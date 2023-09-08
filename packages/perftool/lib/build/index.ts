@@ -103,7 +103,7 @@ export async function buildClient({ config, testModules }: BuildClientParams): P
         config,
     });
 
-    const webpackConfig = getWebpackConfig(entry, buildDirectory, config);
+    const webpackConfig = getWebpackConfig({ entry, config, testModules, output: buildDirectory });
 
     return build(webpackConfig);
 }

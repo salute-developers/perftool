@@ -9,6 +9,7 @@ import { Config } from '../config';
 import getCurrentVersion from '../utils/version';
 import { id as staticTaskSubjectId } from '../stabilizers/staticTask';
 import CWD from '../utils/cwd';
+import { getSubjectIdToReadableNameMap } from '../utils/subjectId';
 
 export type ReportWithMeta = {
     version: string;
@@ -40,19 +41,6 @@ export async function report(statsStream: AsyncGenerator<StatsReport, undefined>
     for await (const statsReport of statsStream) {
         info(JSON.stringify(statsReport, null, 4));
     }
-}
-
-function getSubjectIdToReadableNameMap(testModules: TestModule[]) {
-    return testModules.reduce(
-        (acc, { subjects, path: modulePath }) => {
-            subjects.forEach(({ id, originalExportedName }) => {
-                acc[id] = `${path.relative(CWD, path.resolve(CWD, modulePath))}#${originalExportedName}`;
-            });
-
-            return acc;
-        },
-        {} as { [k: string]: string },
-    );
 }
 
 function getCachedTestIds(allTestModules: TestModule[], actualTestModules: TestModule[]): string[] {
