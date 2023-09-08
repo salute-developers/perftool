@@ -24,13 +24,13 @@
     "release": "auto shipit"
   },
   "devDependencies": {
-    "@auto-it/conventional-commits": "11.0.1",
-    "@auto-it/npm": "11.0.1",
+    "@auto-it/conventional-commits": "11.0.2",
+    "@auto-it/npm": "11.0.2",
     "@commitlint/cli": "17.7.1",
     "@commitlint/config-conventional": "17.7.0",
-    "@typescript-eslint/eslint-plugin": "6.5.0",
-    "@typescript-eslint/parser": "6.5.0",
-    "auto": "11.0.1",
+    "@typescript-eslint/eslint-plugin": "6.6.0",
+    "@typescript-eslint/parser": "6.6.0",
+    "auto": "11.0.2",
     "eslint": "8.48.0",
     "eslint-config-airbnb": "19.0.4",
     "eslint-config-prettier": "9.0.0",
