@@ -25,7 +25,7 @@
   },
   "devDependencies": {
     "@auto-it/conventional-commits": "11.0.2",
-    "@auto-it/npm": "11.0.2",
+    "@auto-it/npm": "11.0.4",
     "@commitlint/cli": "17.7.1",
     "@commitlint/config-conventional": "17.7.0",
     "@typescript-eslint/eslint-plugin": "6.6.0",
