@@ -31,7 +31,7 @@ jobs:
         run: pnpm install
 
       - name: Unit tests
-        run: npx lerna run test
+        run: pnpm exec lerna run test
 
   lint:
     name: Linting
@@ -53,4 +53,4 @@ jobs:
         run: pnpm run lint
 
       - name: Type Check
-        run: npx lerna run typecheck
+        run: pnpm exec lerna run typecheck

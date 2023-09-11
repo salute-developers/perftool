@@ -37,7 +37,7 @@ jobs:
         run: pnpm install
 
       - name: Release Info
-        run: npm whoami && npx auto info || echo 'auto info returned 1'
+        run: npm whoami && pnpm exec auto info || echo 'auto info returned 1'
 
       - name: Create Release
         run: pnpm run release
