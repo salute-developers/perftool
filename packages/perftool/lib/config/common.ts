@@ -33,9 +33,9 @@ export type Config = {
     metricConfiguration: {
         [key: string]: MetricConfiguration;
     };
-    /** Output stabilizer. Available: 'staticTask'. Default: [] **/
+    /** Output stabilizer. Available: 'staticTask'. Default: ['staticTask'] **/
     stabilizers: string[];
-    /** Absolute error that summed with actual metric error when comparing. Default: 0 **/
+    /** Absolute error that summed with actual metric error when comparing. Default: 1 **/
     absoluteError: number;
     /** Custom metrics **/
     metrics: Metric<any>[];
@@ -124,13 +124,13 @@ export function getConfig(cliConfig: CliConfig = {}, projectConfig: ProjectConfi
         taskConfiguration: withDefault(mixedInputConfig.taskConfiguration, {}),
         tasks: withDefault(mixedInputConfig.tasks, []),
         metricConfiguration: withDefault(mixedInputConfig.metricConfiguration, {}),
-        stabilizers: withDefault(mixedInputConfig.stabilizers, []),
-        absoluteError: withDefault(mixedInputConfig.absoluteError, 0),
+        stabilizers: withDefault(mixedInputConfig.stabilizers, ['staticTask']),
+        absoluteError: withDefault(mixedInputConfig.absoluteError, 1),
         metrics: withDefault(mixedInputConfig.metrics, []),
         include: withDefault(mixedInputConfig.include, []),
         exclude: withDefault(mixedInputConfig.exclude, []),
         jobs: withDefault(mixedInputConfig.jobs, Math.max(os.cpus().length - 1, 1)),
-        retries: withDefault(mixedInputConfig.retries, 10),
+        retries: withDefault(mixedInputConfig.retries, 30),
         baseBranchRef: withDefault(mixedInputConfig.baseBranchRef, undefined),
         currentBranchRef: withDefault(mixedInputConfig.currentBranchRef, undefined),
         cache: withDefault(mixedInputConfig.cache, {}),
