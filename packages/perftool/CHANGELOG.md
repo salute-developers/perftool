@@ -1,3 +1,25 @@
+# v0.18.0 (Wed Sep 13 2023)
+
+#### 🚀 Enhancement
+
+- feat(perftool): use stabilizers by default [#171](https://github.com/salute-developers/perftool/pull/171) ([@akhdrv](https://github.com/akhdrv))
+- feat(perftool): use readable name in preview mode [#163](https://github.com/salute-developers/perftool/pull/163) ([@akhdrv](https://github.com/akhdrv))
+
+#### 🐛 Bug Fix
+
+- docs(perftool): README, issue templates, PR template [#171](https://github.com/salute-developers/perftool/pull/171) ([@akhdrv](https://github.com/akhdrv))
+- build(perftool): update packages [#171](https://github.com/salute-developers/perftool/pull/171) ([@akhdrv](https://github.com/akhdrv))
+- Bump independent versions \[skip ci\] ([@Salute-Eva](https://github.com/Salute-Eva))
+- Update CHANGELOG.md \[skip ci\] ([@Salute-Eva](https://github.com/Salute-Eva))
+- build(perftool): update pkgs [#163](https://github.com/salute-developers/perftool/pull/163) ([@akhdrv](https://github.com/akhdrv))
+
+#### Authors: 2
+
+- [@Salute-Eva](https://github.com/Salute-Eva)
+- Artem Khaydarov ([@akhdrv](https://github.com/akhdrv))
+
+---
+
 # v0.17.0 (Fri Sep 08 2023)
 
 #### 🚀 Enhancement

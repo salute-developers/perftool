@@ -1,3 +1,30 @@
+# (Wed Sep 13 2023)
+
+#### 🚀 Enhancement
+
+- `@salutejs/perftool@0.18.0`
+  - feat(perftool): use stabilizers by default [#171](https://github.com/salute-developers/perftool/pull/171) ([@akhdrv](https://github.com/akhdrv))
+  - feat(perftool): use readable name in preview mode [#163](https://github.com/salute-developers/perftool/pull/163) ([@akhdrv](https://github.com/akhdrv))
+
+#### 🐛 Bug Fix
+
+- ci: npx -> pnpm exec [#171](https://github.com/salute-developers/perftool/pull/171) ([@akhdrv](https://github.com/akhdrv))
+- `@salutejs/perftool@0.18.0`
+  - docs(perftool): README, issue templates, PR template [#171](https://github.com/salute-developers/perftool/pull/171) ([@akhdrv](https://github.com/akhdrv))
+  - build(perftool): update packages [#171](https://github.com/salute-developers/perftool/pull/171) ([@akhdrv](https://github.com/akhdrv))
+  - build(perftool): update pkgs [#163](https://github.com/salute-developers/perftool/pull/163) ([@akhdrv](https://github.com/akhdrv))
+
+#### 🔩 Dependency Updates
+
+- ci: bump actions/checkout from 3 to 4 [#152](https://github.com/salute-developers/perftool/pull/152) ([@dependabot[bot]](https://github.com/dependabot[bot]))
+
+#### Authors: 2
+
+- [@dependabot[bot]](https://github.com/dependabot[bot])
+- Artem Khaydarov ([@akhdrv](https://github.com/akhdrv))
+
+---
+
 # (Fri Sep 08 2023)
 
 #### 🚀 Enhancement
