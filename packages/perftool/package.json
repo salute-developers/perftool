@@ -2,7 +2,7 @@
     "name": "@salutejs/perftool",
     "version": "0.17.0",
     "author": "Salute Frontend Team <salute.developers@gmail.com>",
-    "description": "Performance measurement tool for frontend components",
+    "description": "Performance Monitoring System for React Components",
     "license": "MIT",
     "repository": {
         "type": "git",

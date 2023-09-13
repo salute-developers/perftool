@@ -5,7 +5,7 @@
   "contributors": [
     "Artem Khaidarov (https://github.com/akhdrv)"
   ],
-  "description": "Performance measurement tool for frontend components",
+  "description": "Performance Monitoring System for React Components",
   "license": "MIT",
   "repository": {
     "type": "git",
