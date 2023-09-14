@@ -171,19 +171,19 @@ export function Default() {
 Default.beforeTest = async () => {
     await intercept({
         method: 'POST',
-        source: '**/api/bx/v1/ecom/basket/page.php*', // glob-pattern
-        response: 'src/util/perftool/fixtures/basket.json', // file path
+        source: '**/api/foo*', // glob-pattern
+        response: 'src/utils/perftool/fixtures/foo.json', // file path
     });
     await intercept({
         method: 'GET',
         responseType: 'json',
-        source: '**/api/bx/v1/ecom/lk/page.php*',
+        source: '**/api/bar*',
         response: { foo: 'bar' },
     });
     await intercept({
         // any http method
         responseType: 'abort',
-        source: '**/api/bx/v1/ecom/baz/page.php*',
+        source: '**/api/baz*',
     });
 };
 ```
