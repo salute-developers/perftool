@@ -1,3 +1,19 @@
+# v0.19.0 (Mon Oct 02 2023)
+
+#### 🚀 Enhancement
+
+- feat(perftool): export report types [#209](https://github.com/salute-developers/perftool/pull/209) ([@akhdrv](https://github.com/akhdrv))
+
+#### 🐛 Bug Fix
+
+- build(perftool): update packages [#209](https://github.com/salute-developers/perftool/pull/209) ([@akhdrv](https://github.com/akhdrv))
+
+#### Authors: 1
+
+- Artem Khaydarov ([@akhdrv](https://github.com/akhdrv))
+
+---
+
 # v0.18.0 (Wed Sep 13 2023)
 
 #### 🚀 Enhancement

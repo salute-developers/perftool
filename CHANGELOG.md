@@ -1,3 +1,24 @@
+# (Mon Oct 02 2023)
+
+#### 🚀 Enhancement
+
+- `@salutejs/perftool@0.19.0`
+  - feat(perftool): export report types [#209](https://github.com/salute-developers/perftool/pull/209) ([@akhdrv](https://github.com/akhdrv))
+
+#### 🐛 Bug Fix
+
+- build: update packages, lockfile [#209](https://github.com/salute-developers/perftool/pull/209) ([@akhdrv](https://github.com/akhdrv))
+- build(main-suite): update packages [#209](https://github.com/salute-developers/perftool/pull/209) ([@akhdrv](https://github.com/akhdrv))
+- docs: fix readme [#176](https://github.com/salute-developers/perftool/pull/176) ([@akhdrv](https://github.com/akhdrv))
+- `@salutejs/perftool@0.19.0`
+  - build(perftool): update packages [#209](https://github.com/salute-developers/perftool/pull/209) ([@akhdrv](https://github.com/akhdrv))
+
+#### Authors: 1
+
+- Artem Khaydarov ([@akhdrv](https://github.com/akhdrv))
+
+---
+
 # (Wed Sep 13 2023)
 
 #### 🚀 Enhancement
