@@ -32,7 +32,7 @@ type Report = {
     };
 };
 
-type CompareReport = {
+export type CompareReport = {
     version: string;
     isVersionChanged: boolean;
     timestamp: number;
