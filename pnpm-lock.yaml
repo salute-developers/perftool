@@ -178,8 +178,8 @@ importers:
         specifier: 18.2.24
         version: 18.2.24
       '@types/react-dom':
-        specifier: 18.2.8
-        version: 18.2.8
+        specifier: 18.2.14
+        version: 18.2.14
       jest:
         specifier: 29.7.0
         version: 29.7.0(@types/node@20.8.0)(ts-node@10.9.1)
@@ -3150,8 +3150,8 @@ packages:
     resolution: {integrity: sha512-xrO9OoVPqFuYyR/loIHjnbvvyRZREYKLjxV4+dY6v3FQR3stQ9ZxIGkaclF7YhI9hfjpuTbu14hZEy94qKLtOA==}
     dev: true
 
-  /@types/react-dom@18.2.8:
-    resolution: {integrity: sha512-bAIvO5lN/U8sPGvs1Xm61rlRHHaq5rp5N3kp9C+NJ/Q41P8iqjkXSu0+/qu8POsjH9pNWb0OYabFez7taP7omw==}
+  /@types/react-dom@18.2.14:
+    resolution: {integrity: sha512-V835xgdSVmyQmI1KLV2BEIUgqEuinxp9O4G6g3FqO/SqLac049E53aysv0oEFD2kHfejeKU+ZqL2bcFWj9gLAQ==}
     dependencies:
       '@types/react': 18.2.24
     dev: true
