@@ -41,24 +41,3 @@ jobs:
 
       - name: Create Release
         run: pnpm run release
-
-      - name: Update package-lock's
-        if: github.event_name != 'pull_request'
-        run: |
-          pnpm install --lockfile-only
-
-      - name: Extract branch name
-        if: github.event_name != 'pull_request'
-        shell: bash
-        run: echo "##[set-output name=branch;]$(echo ${GITHUB_REF#refs/heads/})"
-        id: extract_branch
-
-      - name: Commit & Push package-lock's
-        if: github.event_name != 'pull_request'
-        uses: actions-js/push@master
-        with:
-          github_token: ${{ secrets.GH_TOKEN }}
-          message: 'chore: update package-locks [skip ci]'
-          branch: ${{ steps.extract_branch.outputs.branch }}
-          author_name: Salute Frontend Team
-          author_email: salute.developers@gmail.com
