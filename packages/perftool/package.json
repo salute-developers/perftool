@@ -68,7 +68,7 @@
         "minimatch": "9.0.3",
         "morgan": "1.10.0",
         "open": "9.1.0",
-        "puppeteer": "21.4.0",
+        "puppeteer": "21.4.1",
         "serialize-error": "11.0.2",
         "simple-git": "3.20.0",
         "ts-node": "11.0.0-beta.1",
