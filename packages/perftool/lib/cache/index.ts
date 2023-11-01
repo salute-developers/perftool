@@ -7,6 +7,7 @@ import { JSONSerializable } from '../utils/types';
 import checkPath from '../utils/checkPath';
 import getCurrentVersion from '../utils/version';
 import { debug, info, warn } from '../utils/logger';
+import sanitizeFilename from '../utils/sanitizeFilename';
 
 type TaskState = { [subjectId: string]: { [taskId: string]: JSONSerializable } };
 type SubjectsDepsHashMap = { [subjectId: string]: string };
@@ -120,7 +121,7 @@ class Cache {
         try {
             const key = currentBranchRef || (await simpleGit().revparse(['--short', 'HEAD']));
 
-            return path.resolve(cacheDirectory, `${key}.json`);
+            return path.resolve(cacheDirectory, `${sanitizeFilename(key)}.json`);
         } catch (error) {
             warn('Could not obtain HEAD commit sha. Error: ', error);
         }
@@ -238,11 +239,7 @@ class Cache {
             return;
         }
 
-        this.subjectDeps = {};
-
-        for (const [subjectId, hash] of subjectsDepsHashMap) {
-            this.subjectDeps[subjectId] = hash;
-        }
+        this.subjectDeps = Object.fromEntries(subjectsDepsHashMap.entries());
     }
 }
 
