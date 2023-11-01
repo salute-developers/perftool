@@ -1,3 +1,22 @@
+# (Wed Nov 01 2023)
+
+#### 🐛 Bug Fix
+
+- build: update pkgs [#260](https://github.com/salute-developers/perftool/pull/260) ([@akhdrv](https://github.com/akhdrv))
+- build: update pkgs [#243](https://github.com/salute-developers/perftool/pull/243) ([@akhdrv](https://github.com/akhdrv))
+- build(main-suite): update pkgs [#243](https://github.com/salute-developers/perftool/pull/243) ([@akhdrv](https://github.com/akhdrv))
+- ci: rm useless release steps [#243](https://github.com/salute-developers/perftool/pull/243) ([@akhdrv](https://github.com/akhdrv))
+- `@salutejs/perftool@0.19.1`
+  - build(perftool): update pkgs [#260](https://github.com/salute-developers/perftool/pull/260) ([@akhdrv](https://github.com/akhdrv))
+  - fix(perftool): sanitize cache file name [#260](https://github.com/salute-developers/perftool/pull/260) ([@akhdrv](https://github.com/akhdrv))
+  - build(perftool): update pkgs [#243](https://github.com/salute-developers/perftool/pull/243) ([@akhdrv](https://github.com/akhdrv))
+
+#### Authors: 1
+
+- Artem Khaydarov ([@akhdrv](https://github.com/akhdrv))
+
+---
+
 # (Mon Oct 02 2023)
 
 #### 🚀 Enhancement
