@@ -47,8 +47,4 @@ if (process.env.PERFTOOL_PREVIEW_MODE) {
     } catch (error) {
         onError(error);
     }
-
-    window.addEventListener('unhandledrejection', function(event) {
-        onError(event.reason);
-    });
 }

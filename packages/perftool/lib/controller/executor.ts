@@ -12,6 +12,7 @@ import { RawTest } from '../client/input';
 import { useInterceptApi } from '../api/intercept';
 import { createNewPage } from '../utils/puppeteer';
 import { useViewportApi } from '../api/viewport';
+import decorateErrorWithTestParams from '../utils/decorateErrorWithTestParams';
 
 import { createInsertionScriptContent } from './clientScript';
 
@@ -123,8 +124,10 @@ export default class Executor<T extends Task<any, any, any>[]> implements IExecu
 
             result.resolve(taskResult);
         });
-        await page.exposeFunction('_perftool_on_error', (error: ErrorObject) => {
-            result.resolve(deserializeError(error));
+        await page.exposeFunction('_perftool_on_error', (rawError: ErrorObject) => {
+            const error = deserializeError(rawError);
+
+            result.resolve(decorateErrorWithTestParams(error, { subjectId: test.subjectId }));
         });
         await useInterceptApi(page);
         await useViewportApi(page);
