@@ -1,3 +1,20 @@
+# v0.20.0 (Mon Nov 27 2023)
+
+#### 🚀 Enhancement
+
+- feat(perftool): handle promise rejections [#297](https://github.com/salute-developers/perftool/pull/297) ([@akhdrv](https://github.com/akhdrv))
+
+#### 🐛 Bug Fix
+
+- build(perftool): update packages [#297](https://github.com/salute-developers/perftool/pull/297) ([@akhdrv](https://github.com/akhdrv))
+- build(perftool): up pkgs [#275](https://github.com/salute-developers/perftool/pull/275) ([@akhdrv](https://github.com/akhdrv))
+
+#### Authors: 1
+
+- Artem Khaydarov ([@akhdrv](https://github.com/akhdrv))
+
+---
+
 # v0.19.1 (Wed Nov 01 2023)
 
 #### 🐛 Bug Fix

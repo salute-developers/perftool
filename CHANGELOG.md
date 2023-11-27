@@ -1,3 +1,31 @@
+# (Mon Nov 27 2023)
+
+#### 🚀 Enhancement
+
+- `@salutejs/perftool@0.20.0`
+  - feat(perftool): handle promise rejections [#297](https://github.com/salute-developers/perftool/pull/297) ([@akhdrv](https://github.com/akhdrv))
+
+#### 🐛 Bug Fix
+
+- build(main-suite): update packages [#297](https://github.com/salute-developers/perftool/pull/297) ([@akhdrv](https://github.com/akhdrv))
+- build: update packages [#297](https://github.com/salute-developers/perftool/pull/297) ([@akhdrv](https://github.com/akhdrv))
+- build(main-suite): up pkgs [#275](https://github.com/salute-developers/perftool/pull/275) ([@akhdrv](https://github.com/akhdrv))
+- build: up pkgs [#275](https://github.com/salute-developers/perftool/pull/275) ([@akhdrv](https://github.com/akhdrv))
+- `@salutejs/perftool@0.20.0`
+  - build(perftool): update packages [#297](https://github.com/salute-developers/perftool/pull/297) ([@akhdrv](https://github.com/akhdrv))
+  - build(perftool): up pkgs [#275](https://github.com/salute-developers/perftool/pull/275) ([@akhdrv](https://github.com/akhdrv))
+
+#### 🔩 Dependency Updates
+
+- ci: bump actions/setup-node from 3 to 4 [#247](https://github.com/salute-developers/perftool/pull/247) ([@dependabot[bot]](https://github.com/dependabot[bot]))
+
+#### Authors: 2
+
+- [@dependabot[bot]](https://github.com/dependabot[bot])
+- Artem Khaydarov ([@akhdrv](https://github.com/akhdrv))
+
+---
+
 # (Wed Nov 01 2023)
 
 #### 🐛 Bug Fix
