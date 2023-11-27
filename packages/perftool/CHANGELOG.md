@@ -1,3 +1,15 @@
+# v0.20.1 (Mon Nov 27 2023)
+
+#### 🐛 Bug Fix
+
+- fix(perftool): fix unhandled rejections handler [#298](https://github.com/salute-developers/perftool/pull/298) ([@akhdrv](https://github.com/akhdrv))
+
+#### Authors: 1
+
+- Artem Khaydarov ([@akhdrv](https://github.com/akhdrv))
+
+---
+
 # v0.20.0 (Mon Nov 27 2023)
 
 #### 🚀 Enhancement
