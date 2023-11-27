@@ -1,5 +1,6 @@
 import type { Config } from '../config/common';
 import { debug } from '../utils/logger';
+import { onError } from '../utils/ErrorBoundary';
 
 import type { Task } from './measurement/types';
 import { runTask } from './measurement/runner';
@@ -20,6 +21,10 @@ export async function createPerfToolClient<T extends Task<any, any, any>[]>({
     debug('Available subjects: ', subjects);
     debug('Available tasks: ', tasks);
     debug('Config: ', config);
+
+    window.addEventListener('unhandledrejection', (event) => {
+        onError(event.reason);
+    });
 
     const { task, subject, state } = await resolveTest({ tasks, subjects });
 
