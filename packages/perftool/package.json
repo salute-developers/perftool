@@ -1,6 +1,6 @@
 {
     "name": "@salutejs/perftool",
-    "version": "0.19.1",
+    "version": "0.20.0",
     "author": "Salute Frontend Team <salute.developers@gmail.com>",
     "description": "Performance Monitoring System for React Components",
     "license": "MIT",
