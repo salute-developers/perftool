@@ -5,7 +5,6 @@ import { getAllTasks } from '../config/task';
 import { subject as staticTaskSubject } from '../stabilizers/staticTask';
 import { setLogLevel } from '../utils/logger';
 import { EntrySubject } from './input';
-import { onError } from '../utils/ErrorBoundary';
 
 const config = ((v) => v)(
     // <CONFIG_ARGS_MARK>
@@ -38,13 +37,9 @@ if (process.env.PERFTOOL_PREVIEW_MODE) {
     // TODO tasks in client config are not serialized
     const allTasks = getAllTasks(config);
 
-    try {
-        await createPerfToolClient({
-            config,
-            tasks: allTasks,
-            subjects: allTestSubjects,
-        });
-    } catch (error) {
-        onError(error);
-    }
+    await createPerfToolClient({
+        config,
+        tasks: allTasks,
+        subjects: allTestSubjects,
+    });
 }

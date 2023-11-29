@@ -85,6 +85,7 @@ export type Config = {
     runWaitTimeout: number;
     /** How many times to run the tasks without saving the results. Default: 1 **/
     dryRunTimes: number;
+    maxTimeoutsInRow: number;
     /** Function used to modify webpack config. Default: identity **/
     modifyWebpackConfig: (defaultConfig: WebpackConfig) => WebpackConfig;
     /** Which exports to pick. Default: 'named' **/
@@ -145,7 +146,8 @@ export function getConfig(cliConfig: CliConfig = {}, projectConfig: ProjectConfi
         puppeteerOptions: withDefault(mixedInputConfig.puppeteerOptions, {}),
         taskWaitTimeout: withDefault(mixedInputConfig.taskWaitTimeout, 1000 * 10),
         runWaitTimeout: withDefault(mixedInputConfig.runWaitTimeout, 1000 * 60 * 2),
-        dryRunTimes: withDefault(mixedInputConfig.taskWaitTimeout, 1),
+        dryRunTimes: withDefault(mixedInputConfig.dryRunTimes, 1),
+        maxTimeoutsInRow: withDefault(mixedInputConfig.maxTimeoutsInRow, 3),
         modifyWebpackConfig: withDefault(mixedInputConfig.modifyWebpackConfig, (c) => c),
         exportPickRule: withDefault(mixedInputConfig.exportPickRule, 'named'),
     };

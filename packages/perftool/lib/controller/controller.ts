@@ -2,9 +2,9 @@ import { Config } from '../config';
 import { Task } from '../client/measurement/types';
 import { RunTaskResult } from '../client/measurement/runner';
 import combineGenerators from '../utils/combineGenerators';
-import { debug } from '../utils/logger';
+import { debug, warn } from '../utils/logger';
 
-import { IExecutor } from './executor';
+import { IExecutor, Test } from './executor';
 import { IPlanner } from './planner';
 
 export default class TestController<T extends Task<any, any>[]> {
@@ -14,6 +14,8 @@ export default class TestController<T extends Task<any, any>[]> {
 
     private readonly executor: IExecutor<T>;
 
+    private readonly retryCounter: Record<string, number> = {};
+
     constructor(config: Config, planner: IPlanner, executor: IExecutor<T>) {
         this.config = config;
         this.executor = executor;
@@ -21,18 +23,21 @@ export default class TestController<T extends Task<any, any>[]> {
     }
 
     async *run(): AsyncGenerator<RunTaskResult<T[number]>, undefined> {
-        const { executor } = this;
+        const { executor, handleErrorResult, resetTimeoutCounter } = this;
         const schedule = this.planner.plan();
 
         const start = async function* start() {
-            for (const value of schedule) {
-                const result = await executor.execute(value);
+            for (const test of schedule) {
+                const result = await executor.execute(test);
 
                 if (result instanceof Error) {
-                    throw result;
+                    handleErrorResult(result, test);
+                    continue;
                 }
 
-                if (value.type === 'dry') {
+                resetTimeoutCounter(result);
+
+                if (test.type === 'dry') {
                     debug('[controller]', 'current run is dry, skipping');
                     continue;
                 }
@@ -54,4 +59,35 @@ export default class TestController<T extends Task<any, any>[]> {
 
         return undefined;
     }
+
+    private handleErrorResult = (error: Error, test: Test): void => {
+        if (error.name === 'TimeoutError') {
+            const key = `${test.subjectId}_${test.taskId}`;
+
+            this.retryCounter[key] = (this.retryCounter[key] || 0) + 1;
+
+            if (this.retryCounter[key] > this.config.maxTimeoutsInRow) {
+                throw error;
+            }
+
+            warn(
+                `Task ${test.taskId} timed out running component ${test.subjectId}. ${
+                    this.config.maxTimeoutsInRow - this.retryCounter[key]
+                } retries left in a row.`,
+            );
+            debug('Original error: ', error);
+
+            this.planner.scheduleRetry(test);
+
+            return;
+        }
+
+        throw error;
+    };
+
+    private resetTimeoutCounter = (test: Test): void => {
+        const key = `${test.subjectId}_${test.taskId}`;
+
+        this.retryCounter[key] = 0;
+    };
 }

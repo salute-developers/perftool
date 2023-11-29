@@ -25,14 +25,12 @@ type RunTaskParams<T extends Task<any, any, any>> = {
     state: TaskState<T>;
 };
 
-type SuccessResult<T extends Task<any, any, any>> = { result: PromiseFulfilledResult<ReturnType<T['run']>> };
-type ErrorResult = { error: string };
-
 export type RunTaskResult<T extends Task<any, any, any>> = {
     taskId: string;
     subjectId: string;
     state?: TaskState<T>;
-} & (SuccessResult<T> | ErrorResult);
+    result: PromiseFulfilledResult<ReturnType<T['run']>>;
+};
 
 export async function runTask<T extends Task<any, any, any>>({
     task,
@@ -68,21 +66,17 @@ export async function runTask<T extends Task<any, any, any>>({
             .catch((error: Error) => {
                 debug(`Test ${meta.taskId}, ${meta.subjectId} failed. Error:`, error);
 
-                return {
-                    ...meta,
-                    state,
-                    error: error.toString(),
-                };
+                throw error;
             })
             .finally(() => {
                 isComplete = true;
             }),
         defer(globalConfig.taskWaitTimeout, () => {
-            if (!isComplete) {
-                debug(`Test ${meta.taskId}, ${meta.subjectId} timed out`);
+            if (isComplete) {
+                return undefined as never;
             }
 
-            return { ...meta, state, error: new TimeoutError().toString() };
+            throw new TimeoutError(`Test ${meta.taskId}, ${meta.subjectId} timed out`);
         }),
     ]);
 }

@@ -9,6 +9,7 @@ import type { Test } from './executor';
 
 export type IPlanner = {
     plan(): Generator<Test, undefined>;
+    scheduleRetry(test: Test): void;
 };
 
 export function getTests<T extends Task<any, any>[]>(
@@ -37,6 +38,8 @@ export default class Planner<T extends Task<any, any>[]> implements IPlanner {
     private readonly tasks: T;
 
     private readonly testModules: TestModule[];
+
+    private readonly additionalRuns: Test[] = [];
 
     constructor(config: Config, tasks: T, testModules: TestModule[]) {
         this.config = config;
@@ -81,6 +84,18 @@ export default class Planner<T extends Task<any, any>[]> implements IPlanner {
             }
         }
 
+        if (this.additionalRuns.length) {
+            debug('[planner]', 'running extra times');
+
+            for (const test of this.additionalRuns) {
+                yield test;
+            }
+        }
+
         return undefined;
+    }
+
+    scheduleRetry(test: Test): void {
+        this.additionalRuns.push(test);
     }
 }
