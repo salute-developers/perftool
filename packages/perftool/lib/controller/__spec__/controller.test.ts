@@ -19,6 +19,7 @@ describe('controller/TestController', () => {
             jobs: 3,
         } as Config;
         const planner: IPlanner = {
+            scheduleRetry() {},
             plan: jest.fn(function* () {
                 for (const test of tests) {
                     yield test;
@@ -61,6 +62,7 @@ describe('controller/TestController', () => {
             jobs: 2,
         } as Config;
         const planner = {
+            scheduleRetry() {},
             plan: jest.fn(function* () {
                 for (const test of tests) {
                     yield test;
@@ -95,6 +97,7 @@ describe('controller/TestController', () => {
             jobs: 1,
         } as Config;
         const planner = {
+            scheduleRetry() {},
             plan: jest.fn(function* () {
                 for (const test of tests) {
                     yield test;
