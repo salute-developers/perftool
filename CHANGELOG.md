@@ -1,3 +1,24 @@
+# (Wed Nov 29 2023)
+
+#### 🚀 Enhancement
+
+- build(main-suite): update packages [#304](https://github.com/salute-developers/perftool/pull/304) ([@akhdrv](https://github.com/akhdrv))
+- `@salutejs/perftool@0.21.0`
+  - feat(perftool): fix timeouts, add retries for timeouts [#304](https://github.com/salute-developers/perftool/pull/304) ([@akhdrv](https://github.com/akhdrv))
+
+#### 🐛 Bug Fix
+
+- build: update packages [#304](https://github.com/salute-developers/perftool/pull/304) ([@akhdrv](https://github.com/akhdrv))
+- `@salutejs/perftool@0.21.0`
+  - build(perftool): update packages [#304](https://github.com/salute-developers/perftool/pull/304) ([@akhdrv](https://github.com/akhdrv))
+  - fix(perftool): fix unhandled rejections handler [#298](https://github.com/salute-developers/perftool/pull/298) ([@akhdrv](https://github.com/akhdrv))
+
+#### Authors: 1
+
+- Artem Khaydarov ([@akhdrv](https://github.com/akhdrv))
+
+---
+
 # (Mon Nov 27 2023)
 
 #### 🐛 Bug Fix

@@ -1,3 +1,23 @@
+# v0.21.0 (Wed Nov 29 2023)
+
+#### 🚀 Enhancement
+
+- feat(perftool): fix timeouts, add retries for timeouts [#304](https://github.com/salute-developers/perftool/pull/304) ([@akhdrv](https://github.com/akhdrv))
+
+#### 🐛 Bug Fix
+
+- build(perftool): update packages [#304](https://github.com/salute-developers/perftool/pull/304) ([@akhdrv](https://github.com/akhdrv))
+- "Bump independent versions \[skip ci\]" ([@Salute-Eva](https://github.com/Salute-Eva))
+- Update CHANGELOG.md \[skip ci\] ([@Salute-Eva](https://github.com/Salute-Eva))
+- fix(perftool): fix unhandled rejections handler [#298](https://github.com/salute-developers/perftool/pull/298) ([@akhdrv](https://github.com/akhdrv))
+
+#### Authors: 2
+
+- [@Salute-Eva](https://github.com/Salute-Eva)
+- Artem Khaydarov ([@akhdrv](https://github.com/akhdrv))
+
+---
+
 # v0.20.1 (Mon Nov 27 2023)
 
 #### 🐛 Bug Fix
