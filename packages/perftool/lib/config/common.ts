@@ -9,6 +9,7 @@ import { Metric } from '../statistics/types';
 import { debug } from '../utils/logger';
 
 import { cacheDirectory } from './paths';
+import { defaultMetricConfiguration } from './metric';
 
 type MetricConfiguration = {
     enable?: boolean;
@@ -108,9 +109,13 @@ export type CliConfig = Partial<
     >
 >;
 
-function withDefault<T>(value: T | undefined, defaultValue: T): T {
+function withDefault<T>(value: T | undefined, defaultValue: T, deep = false): T {
     if (typeof value === 'undefined') {
         return defaultValue;
+    }
+
+    if (deep) {
+        return merge(defaultValue, value);
     }
 
     return value;
@@ -124,7 +129,7 @@ export function getConfig(cliConfig: CliConfig = {}, projectConfig: ProjectConfi
         mode: withDefault(mixedInputConfig.mode, 'normal'),
         taskConfiguration: withDefault(mixedInputConfig.taskConfiguration, {}),
         tasks: withDefault(mixedInputConfig.tasks, []),
-        metricConfiguration: withDefault(mixedInputConfig.metricConfiguration, {}),
+        metricConfiguration: withDefault(mixedInputConfig.metricConfiguration, defaultMetricConfiguration, true),
         stabilizers: withDefault(mixedInputConfig.stabilizers, ['staticTask']),
         absoluteError: withDefault(mixedInputConfig.absoluteError, 1),
         metrics: withDefault(mixedInputConfig.metrics, []),
