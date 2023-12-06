@@ -40,6 +40,13 @@ jobs:
           npm run integration:all
           npm run integration:check
 
+      - name: Expose artifacts
+        if: always()
+        uses: actions/upload-artifact@v3
+        with:
+          name: Perftool Reports (Node ${{ matrix.node }}, React ${{ matrix.react }})
+          path: spec/main-suite/test-result/*
+
   npm:
     name: Project using NPM
     runs-on: ubuntu-latest
