@@ -15,23 +15,27 @@ import getCurrentVersion from '../utils/version';
 import Cache from '../cache';
 import { filterTestModulesByCachedDepsHash } from '../utils/subjectDeps';
 import PreviewController from '../preview/controller';
+import { processCliLogLevel } from '../utils/cli';
 
 const cli = createCommand('perftool');
 
 cli.addArgument(createArgument('[include...]', 'Modules to run perftest on'))
-    .addOption(createOption('-l, --logLevel <level>', 'Log level').choices(['quiet', 'normal', 'verbose']))
     .addOption(createOption('-c, --configPath <path>', 'Config path'))
     .addOption(createOption('-b, --baseBranchRef <ref>', 'Base branch ref'))
     .addOption(createOption('-С, --currentBranchRef <ref>', 'Current branch ref'))
-    .addOption(createOption('-p, --preview', 'Preview mode'))
-    .addOption(createOption('-o, --outputFilePath <path>', 'Output file path'));
+    .addOption(createOption('-o, --outputFilePath <path>', 'Output file path'))
+    .addOption(createOption('-l, --logLevel <level>', 'Log level').choices(['quiet', 'normal', 'verbose']))
+    .addOption(createOption('-v, --verbose', 'Log level verbose'))
+    .addOption(createOption('-q, --quiet', 'Log level quiet'))
+    .addOption(createOption('-p, --preview', 'Preview mode'));
 
 function getCliConfig(include: string[], rawOptions: OptionValues): CliConfig {
-    const { preview, ...options } = rawOptions;
+    const { preview, verbose, quiet, logLevel, ...options } = rawOptions;
     const mode = preview ? 'preview' : undefined;
 
     return {
         include,
+        logLevel: processCliLogLevel({ verbose, quiet, logLevel }),
         mode,
         ...options,
     };
@@ -42,11 +46,11 @@ async function start() {
 
     await cli.parseAsync();
     const options = cli.opts();
-
-    setLogLevel(options.logLevel);
-
     const [include] = cli.processedArgs;
     const cliConfig: CliConfig = getCliConfig(include, options || {});
+
+    setLogLevel(cliConfig.logLevel);
+
     debug('parsed cli config', cliConfig);
 
     const importedConfig = await importConfig(cliConfig.configPath);

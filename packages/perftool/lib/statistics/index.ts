@@ -2,7 +2,7 @@ import { Config } from '../config';
 import { Task } from '../client/measurement/types';
 import { RunTaskResult } from '../client/measurement/runner';
 import { JSONSerializable } from '../utils/types';
-import { defer } from '../utils/deferred';
+import Deferred, { defer } from '../utils/deferred';
 import { id as staticTaskSubjectId } from '../stabilizers/staticTask';
 import { getAllMetrics } from '../config/metric';
 
@@ -27,6 +27,10 @@ export default class Statistics<T extends Task<any, any>[]> {
     taskIdToTaskMap: Map<T[number]['id'], T[number]>;
 
     isConsuming = false;
+
+    private consumingFinishedCallback: (() => void) | null = null;
+
+    private consumingPromise: Promise<void> | null = null;
 
     constructor(config: Config, tasks: T) {
         this.config = config;
@@ -63,6 +67,20 @@ export default class Statistics<T extends Task<any, any>[]> {
         this.computableObservations.get(subjectId)?.get(taskId)?.push(rest.result);
     }
 
+    private waitForConsumeEnd(): Promise<void> {
+        if (!this.isConsuming) {
+            return Promise.resolve();
+        }
+
+        if (!this.consumingPromise) {
+            const def = new Deferred<void>();
+            this.consumingPromise = def.promise;
+            this.consumingFinishedCallback = def.resolve;
+        }
+
+        return this.consumingPromise;
+    }
+
     async consume(source: AsyncGenerator<RunTaskResult<T[number]>, undefined>): Promise<void> {
         this.isConsuming = true;
 
@@ -75,11 +93,12 @@ export default class Statistics<T extends Task<any, any>[]> {
         }
 
         this.isConsuming = false;
+        this.consumingFinishedCallback?.();
     }
 
     async *stream(): AsyncGenerator<StatsReport, undefined> {
         while (this.isConsuming) {
-            await defer(this.config.intermediateRefreshInterval);
+            await Promise.race([defer(this.config.intermediateRefreshInterval), this.waitForConsumeEnd()]);
 
             yield this.getResult();
         }
@@ -121,6 +140,7 @@ export default class Statistics<T extends Task<any, any>[]> {
 
     clear() {
         this.isConsuming = false;
+        this.consumingFinishedCallback?.();
         this.computableObservations.clear();
     }
 }
