@@ -14,7 +14,7 @@ jobs:
   basic:
     strategy:
       matrix:
-        node: [ 16, 18, 20 ]
+        node: [ 18, 20, 21 ]
         react: [ 16, 17, 18 ]
     name: Basic (Node ${{ matrix.node }}, React ${{ matrix.react }})
     runs-on: ubuntu-latest
