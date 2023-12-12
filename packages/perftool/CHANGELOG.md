@@ -1,3 +1,20 @@
+# v0.22.0 (Tue Dec 12 2023)
+
+#### 🚀 Enhancement
+
+- feat(perftool): add verbose, quiet flags, fix intermediate calcs timing [#317](https://github.com/salute-developers/perftool/pull/317) ([@akhdrv](https://github.com/akhdrv))
+- feat(perftool): new metrics [#317](https://github.com/salute-developers/perftool/pull/317) ([@akhdrv](https://github.com/akhdrv))
+
+#### 🐛 Bug Fix
+
+- build(perftool): up packages [#317](https://github.com/salute-developers/perftool/pull/317) ([@akhdrv](https://github.com/akhdrv))
+
+#### Authors: 1
+
+- Artem Khaydarov ([@akhdrv](https://github.com/akhdrv))
+
+---
+
 # v0.21.0 (Wed Nov 29 2023)
 
 #### 🚀 Enhancement
