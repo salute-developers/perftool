@@ -70,6 +70,7 @@
         "open": "9.1.0",
         "puppeteer": "21.6.0",
         "serialize-error": "11.0.3",
+        "shallow-equal": "3.1.0",
         "simple-git": "3.21.0",
         "ts-node": "10.9.2",
         "typescript": "5.3.3",

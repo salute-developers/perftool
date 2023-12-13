@@ -11,12 +11,14 @@ import { debug } from '../utils/logger';
 import { RawTest } from '../client/input';
 import { useInterceptApi } from '../api/intercept';
 import { createNewPage } from '../utils/puppeteer';
-import { useViewportApi } from '../api/viewport';
+import { useViewportApi, ViewportState } from '../api/viewport';
 import decorateErrorWithTestParams from '../utils/decorateErrorWithTestParams';
 
-import { createInsertionScriptContent } from './clientScript';
+import { bootstrapTest } from './clientScript';
 
 export type Test = { taskId: string; subjectId: string; type?: 'dry' };
+
+export type ComponentState = ViewportState;
 
 export type IExecutor<T extends Task<any, any>[]> = {
     execute(test: Test): Promise<RunTaskResult<T[number]> | Error>;
@@ -33,16 +35,26 @@ export default class Executor<T extends Task<any, any, any>[]> implements IExecu
 
     private workable = true;
 
-    private readonly stateMap: Map<string, TaskState<T[number]>> = new Map();
+    private readonly taskStateMap: Map<string, TaskState<T[number]>> = new Map();
 
-    private getStateKey(taskId: string, subjectId: string) {
+    private readonly componentStateMap: Map<string, ComponentState> = new Map();
+
+    private getComponentState(subjectId: string): ComponentState {
+        if (!this.componentStateMap.has(subjectId)) {
+            this.componentStateMap.set(subjectId, {});
+        }
+
+        return this.componentStateMap.get(subjectId)!;
+    }
+
+    private getTaskStateKey(taskId: string, subjectId: string) {
         return `${taskId}_${subjectId}`;
     }
 
-    private decorateWithState = (test: Test): RawTest<T[number]> => {
-        const key = this.getStateKey(test.taskId, test.subjectId);
+    private decorateWithTaskState = (test: Test): RawTest<T[number]> => {
+        const key = this.getTaskStateKey(test.taskId, test.subjectId);
 
-        if (!this.stateMap.has(key)) {
+        if (!this.taskStateMap.has(key)) {
             const cachedState = this.cache.getTaskState(test.subjectId, test.taskId);
             let state = {} as TaskState<T[number]>;
 
@@ -53,10 +65,10 @@ export default class Executor<T extends Task<any, any, any>[]> implements IExecu
                 };
             }
 
-            this.stateMap.set(key, state);
+            this.taskStateMap.set(key, state);
         }
 
-        const state = this.stateMap.get(key)!;
+        const state = this.taskStateMap.get(key)!;
 
         return {
             ...test,
@@ -64,13 +76,13 @@ export default class Executor<T extends Task<any, any, any>[]> implements IExecu
         };
     };
 
-    private setState = (result: RunTaskResult<T[number]>): void => {
+    private setTaskState = (result: RunTaskResult<T[number]>): void => {
         const { taskId, subjectId, state } = result;
-        const key = this.getStateKey(taskId, subjectId);
+        const key = this.getTaskStateKey(taskId, subjectId);
 
         // eslint-disable-next-line @typescript-eslint/no-unused-vars
         const { cached: _, ...filteredState } = state || ({} as TaskState<T[number]>);
-        this.stateMap.set(key, filteredState as TaskState<T[number]>);
+        this.taskStateMap.set(key, filteredState as TaskState<T[number]>);
         this.cache.setTaskState(subjectId, taskId, filteredState);
         result.state = undefined;
     };
@@ -117,10 +129,11 @@ export default class Executor<T extends Task<any, any, any>[]> implements IExecu
 
         const page = await createNewPage(this.browserInstance);
         const result = new Deferred<RunTaskResult<T[number]> | Error>();
+        const componentState = this.getComponentState(test.subjectId);
+        const decoratedTest = this.decorateWithTaskState(test);
 
-        await page.goto(`http://localhost:${this.port}/`);
         await page.exposeFunction('_perftool_finish', (taskResult: RunTaskResult<T[number]>) => {
-            this.setState(taskResult);
+            this.setTaskState(taskResult);
 
             result.resolve(taskResult);
         });
@@ -130,8 +143,13 @@ export default class Executor<T extends Task<any, any, any>[]> implements IExecu
             result.resolve(decorateErrorWithTestParams(error, { subjectId: test.subjectId }));
         });
         await useInterceptApi(page);
-        await useViewportApi(page);
-        await page.addScriptTag({ content: createInsertionScriptContent(this.decorateWithState(test)) });
+        await useViewportApi(page, componentState, async () => {
+            await bootstrapTest(page, decoratedTest);
+        });
+
+        await page.goto(`http://localhost:${this.port}/`);
+
+        await bootstrapTest(page, decoratedTest);
 
         return Promise.race([
             result.promise,

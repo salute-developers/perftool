@@ -47,14 +47,12 @@ describe('controller/Executor', () => {
         let newPageMock = {} as jest.Mock;
         let gotoMock = {} as jest.Mock;
         let exposeFunctionMock = {} as jest.Mock<any>;
-        let addScriptTagMock = {} as jest.Mock;
         let closeMock = {} as jest.Mock;
-        let createInsertionScriptContentMock = {} as jest.Mock;
+        let bootstrapTestMock = {} as jest.Mock;
         let useInterceptApiMock = {} as jest.Mock;
         let useViewportApiMock = {} as jest.Mock;
         const test: Test = { subjectId: 'fakeId3', taskId: 'fakeTask3', type: 'dry' };
         const result = { ...test, state: {} };
-        const insertionScriptContent = 'some script content';
         jest.unstable_mockModule('puppeteer', () => ({
             default: {
                 launch: async () => ({
@@ -63,14 +61,13 @@ describe('controller/Executor', () => {
                         exposeFunction: (exposeFunctionMock = jest.fn((_: any, callback: (r: any) => void) => {
                             callback(result);
                         })),
-                        addScriptTag: (addScriptTagMock = jest.fn()),
                         close: (closeMock = jest.fn()),
                     }))),
                 }),
             },
         }));
         jest.unstable_mockModule('../clientScript', () => ({
-            createInsertionScriptContent: (createInsertionScriptContentMock = jest.fn(() => insertionScriptContent)),
+            bootstrapTest: (bootstrapTestMock = jest.fn()),
         }));
         jest.unstable_mockModule('../../api/intercept', () => ({
             useInterceptApi: (useInterceptApiMock = jest.fn()),
@@ -103,21 +100,12 @@ describe('controller/Executor', () => {
         expect(useInterceptApiMock).toHaveBeenCalledTimes(1);
         expect(useViewportApiMock).toHaveBeenCalledTimes(1);
 
-        expect(addScriptTagMock).toHaveBeenCalledTimes(1);
-        expect(addScriptTagMock).toHaveBeenCalledWith({ content: insertionScriptContent });
-
-        expect(createInsertionScriptContentMock).toHaveBeenCalledTimes(1);
-        expect(createInsertionScriptContentMock).toHaveBeenCalledWith({ ...test, state: {} });
+        expect(bootstrapTestMock).toHaveBeenCalledTimes(1);
+        expect(bootstrapTestMock.mock.calls[0][1]).toEqual({ ...test, state: {} });
 
         expect(closeMock).toHaveBeenCalledTimes(1);
 
         expect(execResult).toEqual(result);
-
-        result.state = { changedState: true };
-
-        await executor.execute(test);
-
-        expect(createInsertionScriptContentMock).toHaveBeenLastCalledWith({ ...test, state: { changedState: true } });
     });
 
     it('should return error on page timeout', async () => {
@@ -135,7 +123,10 @@ describe('controller/Executor', () => {
             },
         }));
         jest.unstable_mockModule('../clientScript', () => ({
-            createInsertionScriptContent: jest.fn(),
+            bootstrapTest: jest.fn(),
+        }));
+        jest.unstable_mockModule('../../api/intercept', () => ({
+            useInterceptApi: jest.fn(),
         }));
 
         const { default: Executor } = await import('../executor');

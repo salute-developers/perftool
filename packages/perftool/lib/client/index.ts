@@ -26,15 +26,16 @@ export async function createPerfToolClient<T extends Task<any, any, any>[]>({
         onError(event.reason);
     });
 
-    const { task, subject, state } = await resolveTest({ tasks, subjects });
-
-    debug(`Running...`);
-
     try {
+        const { task, subject, state } = await resolveTest({ tasks, subjects });
+
+        debug(`Running...`);
         const result = await runTask<T[number]>({ task, subject, config, state });
+        debug(`Test successfully finished`);
 
         await window._perftool_finish!(result);
     } catch (error) {
+        debug('Test finished with error: ', error);
         onError(error);
     }
 }

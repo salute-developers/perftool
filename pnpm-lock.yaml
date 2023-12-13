@@ -143,6 +143,9 @@ importers:
       serialize-error:
         specifier: 11.0.3
         version: 11.0.3
+      shallow-equal:
+        specifier: 3.1.0
+        version: 3.1.0
       simple-git:
         specifier: 3.21.0
         version: 3.21.0
@@ -10320,6 +10323,10 @@ packages:
     dependencies:
       kind-of: 6.0.3
     dev: true
+
+  /shallow-equal@3.1.0:
+    resolution: {integrity: sha512-pfVOw8QZIXpMbhBWvzBISicvToTiM5WBF1EeAUZDDSb5Dt29yl4AYbyywbJFSEsRUMr7gJaxqCdr4L3tQf9wVg==}
+    dev: false
 
   /shallowequal@1.1.0:
     resolution: {integrity: sha512-y0m1JoUZSlPAjXVtPPW70aZWfIL/dSP7AFkRnniLCrK/8MDKog3TySTBmckD+RObVxH0v4Tox67+F14PdED2oQ==}
