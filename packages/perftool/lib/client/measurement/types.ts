@@ -9,6 +9,9 @@ export type MeasurerConfig = {
 export type TaskAim = 'increase' | 'decrease';
 
 export type State = {
+    /**
+     * Is the current state taken from cache
+     */
     cached?: boolean;
 };
 

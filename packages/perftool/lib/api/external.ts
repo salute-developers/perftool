@@ -1,5 +1,5 @@
 import type { InterceptParams } from './intercept';
-import { SetViewportParams } from './viewport';
+import type { SetViewportParams } from './viewport';
 
 export const intercept = async (params: InterceptParams): Promise<void> => window._perftool_intercept?.(params);
 
