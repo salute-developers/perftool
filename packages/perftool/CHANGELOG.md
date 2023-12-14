@@ -1,3 +1,16 @@
+# v0.23.0 (Thu Dec 14 2023)
+
+#### 🚀 Enhancement
+
+- build(perftool): up packages [#323](https://github.com/salute-developers/perftool/pull/323) ([@akhdrv](https://github.com/akhdrv))
+- feat(perftool): misc [#323](https://github.com/salute-developers/perftool/pull/323) ([@akhdrv](https://github.com/akhdrv))
+
+#### Authors: 1
+
+- Artem Khaydarov ([@akhdrv](https://github.com/akhdrv))
+
+---
+
 # v0.22.0 (Tue Dec 12 2023)
 
 #### 🚀 Enhancement
