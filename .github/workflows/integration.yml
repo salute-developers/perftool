@@ -42,7 +42,7 @@ jobs:
 
       - name: Expose artifacts
         if: always()
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: Perftool Reports (Node ${{ matrix.node }}, React ${{ matrix.react }})
           path: spec/main-suite/test-result/*
