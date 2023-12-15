@@ -36,6 +36,8 @@ export type Config = {
     };
     /** Output stabilizer. Available: 'staticTask'. Default: ['staticTask'] **/
     stabilizers: string[];
+    /** Detect outliers and exclude them from staticstics **/
+    separateOutliers: boolean;
     /** Absolute error that summed with actual metric error when comparing. Default: 1 **/
     absoluteError: number;
     /** Custom metrics **/
@@ -86,6 +88,7 @@ export type Config = {
     runWaitTimeout: number;
     /** How many times to run the tasks without saving the results. Default: 1 **/
     dryRunTimes: number;
+    /** Number of test timeouts in a row before exit with error **/
     maxTimeoutsInRow: number;
     /** Function used to modify webpack config. Default: identity **/
     modifyWebpackConfig: (defaultConfig: WebpackConfig) => WebpackConfig;
@@ -131,6 +134,7 @@ export function getConfig(cliConfig: CliConfig = {}, projectConfig: ProjectConfi
         tasks: withDefault(mixedInputConfig.tasks, []),
         metricConfiguration: withDefault(mixedInputConfig.metricConfiguration, defaultMetricConfiguration, true),
         stabilizers: withDefault(mixedInputConfig.stabilizers, ['staticTask']),
+        separateOutliers: withDefault(mixedInputConfig.separateOutliers, true),
         absoluteError: withDefault(mixedInputConfig.absoluteError, 1),
         metrics: withDefault(mixedInputConfig.metrics, []),
         include: withDefault(mixedInputConfig.include, []),
