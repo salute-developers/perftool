@@ -5,10 +5,11 @@ import { JSONSerializable } from '../utils/types';
 import Deferred, { defer } from '../utils/deferred';
 import { id as staticTaskSubjectId } from '../stabilizers/staticTask';
 import { getAllMetrics } from '../config/metric';
+import { separateOutliers } from '../utils/outlierDetection';
 
 import { MetricResult } from './types';
 
-export type StatsMap = { __statsMap: true; observations?: number[] } & {
+export type StatsMap = { __statsMap: true; observations: number[]; outliers?: number[] } & {
     [statKey: string]: MetricResult;
 };
 export type StatsReport = {
@@ -81,6 +82,14 @@ export default class Statistics<T extends Task<any, any>[]> {
         return this.consumingPromise;
     }
 
+    private separateOutliers(observations: number[]): { observations: number[]; outliers?: number[] } {
+        if (!this.config.separateOutliers) {
+            return { observations };
+        }
+
+        return separateOutliers(observations);
+    }
+
     async consume(source: AsyncGenerator<RunTaskResult<T[number]>, undefined>): Promise<void> {
         this.isConsuming = true;
 
@@ -118,13 +127,15 @@ export default class Statistics<T extends Task<any, any>[]> {
             report[subjectId] = report[subjectId] || {};
 
             for (const [taskId, results] of tasksResult) {
-                report[subjectId][taskId] = report[subjectId][taskId] || { __statsMap: true, observations: results };
+                const separatedResult = this.separateOutliers(results);
+
+                report[subjectId][taskId] = report[subjectId][taskId] || { __statsMap: true, ...separatedResult };
 
                 // Presort for faster median and quantiles
                 // eslint-disable-next-line no-nested-ternary
-                results.sort((a, b) => (a > b ? 1 : a < b ? -1 : 0));
+                const filteredObservations = [...separatedResult.observations].sort((a, b) => a - b);
                 for (const metric of getAllMetrics(this.config)) {
-                    const metricResult = metric.compute(results);
+                    const metricResult = metric.compute(filteredObservations);
 
                     if (Array.isArray(metricResult) && subjectId !== staticTaskSubjectId) {
                         metricResult[1] += this.config.absoluteError;
