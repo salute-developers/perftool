@@ -1,3 +1,22 @@
+# (Sat Dec 16 2023)
+
+#### 🚀 Enhancement
+
+- `@salutejs/perftool@0.24.0`
+  - build(perftool): up packages [#326](https://github.com/salute-developers/perftool/pull/326) ([@akhdrv](https://github.com/akhdrv))
+  - feat(perftool): outlier detection [#326](https://github.com/salute-developers/perftool/pull/326) ([@akhdrv](https://github.com/akhdrv))
+
+#### 🔩 Dependency Updates
+
+- ci: bump actions/upload-artifact from 3 to 4 [#325](https://github.com/salute-developers/perftool/pull/325) ([@dependabot[bot]](https://github.com/dependabot[bot]))
+
+#### Authors: 2
+
+- [@dependabot[bot]](https://github.com/dependabot[bot])
+- Artem Khaydarov ([@akhdrv](https://github.com/akhdrv))
+
+---
+
 # (Thu Dec 14 2023)
 
 #### 🚀 Enhancement

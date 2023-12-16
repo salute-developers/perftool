@@ -1,3 +1,16 @@
+# v0.24.0 (Sat Dec 16 2023)
+
+#### 🚀 Enhancement
+
+- build(perftool): up packages [#326](https://github.com/salute-developers/perftool/pull/326) ([@akhdrv](https://github.com/akhdrv))
+- feat(perftool): outlier detection [#326](https://github.com/salute-developers/perftool/pull/326) ([@akhdrv](https://github.com/akhdrv))
+
+#### Authors: 1
+
+- Artem Khaydarov ([@akhdrv](https://github.com/akhdrv))
+
+---
+
 # v0.23.0 (Thu Dec 14 2023)
 
 #### 🚀 Enhancement
