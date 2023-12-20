@@ -208,8 +208,8 @@ importers:
         specifier: 18.2.0
         version: 18.2.0(react@18.2.0)
       styled-components:
-        specifier: 6.1.1
-        version: 6.1.1(react-dom@18.2.0)(react@18.2.0)
+        specifier: 6.1.2
+        version: 6.1.2(react-dom@18.2.0)(react@18.2.0)
     devDependencies:
       '@salutejs/perftool':
         specifier: workspace:*
@@ -231,7 +231,7 @@ importers:
         version: 8.12.0
       babel-plugin-styled-components:
         specifier: 2.1.4
-        version: 2.1.4(@babel/core@7.23.6)(styled-components@6.1.1)
+        version: 2.1.4(@babel/core@7.23.6)(styled-components@6.1.2)
       jest:
         specifier: 29.7.0
         version: 29.7.0(@types/node@20.10.4)(ts-node@10.9.2)
@@ -1852,7 +1852,7 @@ packages:
       lodash.get: 4.4.2
       make-error: 1.3.6
       ts-node: 9.1.1(typescript@5.3.3)
-      tslib: 2.1.0
+      tslib: 2.6.2
     transitivePeerDependencies:
       - typescript
     dev: true
@@ -4129,7 +4129,7 @@ packages:
       - supports-color
     dev: false
 
-  /babel-plugin-styled-components@2.1.4(@babel/core@7.23.6)(styled-components@6.1.1):
+  /babel-plugin-styled-components@2.1.4(@babel/core@7.23.6)(styled-components@6.1.2):
     resolution: {integrity: sha512-Xgp9g+A/cG47sUyRwwYxGM4bR/jDRg5N6it/8+HxCnbT5XNKSKDT9xm4oag/osgqjC2It/vH0yXsomOG6k558g==}
     peerDependencies:
       styled-components: '>= 2'
@@ -4139,7 +4139,7 @@ packages:
       '@babel/plugin-syntax-jsx': 7.23.3(@babel/core@7.23.6)
       lodash: 4.17.21
       picomatch: 2.3.1
-      styled-components: 6.1.1(react-dom@18.2.0)(react@18.2.0)
+      styled-components: 6.1.2(react-dom@18.2.0)(react@18.2.0)
     transitivePeerDependencies:
       - '@babel/core'
     dev: true
@@ -10778,8 +10778,8 @@ packages:
       through: 2.3.8
     dev: true
 
-  /styled-components@6.1.1(react-dom@18.2.0)(react@18.2.0):
-    resolution: {integrity: sha512-cpZZP5RrKRIClBW5Eby4JM1wElLVP4NQrJbJ0h10TidTyJf4SIIwa3zLXOoPb4gJi8MsJ8mjq5mu2IrEhZIAcQ==}
+  /styled-components@6.1.2(react-dom@18.2.0)(react@18.2.0):
+    resolution: {integrity: sha512-LJjirciivbOKNuKKjheXMeNOlFspur4s2/AYW2hPyrL4RhwEFiowF9axgjeMVxX7siEoLJAitKrzpuNApJ5R/Q==}
     engines: {node: '>= 16'}
     peerDependencies:
       react: '>= 16.8.0'
