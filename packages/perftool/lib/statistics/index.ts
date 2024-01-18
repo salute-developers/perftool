@@ -105,6 +105,12 @@ export default class Statistics<T extends Task<any, any>[]> {
         this.consumingFinishedCallback?.();
     }
 
+    addObservations(results: RunTaskResult<T[number]>[]): void {
+        results.forEach((res) => {
+            this.addObservation(res);
+        });
+    }
+
     async *stream(): AsyncGenerator<StatsReport, undefined> {
         while (this.isConsuming) {
             await Promise.race([defer(this.config.intermediateRefreshInterval), this.waitForConsumeEnd()]);
@@ -116,7 +122,7 @@ export default class Statistics<T extends Task<any, any>[]> {
     }
 
     getResult(): StatsReport {
-        // TODO filter outsiders, feedback & restart for more,
+        // TODO feedback & restart for more
         const report: StatsReport = {};
 
         for (const [subjectId, value] of this.bypassedObservations) {

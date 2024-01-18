@@ -30,6 +30,7 @@ export type RunTaskResult<T extends Task<any, any, any>> = {
     subjectId: string;
     state?: TaskState<T>;
     result: PromiseFulfilledResult<ReturnType<T['run']>>;
+    isBaseline?: boolean;
 };
 
 export async function runTask<T extends Task<any, any, any>>({

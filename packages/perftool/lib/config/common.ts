@@ -7,6 +7,7 @@ import { Task, MeasurerConfig } from '../client/measurement/types';
 import { ExportPickRule } from '../build/collect';
 import { Metric } from '../statistics/types';
 import { debug } from '../utils/logger';
+import { IS_CI_ENVIRONMENT } from '../utils/ci';
 
 import { cacheDirectory } from './paths';
 import { defaultMetricConfiguration } from './metric';
@@ -21,9 +22,15 @@ type TaskConfiguration = MeasurerConfig & {
     failOnSignificantChanges?: boolean;
 };
 
+export type PerftoolMode = 'normal' | 'collaborative' | 'preview' | 'child';
+
 export type Config = {
-    /** Normal mode for test run, preview mode for checking how components are rendered. Default: 'normal' **/
-    mode: 'normal' | 'preview';
+    /**
+     * Normal mode for test run, preview mode for checking how components are rendered.
+     * Child mode for collaborative run for two versions of the project
+     * Default: 'normal'
+     **/
+    mode: PerftoolMode;
     /** Configuration for each task, keyed by taskId (e.g. render/rerender). Can be used for custom tasks also **/
     taskConfiguration: {
         [key: string]: TaskConfiguration;
@@ -94,9 +101,20 @@ export type Config = {
     modifyWebpackConfig: (defaultConfig: WebpackConfig) => WebpackConfig;
     /** Which exports to pick. Default: 'named' **/
     exportPickRule: ExportPickRule;
+    /**
+     * Path to the directory of the baseline version of the project,
+     * which is compared to the current version.
+     **/
+    baselineRefDir?: string;
+    /** In collaborative mode, consequently compare the reports **/
+    compareAtOnce: boolean;
+    /** In collaborative mode, output path of the baseline report **/
+    baselineOutputPath: string;
+    /** In collaborative mode, output path of the comparison report **/
+    compareOutputPath: string;
 };
 
-export type ProjectConfig = Partial<Omit<Config, 'configPath' | 'logLevel' | 'mode'>>;
+export type ProjectConfig = Partial<Omit<Config, 'configPath' | 'logLevel' | 'mode' | 'baselineRefDir'>>;
 
 export type CliConfig = Partial<
     Pick<
@@ -108,6 +126,9 @@ export type CliConfig = Partial<
         | 'failOnSignificantChanges'
         | 'baseBranchRef'
         | 'currentBranchRef'
+        | 'baselineRefDir'
+        | 'baselineOutputPath'
+        | 'compareOutputPath'
         | 'mode'
     >
 >;
@@ -128,8 +149,10 @@ export function getConfig(cliConfig: CliConfig = {}, projectConfig: ProjectConfi
     debug('getting final config');
     const mixedInputConfig = merge(projectConfig, cliConfig);
 
+    const mode = withDefault(mixedInputConfig.mode, 'normal');
+
     const result = {
-        mode: withDefault(mixedInputConfig.mode, 'normal'),
+        mode,
         taskConfiguration: withDefault(mixedInputConfig.taskConfiguration, {}),
         tasks: withDefault(mixedInputConfig.tasks, []),
         metricConfiguration: withDefault(mixedInputConfig.metricConfiguration, defaultMetricConfiguration, true),
@@ -137,19 +160,33 @@ export function getConfig(cliConfig: CliConfig = {}, projectConfig: ProjectConfi
         separateOutliers: withDefault(mixedInputConfig.separateOutliers, true),
         absoluteError: withDefault(mixedInputConfig.absoluteError, 1),
         metrics: withDefault(mixedInputConfig.metrics, []),
-        include: withDefault(mixedInputConfig.include, []),
-        exclude: withDefault(mixedInputConfig.exclude, []),
+        include: withDefault(mixedInputConfig.include, ['**/*.perftest.tsx']),
+        exclude: withDefault(mixedInputConfig.exclude, ['**/node_modules/**']),
         jobs: withDefault(mixedInputConfig.jobs, Math.max(os.cpus().length - 1, 1)),
-        retries: withDefault(mixedInputConfig.retries, 30),
+        retries: withDefault(mixedInputConfig.retries, 50),
         baseBranchRef: withDefault(mixedInputConfig.baseBranchRef, undefined),
         currentBranchRef: withDefault(mixedInputConfig.currentBranchRef, undefined),
-        cache: withDefault(mixedInputConfig.cache, {}),
+        cache: withDefault(
+            mixedInputConfig.cache,
+            IS_CI_ENVIRONMENT
+                ? {
+                      taskState: true,
+                      testSubjectsDeps: true,
+                  }
+                : {},
+        ),
         cacheDirectory: withDefault(mixedInputConfig.cacheDirectory, cacheDirectory),
-        cacheExpirationTime: withDefault(mixedInputConfig.cacheExpirationTime, 0),
-        displayIntermediateCalculations: withDefault(mixedInputConfig.displayIntermediateCalculations, true),
+        cacheExpirationTime: withDefault(mixedInputConfig.cacheExpirationTime, 1000 * 60 * 60 * 24 * 30),
+        displayIntermediateCalculations: withDefault(
+            mixedInputConfig.displayIntermediateCalculations,
+            !IS_CI_ENVIRONMENT,
+        ),
         intermediateRefreshInterval: withDefault(mixedInputConfig.intermediateRefreshInterval, 10000),
         failOnSignificantChanges: withDefault(mixedInputConfig.failOnSignificantChanges, true),
-        outputFilePath: withDefault(mixedInputConfig.outputFilePath, 'perftest/report-[time].json'),
+        outputFilePath: withDefault(
+            mixedInputConfig.outputFilePath,
+            mode === 'collaborative' ? 'perftest/result.json' : 'perftest/report-[time].json',
+        ),
         configPath: withDefault(mixedInputConfig.configPath, undefined),
         logLevel: withDefault(mixedInputConfig.logLevel, 'normal'),
         puppeteerOptions: withDefault(mixedInputConfig.puppeteerOptions, {}),
@@ -159,6 +196,10 @@ export function getConfig(cliConfig: CliConfig = {}, projectConfig: ProjectConfi
         maxTimeoutsInRow: withDefault(mixedInputConfig.maxTimeoutsInRow, 3),
         modifyWebpackConfig: withDefault(mixedInputConfig.modifyWebpackConfig, (c) => c),
         exportPickRule: withDefault(mixedInputConfig.exportPickRule, 'named'),
+        baselineRefDir: withDefault(mixedInputConfig.baselineRefDir, undefined),
+        compareAtOnce: withDefault(mixedInputConfig.compareAtOnce, true),
+        baselineOutputPath: withDefault(mixedInputConfig.baselineOutputPath, 'perftest/baseline.json'),
+        compareOutputPath: withDefault(mixedInputConfig.compareOutputPath, 'perftest/comparison.json'),
     };
 
     debug('final config: ', result);

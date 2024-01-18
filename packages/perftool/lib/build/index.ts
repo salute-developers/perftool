@@ -11,7 +11,7 @@ import { modifyEntrypoint } from './entrypoint';
 
 const dirname = path.dirname(fileURLToPath(import.meta.url));
 
-type BuildResult = {
+export type BuildResult = {
     subjectsDepsHashMap: Map<string, string>;
 };
 

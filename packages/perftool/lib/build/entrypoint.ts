@@ -43,13 +43,24 @@ export async function modifyEntrypoint({ modules, entrypointPath, config }: Modi
     const contents = await fsPromises.readFile(entrypointPath, { encoding: 'utf-8' });
     debug('reading initial contents of entry succeed');
 
+    const filteredConfig = getClientConfig(config);
+
     const formattedContents = contents
         // Insert generated code that creates subjects into entrypoint
         .replace('// <TEST_SUBJECT_MARK>', formatLines(clientTestSubjects))
         // Insert serialized config
-        .replace('// <CONFIG_ARGS_MARK>', JSON.stringify(config));
+        .replace('// <CONFIG_ARGS_MARK>', JSON.stringify(filteredConfig));
 
     debug('writing modified contents');
     await fsPromises.writeFile(entrypointPath, formattedContents, { encoding: 'utf-8', mode: constants.O_TRUNC });
     debug('writing modified contents succeed');
+}
+
+function getClientConfig(config: Config) {
+    return {
+        tasks: config.tasks,
+        taskConfiguration: config.taskConfiguration,
+        logLevel: config.logLevel,
+        taskWaitTimeout: config.taskWaitTimeout,
+    };
 }

@@ -31,7 +31,7 @@ describe('controller/planner/getTests', () => {
         }, [] as Test[]);
 
         const { getTests } = await import('../planner');
-        const result = getTests(config, tasks, modules);
+        const result = getTests(config, tasks, modules, null);
 
         expect(new Set(result)).toEqual(new Set(expectedResult));
     });
@@ -58,7 +58,7 @@ describe('controller/planner/getTests', () => {
         expectedResult.push({ taskId: tasks[0].id, subjectId: staticTaskSubjectId });
 
         const { getTests } = await import('../planner');
-        const result = getTests(config, tasks, modules);
+        const result = getTests(config, tasks, modules, null);
 
         expect(new Set(result)).toEqual(new Set(expectedResult));
     });
@@ -94,7 +94,7 @@ describe('controller/Planner', () => {
 
         const { default: Planner } = await import('../planner');
 
-        const planner = new Planner(config, tasks, modules);
+        const planner = new Planner(config, tasks, modules, null);
 
         const result = [...planner.plan()];
 
@@ -114,7 +114,7 @@ describe('controller/Planner', () => {
 
         const { default: Planner } = await import('../planner');
 
-        const planner = new Planner(config, tasks, modules);
+        const planner = new Planner(config, tasks, modules, null);
 
         const result = [...planner.plan()];
 
@@ -137,7 +137,7 @@ describe('controller/Planner', () => {
 
         const { default: Planner } = await import('../planner');
 
-        const planner = new Planner(config, tasks, modules);
+        const planner = new Planner(config, tasks, modules, null);
 
         const result = [];
 

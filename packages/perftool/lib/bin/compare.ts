@@ -10,6 +10,7 @@ import CWD from '../utils/cwd';
 import { processReports } from '../compare/process';
 import { CliConfig } from '../config/common';
 import { processCliLogLevel } from '../utils/cli';
+import { writeReport } from '../reporter';
 
 const cli = createCommand('perftool-compare');
 
@@ -54,12 +55,8 @@ async function start() {
     ]);
 
     const result = await processReports(config, currentReport, previousReport);
-    const contents = JSON.stringify(result, null, 2);
 
-    await fsPromises.mkdir(path.dirname(outputPath), { recursive: true });
-    await fsPromises.writeFile(outputPath, contents, {
-        encoding: 'utf-8',
-    });
+    await writeReport(result, outputPath);
 
     info('Report successfully written to', outputPath);
 

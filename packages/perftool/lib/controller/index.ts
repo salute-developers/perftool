@@ -15,6 +15,8 @@ type RunTestsParams<T extends Task<any, any>[]> = {
     port: number;
     tasks: T;
     testModules: TestModule[];
+    baselinePort?: number;
+    baselineTestModules?: TestModule[];
 };
 
 export async function* runTests<T extends Task<any, any>[]>({
@@ -23,11 +25,18 @@ export async function* runTests<T extends Task<any, any>[]>({
     port,
     tasks,
     testModules,
+    baselinePort,
+    baselineTestModules,
 }: RunTestsParams<T>): AsyncGenerator<RunTaskResult<T[number]>, undefined> {
     info('Running performance tests...');
 
-    const executor = await Executor.create<T>(config, cache, port);
-    const planner = new Planner(config, tasks, testModules);
+    const planner = new Planner(config, tasks, testModules, baselineTestModules || null);
+    const executor = await Executor.create<T>(
+        config,
+        cache,
+        port,
+        typeof baselinePort === 'number' ? baselinePort : null,
+    );
     const controller = new TestController<T>(config, planner, executor);
 
     const results = controller.run();

@@ -16,7 +16,7 @@ import decorateErrorWithTestParams from '../utils/decorateErrorWithTestParams';
 
 import { bootstrapTest } from './clientScript';
 
-export type Test = { taskId: string; subjectId: string; type?: 'dry' };
+export type Test = { taskId: string; subjectId: string; type?: 'dry'; isBaseline?: boolean };
 
 export type ComponentState = ViewportState;
 
@@ -31,6 +31,8 @@ export default class Executor<T extends Task<any, any, any>[]> implements IExecu
 
     private readonly port: number;
 
+    private readonly baselinePort: number | null;
+
     private readonly browserInstance: Browser;
 
     private workable = true;
@@ -39,20 +41,21 @@ export default class Executor<T extends Task<any, any, any>[]> implements IExecu
 
     private readonly componentStateMap: Map<string, ComponentState> = new Map();
 
-    private getComponentState(subjectId: string): ComponentState {
-        if (!this.componentStateMap.has(subjectId)) {
-            this.componentStateMap.set(subjectId, {});
+    private getComponentState(subjectId: string, baseline: boolean | undefined): ComponentState {
+        const key = `${subjectId}${baseline ? '_b' : ''}`;
+        if (!this.componentStateMap.has(key)) {
+            this.componentStateMap.set(key, {});
         }
 
-        return this.componentStateMap.get(subjectId)!;
+        return this.componentStateMap.get(key)!;
     }
 
-    private getTaskStateKey(taskId: string, subjectId: string) {
-        return `${taskId}_${subjectId}`;
+    private getTaskStateKey(taskId: string, subjectId: string, baseline: boolean | undefined) {
+        return `${taskId}_${subjectId}${baseline ? '_b' : ''}`;
     }
 
     private decorateWithTaskState = (test: Test): RawTest<T[number]> => {
-        const key = this.getTaskStateKey(test.taskId, test.subjectId);
+        const key = this.getTaskStateKey(test.taskId, test.subjectId, test.isBaseline);
 
         if (!this.taskStateMap.has(key)) {
             const cachedState = this.cache.getTaskState(test.subjectId, test.taskId);
@@ -77,8 +80,8 @@ export default class Executor<T extends Task<any, any, any>[]> implements IExecu
     };
 
     private setTaskState = (result: RunTaskResult<T[number]>): void => {
-        const { taskId, subjectId, state } = result;
-        const key = this.getTaskStateKey(taskId, subjectId);
+        const { taskId, subjectId, state, isBaseline } = result;
+        const key = this.getTaskStateKey(taskId, subjectId, isBaseline);
 
         // eslint-disable-next-line @typescript-eslint/no-unused-vars
         const { cached: _, ...filteredState } = state || ({} as TaskState<T[number]>);
@@ -91,6 +94,7 @@ export default class Executor<T extends Task<any, any, any>[]> implements IExecu
         config: Config,
         cache: Cache,
         port: number,
+        baselinePort: number | null,
     ): Promise<Executor<TT>> {
         debug('[executor]', 'launching browser...');
 
@@ -101,13 +105,20 @@ export default class Executor<T extends Task<any, any, any>[]> implements IExecu
         });
         debug('[executor]', 'launched browser successfully');
 
-        return new Executor<TT>(config, cache, port, browserInstance);
+        return new Executor<TT>(config, cache, port, baselinePort, browserInstance);
     }
 
-    private constructor(config: Config, cache: Cache, port: number, browserInstance: Browser) {
+    private constructor(
+        config: Config,
+        cache: Cache,
+        port: number,
+        baselinePort: number | null,
+        browserInstance: Browser,
+    ) {
         this.config = config;
         this.cache = cache;
         this.port = port;
+        this.baselinePort = baselinePort;
         this.browserInstance = browserInstance;
     }
 
@@ -127,27 +138,33 @@ export default class Executor<T extends Task<any, any, any>[]> implements IExecu
         debug('[executor]', 'running test', test);
         assert(this.workable);
 
+        const { isBaseline } = test;
+        const port = isBaseline ? this.baselinePort : this.port;
+
+        assert(port);
+
         const page = await createNewPage(this.browserInstance);
         const result = new Deferred<RunTaskResult<T[number]> | Error>();
-        const componentState = this.getComponentState(test.subjectId);
+        const componentState = this.getComponentState(test.subjectId, test.isBaseline);
         const decoratedTest = this.decorateWithTaskState(test);
 
         await page.exposeFunction('_perftool_finish', (taskResult: RunTaskResult<T[number]>) => {
-            this.setTaskState(taskResult);
+            const res: typeof taskResult = { ...taskResult, isBaseline };
+            this.setTaskState(res);
 
-            result.resolve(taskResult);
+            result.resolve(res);
         });
         await page.exposeFunction('_perftool_on_error', (rawError: ErrorObject) => {
             const error = deserializeError(rawError);
 
-            result.resolve(decorateErrorWithTestParams(error, { subjectId: test.subjectId }));
+            result.resolve(decorateErrorWithTestParams(error, { subjectId: test.subjectId, isBaseline }));
         });
         await useInterceptApi(page);
         await useViewportApi(page, componentState, async () => {
             await bootstrapTest(page, decoratedTest);
         });
 
-        await page.goto(`http://localhost:${this.port}/`);
+        await page.goto(`http://localhost:${port}/`);
 
         await bootstrapTest(page, decoratedTest);
 

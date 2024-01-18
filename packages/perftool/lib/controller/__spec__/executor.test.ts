@@ -36,7 +36,7 @@ describe('controller/Executor', () => {
         } as Config;
         const cache = createFakeCache();
 
-        const executor = await Executor.create(config, cache, port);
+        const executor = await Executor.create(config, cache, port, null);
 
         expect(executor).toBeInstanceOf(Executor);
         expect(launchMock).toHaveBeenCalledTimes(1);
@@ -52,7 +52,7 @@ describe('controller/Executor', () => {
         let useInterceptApiMock = {} as jest.Mock;
         let useViewportApiMock = {} as jest.Mock;
         const test: Test = { subjectId: 'fakeId3', taskId: 'fakeTask3', type: 'dry' };
-        const result = { ...test, state: {} };
+        const result = { ...test, state: undefined, isBaseline: undefined };
         jest.unstable_mockModule('puppeteer', () => ({
             default: {
                 launch: async () => ({
@@ -85,7 +85,7 @@ describe('controller/Executor', () => {
         } as Config;
         const cache = createFakeCache();
 
-        const executor = await Executor.create(config, cache, port);
+        const executor = await Executor.create(config, cache, port, null);
         const execResult = await executor.execute(test);
 
         expect(newPageMock).toHaveBeenCalledTimes(1);
@@ -138,7 +138,7 @@ describe('controller/Executor', () => {
         } as Config;
         const cache = createFakeCache();
 
-        const executor = await Executor.create(config, cache, port);
+        const executor = await Executor.create(config, cache, port, null);
         const execResult = await executor.execute({ subjectId: 'fakeId3', taskId: 'fakeTask3' });
 
         expect(closeMock).toHaveBeenCalledTimes(1);
@@ -165,7 +165,7 @@ describe('controller/Executor', () => {
         } as Config;
         const cache = createFakeCache();
 
-        const executor = await Executor.create(config, cache, port);
+        const executor = await Executor.create(config, cache, port, null);
 
         await executor.finalize();
         expect(closeMock).toHaveBeenCalledTimes(1);

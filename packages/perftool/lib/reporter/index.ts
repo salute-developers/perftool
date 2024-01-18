@@ -56,8 +56,16 @@ function getCachedTestIds(allTestModules: TestModule[], actualTestModules: TestM
     return allSubjectIds.filter((id) => !actualSubjectIds.includes(id));
 }
 
-export async function generateReport({ config, data, testModules, actualTestModules }: GenerateReportParams) {
-    debug('writing report');
+export function formatFilename(filename: string): string {
+    return path.resolve(CWD, filename.replace('[time]', new Date().toISOString()));
+}
+
+export async function getReport({
+    config,
+    data,
+    testModules,
+    actualTestModules,
+}: GenerateReportParams): Promise<ReportWithMeta> {
     const subjectIdToReadableNameMap = getSubjectIdToReadableNameMap(testModules);
 
     const reportWithMeta: ReportWithMeta = {
@@ -80,11 +88,22 @@ export async function generateReport({ config, data, testModules, actualTestModu
         reportWithMeta.staticTaskResult = data[staticTaskSubjectId];
     }
 
-    const contents = JSON.stringify(reportWithMeta, null, 2);
-    const fileName = path.resolve(CWD, config.outputFilePath.replace('[time]', new Date().toISOString()));
+    return reportWithMeta;
+}
 
-    await fsPromises.mkdir(path.dirname(fileName), { recursive: true });
-    await fsPromises.writeFile(fileName, contents, { encoding: 'utf-8' });
+export async function generateReport({ config, data, testModules, actualTestModules }: GenerateReportParams) {
+    debug('writing report');
+    const reportWithMeta = await getReport({ config, data, testModules, actualTestModules });
+    const fileName = formatFilename(config.outputFilePath);
+
+    await writeReport(reportWithMeta, fileName);
 
     info('Report is successfully written to', fileName);
+}
+
+export async function writeReport(rep: any, p: string): Promise<void> {
+    const contents = JSON.stringify(rep, null, 2);
+
+    await fsPromises.mkdir(path.dirname(p), { recursive: true });
+    await fsPromises.writeFile(p, contents, { encoding: 'utf-8' });
 }

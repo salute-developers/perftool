@@ -1,21 +1,23 @@
 import process from 'process';
 import { createArgument, createCommand, createOption, OptionValues } from 'commander';
 
-import { getConfig, getAllTasks } from '../config';
+import { getConfig, getAllTasks, Config } from '../config';
 import { importConfig } from '../config/node';
-import collectTestSubjects from '../build/collect';
+import collectTestSubjects, { TestModule } from '../build/collect';
 import { buildClient } from '../build';
 import { createServer } from '../server';
 import { runTests } from '../controller';
 import Statistics from '../statistics';
-import { generateReport, measureStartingPoint, report } from '../reporter';
+import { formatFilename, generateReport, getReport, measureStartingPoint, report, writeReport } from '../reporter';
 import { CliConfig } from '../config/common';
-import { debug, error, info, setLogLevel } from '../utils/logger';
+import { debug, error, info, pushPrefix, setLogLevel } from '../utils/logger';
 import getCurrentVersion from '../utils/version';
 import Cache from '../cache';
-import { filterTestModulesByCachedDepsHash } from '../utils/subjectDeps';
+import { filterBaselineTestModules, filterTestModulesByCachedDepsHash } from '../utils/subjectDeps';
 import PreviewController from '../preview/controller';
-import { processCliLogLevel } from '../utils/cli';
+import { processCliLogLevel, processPerftoolMode } from '../utils/cli';
+import { createChild, sendClientBuilt, sendServerCreated, sendTestModules } from '../utils/ipc';
+import { processReports } from '../compare/process';
 
 const cli = createCommand('perftool');
 
@@ -24,19 +26,25 @@ cli.addArgument(createArgument('[include...]', 'Modules to run perftest on'))
     .addOption(createOption('-b, --baseBranchRef <ref>', 'Base branch ref'))
     .addOption(createOption('-С, --currentBranchRef <ref>', 'Current branch ref'))
     .addOption(createOption('-o, --outputFilePath <path>', 'Output file path'))
+    .addOption(createOption('--baselineOutputPath <path>', 'Baseline output file path'))
+    .addOption(createOption('--compareOutputPath <path>', 'Comparison output file path'))
+    .addOption(
+        createOption('-B, --baselineRefDir <path>', 'Path to baseline version of the project (collaborative mode)'),
+    )
     .addOption(createOption('-l, --logLevel <level>', 'Log level').choices(['quiet', 'normal', 'verbose']))
     .addOption(createOption('-v, --verbose', 'Log level verbose'))
     .addOption(createOption('-q, --quiet', 'Log level quiet'))
     .addOption(createOption('-p, --preview', 'Preview mode'));
 
 function getCliConfig(include: string[], rawOptions: OptionValues): CliConfig {
-    const { preview, verbose, quiet, logLevel, ...options } = rawOptions;
-    const mode = preview ? 'preview' : undefined;
+    const { preview, verbose, quiet, logLevel, baselineRefDir, ...options } = rawOptions;
+    const mode = processPerftoolMode({ preview, baselineRefDir });
 
     return {
         include,
         logLevel: processCliLogLevel({ verbose, quiet, logLevel }),
         mode,
+        baselineRefDir,
         ...options,
     };
 }
@@ -55,39 +63,58 @@ async function start() {
 
     const importedConfig = await importConfig(cliConfig.configPath);
     const config = getConfig(cliConfig, importedConfig?.value);
-    const cache = await Cache.acquire(config);
 
     const testModules = await collectTestSubjects(config);
 
     if (!testModules.length) {
         info('No test modules found, exiting');
+
+        if (config.mode === 'child') {
+            sendTestModules([]);
+        }
+
         return;
     }
 
-    const tasks = getAllTasks(config);
-
-    if (config.mode === 'preview') {
-        info('Running in preview mode');
-    } else {
-        info(
-            'Tasks performed in this run: ',
-            tasks.map((t) => t.id),
-        );
+    switch (config.mode) {
+        case 'normal':
+            return processNormalMode(config, testModules);
+        case 'preview':
+            return processPreviewMode(config, testModules);
+        case 'collaborative':
+            return processCollaborativeMode(config, testModules);
+        case 'child':
+            return processChildMode(config, testModules);
+        default:
+            throw new Error();
     }
+}
 
-    const { subjectsDepsHashMap } = await buildClient({ config, testModules });
+async function processPreviewMode(config: Config, testModules: TestModule[]) {
+    info('Running in preview mode');
 
+    await buildClient({ config, testModules });
     const { port, stop } = await createServer(config);
 
-    if (config.mode === 'preview') {
-        const previewController = await PreviewController.create(port);
-        await previewController.start();
+    const previewController = await PreviewController.create(port);
+    await previewController.start();
 
-        await previewController.finalize();
-        await stop();
+    await previewController.finalize();
+    await stop();
+}
 
-        return;
-    }
+async function processNormalMode(config: Config, testModules: TestModule[]) {
+    const cache = await Cache.acquire(config);
+    const tasks = getAllTasks(config);
+    info(
+        'Tasks performed in this run: ',
+        tasks.map((t) => t.id),
+    );
+
+    const { subjectsDepsHashMap } = await buildClient({ config, testModules });
+    const { port, stop } = await createServer(config);
+
+    debug('Deps mapping', subjectsDepsHashMap);
 
     const filteredTestModulesByDepsCache = filterTestModulesByCachedDepsHash({
         config,
@@ -96,9 +123,20 @@ async function start() {
         testModules,
     });
 
+    if (!filteredTestModulesByDepsCache.length) {
+        info('No changed modules found, exiting');
+        return;
+    }
+
     measureStartingPoint();
 
-    const testResultsStream = runTests({ cache, config, port, tasks, testModules: filteredTestModulesByDepsCache });
+    const testResultsStream = runTests({
+        cache,
+        config,
+        port,
+        tasks,
+        testModules: filteredTestModulesByDepsCache,
+    });
 
     const stats = new Statistics(config, tasks);
     const consumingPromise = stats.consume(testResultsStream);
@@ -121,9 +159,124 @@ async function start() {
     });
 }
 
+async function processCollaborativeMode(config: Config, testModules: TestModule[]) {
+    pushPrefix('[main]');
+
+    const child = createChild({ config });
+    const tasks = getAllTasks(config);
+
+    info(
+        'Tasks performed in this run: ',
+        tasks.map((t) => t.id),
+    );
+
+    const { subjectsDepsHashMap } = await buildClient({ config, testModules });
+    const { port, stop } = await createServer(config);
+
+    debug('Deps mapping', subjectsDepsHashMap);
+
+    const baselineTestModules = await child.testSubjectsCollectedPromise;
+    const baselineSubjectsDeps = (await child.clientBuiltPromise).subjectsDepsHashMap;
+
+    debug('Baseline deps mapping', baselineSubjectsDeps);
+
+    const cache = await Cache.acquire(config);
+    const filteredTestModules = filterTestModulesByCachedDepsHash({
+        config,
+        cache,
+        subjectsDepsHashMap,
+        testModules,
+        baselineTestModules,
+        baselineSubjectsDeps,
+    });
+
+    if (!filteredTestModules.length) {
+        info('No changed modules found, exiting');
+        return;
+    }
+
+    const filteredBaselineTestModules = filterBaselineTestModules({
+        testModules: filteredTestModules,
+        baselineTestModules,
+    });
+    const baselineServer = await child.serverCreatedPromise;
+    measureStartingPoint();
+
+    const testResultsStream = runTests({
+        cache,
+        config,
+        port,
+        tasks,
+        testModules: filteredTestModules,
+
+        baselinePort: baselineServer.port,
+        baselineTestModules: filteredBaselineTestModules,
+    });
+
+    const testResults = [];
+
+    for await (const res of testResultsStream) {
+        testResults.push(res);
+    }
+
+    const stats = new Statistics(config, tasks);
+    const baselineStats = new Statistics(config, tasks);
+
+    stats.addObservations(testResults.filter((res) => !res.isBaseline));
+    baselineStats.addObservations(testResults.filter((res) => res.isBaseline));
+
+    cache.setSubjectsDepsHash(new Map());
+    await cache.save();
+    await stop();
+    baselineServer.stop();
+
+    const currentReport = await getReport({
+        config,
+        data: stats.getResult(),
+        testModules,
+        actualTestModules: filteredTestModules,
+    });
+    const baselineReport = await getReport({
+        config,
+        data: baselineStats.getResult(),
+        testModules: baselineTestModules,
+        actualTestModules: filteredBaselineTestModules,
+    });
+
+    const writeReqs = [
+        writeReport(currentReport, formatFilename(config.outputFilePath)),
+        writeReport(baselineReport, formatFilename(config.baselineOutputPath)),
+    ];
+
+    if (config.compareAtOnce) {
+        const compareReport = await processReports(config, currentReport, baselineReport);
+        writeReqs.push(writeReport(compareReport, formatFilename(config.compareOutputPath)));
+
+        await Promise.all(writeReqs);
+
+        if (config.failOnSignificantChanges && compareReport.hasSignificantNegativeChanges) {
+            throw new Error('Looks like something changed badly');
+        }
+    }
+
+    await Promise.all(writeReqs);
+}
+
+async function processChildMode(config: Config, testModules: TestModule[]) {
+    pushPrefix('[baseline]');
+
+    sendTestModules(testModules);
+
+    const { subjectsDepsHashMap } = await buildClient({ config, testModules });
+    sendClientBuilt(subjectsDepsHashMap);
+
+    const { port, stop } = await createServer(config);
+    await sendServerCreated({ port, stop });
+}
+
 await start()
     .then(() => process.exit())
     .catch((err: Error) => {
-        error(err.name, err.message, err.stack);
+        error(err.message, err.stack);
         process.exit(1);
     });

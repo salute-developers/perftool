@@ -3,6 +3,8 @@ import prefix from 'loglevel-plugin-prefix';
 
 type LogLevel = 'quiet' | 'normal' | 'verbose';
 
+const customPrefix = [] as string[];
+
 // We don't want chalk in client build
 if (!process.env.PERFTOOL_CLIENT_RUNTIME) {
     const { default: chalk } = await import('chalk');
@@ -43,18 +45,26 @@ export function setLogLevel(level?: LogLevel): void {
     log.setLevel(resultLevel);
 }
 
+export function pushPrefix(pfx: string): void {
+    customPrefix.push(pfx);
+}
+
+export function popPrefix(): void {
+    customPrefix.pop();
+}
+
 export function error<T extends unknown[]>(...args: T): void {
-    log.error(...args);
+    log.error(...customPrefix, ...args);
 }
 
 export function warn<T extends unknown[]>(...args: T): void {
-    log.warn(...args);
+    log.warn(...customPrefix, ...args);
 }
 
 export function info<T extends unknown[]>(...args: T): void {
-    log.info(...args);
+    log.info(...customPrefix, ...args);
 }
 
 export function debug<T extends unknown[]>(...args: T): void {
-    log.debug(...args);
+    log.debug(...customPrefix, ...args);
 }
