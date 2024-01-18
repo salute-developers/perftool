@@ -60,10 +60,10 @@ describe('controller/runTests', () => {
         expect(result).toEqual(results);
 
         expect(createMock).toHaveBeenCalledTimes(1);
-        expect(createMock).toHaveBeenCalledWith(config, cache, port);
+        expect(createMock).toHaveBeenCalledWith(config, cache, port, null);
 
         expect(fakePlannerCtorMock).toHaveBeenCalledTimes(1);
-        expect(fakePlannerCtorMock).toHaveBeenCalledWith(config, tasks, testModules);
+        expect(fakePlannerCtorMock).toHaveBeenCalledWith(config, tasks, testModules, null);
 
         expect(fakeControllerCtorMock).toHaveBeenCalledTimes(1);
         expect(fakeControllerCtorMock).toHaveBeenCalledWith(config, plannerInstance, executorInstance);

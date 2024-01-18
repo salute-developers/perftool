@@ -1,0 +1,3 @@
+const { CI, BUILD_ID, GITHUB_ACTIONS, TEAMCITY_VERSION } = process.env;
+
+export const IS_CI_ENVIRONMENT = [CI, BUILD_ID, GITHUB_ACTIONS, TEAMCITY_VERSION].some(Boolean);
