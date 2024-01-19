@@ -140,3 +140,57 @@ jobs:
         run: |
           cd spec/main-suite
           pnpm run integration:unchanged
+
+  collaborative_mode:
+    strategy:
+      matrix:
+        node: [ 18, 20, 21 ]
+    name: Сollaborative mode (Node ${{ matrix.node }})
+    runs-on: ubuntu-latest
+    env:
+      GITHUB_TOKEN: ${{ secrets.GH_TOKEN }}
+      NPM_REGISTRY_TOKEN: ${{ secrets.NPM_REGISTRY_TOKEN }}
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          path: current
+      - uses: actions/checkout@v4
+        with:
+          path: baseline
+
+      - uses: pnpm/action-setup@v2
+        with:
+          package_json_file: 'current/package.json'
+      - uses: actions/setup-node@v4
+        with:
+          node-version: ${{ matrix.node }}
+          cache: 'pnpm'
+          cache-dependency-path: 'current/pnpm-lock.yaml'
+
+      - name: Prepare baseline
+        run: |
+          cd baseline
+          pnpm install
+          cd spec/main-suite
+          pnpm run integration:prepare
+
+      - name: Prepare current
+        run: |
+          cd current
+          pnpm install
+          cd spec/main-suite
+          pnpm run integration:prepare
+
+      - name: Run perftool
+        run: |
+          cd current/spec/main-suite
+          npm run integration:collaborative:unchanged
+          npm run integration:collaborative:degradation
+          npm run integration:check
+
+      - name: Expose artifacts
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: Perftool Reports, collaborative (Node ${{ matrix.node }})
+          path: current/spec/main-suite/test-result/*
