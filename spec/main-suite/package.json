@@ -27,6 +27,9 @@
         "integration:npm": "perftool -o test-result/old.json --logLevel=verbose && SLOW=1 perftool -o test-result/new.json --logLevel=verbose && npm run integration:compare",
         "integration:degradation": "perftool -o test-result/old.json --logLevel=verbose && SLOW=1 perftool -o test-result/new.json --logLevel=verbose && pnpm run integration:compare -o test-result/degradation.json",
         "integration:unchanged": "perftool -o test-result/old.json --logLevel=verbose && perftool -o test-result/new.json --logLevel=verbose && pnpm run integration:compare -o test-result/unchanged.json",
+        "integration:collaborative": "perftool -v --baselineRefDir ../../../baseline/spec/main-suite -o test-result/new.json --baselineOutputPath test-result/old.json",
+        "integration:collaborative:unchanged": "./touch.mjs && pnpm run integration:collaborative --compareOutputPath test-result/unchanged.json",
+        "integration:collaborative:degradation": "./slowdown.mjs && pnpm run integration:collaborative --compareOutputPath test-result/degradation.json",
         "integration:compare": "perftool-compare test-result/new.json test-result/old.json --logLevel=verbose"
     },
     "private": true
