@@ -1,3 +1,16 @@
+# v0.25.0 (Tue Jan 23 2024)
+
+#### 🚀 Enhancement
+
+- build(perftool): update pkgs [#370](https://github.com/salute-developers/perftool/pull/370) ([@akhdrv](https://github.com/akhdrv))
+- feat(perftool): collaborative mode, remove 'open' [#370](https://github.com/salute-developers/perftool/pull/370) ([@akhdrv](https://github.com/akhdrv))
+
+#### Authors: 1
+
+- Artem Khaydarov ([@akhdrv](https://github.com/akhdrv))
+
+---
+
 # v0.24.0 (Sat Dec 16 2023)
 
 #### 🚀 Enhancement
