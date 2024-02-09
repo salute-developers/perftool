@@ -22,7 +22,7 @@ jobs:
       NPM_REGISTRY_TOKEN: ${{ secrets.NPM_REGISTRY_TOKEN }}
     steps:
       - uses: actions/checkout@v4
-      - uses: pnpm/action-setup@v2
+      - uses: pnpm/action-setup@v3
       - uses: actions/setup-node@v4
         with:
           node-version-file: '.nvmrc'
@@ -41,7 +41,7 @@ jobs:
       NPM_REGISTRY_TOKEN: ${{ secrets.NPM_REGISTRY_TOKEN }}
     steps:
       - uses: actions/checkout@v4
-      - uses: pnpm/action-setup@v2
+      - uses: pnpm/action-setup@v3
       - uses: actions/setup-node@v4
         with:
           node-version-file: '.nvmrc'
