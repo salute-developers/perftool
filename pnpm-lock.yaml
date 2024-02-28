@@ -18,8 +18,8 @@ importers:
         specifier: 18.5.0
         version: 18.5.0(@types/node@20.11.5)(typescript@5.3.3)
       '@commitlint/config-conventional':
-        specifier: 18.5.0
-        version: 18.5.0
+        specifier: 19.0.0
+        version: 19.0.0
       '@typescript-eslint/eslint-plugin':
         specifier: 6.19.1
         version: 6.19.1(@typescript-eslint/parser@6.19.1)(eslint@8.56.0)(typescript@5.3.3)
@@ -1692,10 +1692,11 @@ packages:
       - typescript
     dev: true
 
-  /@commitlint/config-conventional@18.5.0:
-    resolution: {integrity: sha512-XGmU4u3Z7bCn0H0nTEG9LUn6hMDUIPP4P6dun7PKFhtnt/wwiKAqmPj+QRmFiqWjkOWcmrh7w7xRiDL32cWS5g==}
+  /@commitlint/config-conventional@19.0.0:
+    resolution: {integrity: sha512-d8lPm+slPUdA8Zof2Y36RqAm/MmAYx/QQIEd2gKbpfLThQK1oYLs+0C3sMPD+4LIq2kh4cnbV9WnPA0P5sN8Ig==}
     engines: {node: '>=v18'}
     dependencies:
+      '@commitlint/types': 19.0.0
       conventional-changelog-conventionalcommits: 7.0.2
     dev: true
 
@@ -1834,6 +1835,13 @@ packages:
     engines: {node: '>=v18'}
     dependencies:
       chalk: 4.1.2
+    dev: true
+
+  /@commitlint/types@19.0.0:
+    resolution: {integrity: sha512-qLjLUdYXKi0TIavONrjBkxrElp7KguqDbvzIRbqTdJBV/cAAr8QEhHe1qUq8OcCM3gFWTlUrDz3ISZbkRoGsAg==}
+    engines: {node: '>=v18'}
+    dependencies:
+      chalk: 5.3.0
     dev: true
 
   /@cspotcode/source-map-support@0.8.1:
@@ -7374,7 +7382,7 @@ packages:
     hasBin: true
     dependencies:
       async: 3.2.5
-      chalk: 4.1.0
+      chalk: 4.1.2
       filelist: 1.0.4
       minimatch: 3.1.2
     dev: true
@@ -7495,7 +7503,7 @@ packages:
     resolution: {integrity: sha512-LMIgiIrhigmPrs03JHpxUh2yISK3vLFPkAodPeo0+BuF7wA2FoQbkEg1u8gBYBThncu7e1oEDUfIXVuTqLRUjw==}
     engines: {node: ^14.15.0 || ^16.10.0 || >=18.0.0}
     dependencies:
-      chalk: 4.1.0
+      chalk: 4.1.2
       diff-sequences: 29.6.3
       jest-get-type: 29.6.3
       pretty-format: 29.7.0
@@ -9029,7 +9037,7 @@ packages:
       '@yarnpkg/parsers': 3.0.0-rc.46
       '@zkochan/js-yaml': 0.0.6
       axios: 1.6.5
-      chalk: 4.1.0
+      chalk: 4.1.2
       cli-cursor: 3.1.0
       cli-spinners: 2.6.1
       cliui: 8.0.1
