@@ -24,7 +24,9 @@ type ComparableResult = {
     change?: CompareResult;
 };
 
-type ComparableResultMap = { __comparable: true } & { [statKey: string]: ComparableResult };
+type ComparableResultMap = { __comparable: true; modes?: ComparableResultMap[] | IncomparableResult } & {
+    [statKey: string]: ComparableResult;
+};
 
 type Report = {
     [subjectId: string]: {
@@ -61,7 +63,7 @@ function findSignificantNegativeChanges(config: Config, report: Report): boolean
             }
 
             // eslint-disable-next-line @typescript-eslint/no-unused-vars
-            const { __comparable, ...comparableResults } = result;
+            const { __comparable, modes, ...comparableResults } = result;
 
             for (const [metricId, { change }] of Object.entries(comparableResults)) {
                 const metricShouldFailOnNegativeChanges =
@@ -73,6 +75,26 @@ function findSignificantNegativeChanges(config: Config, report: Report): boolean
                     metricShouldFailOnNegativeChanges
                 ) {
                     return true;
+                }
+            }
+
+            if (Array.isArray(modes)) {
+                for (const mode of modes) {
+                    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+                    const { __comparable, modes, value, lowerBound, upperBound, ...comparableResults } = mode;
+
+                    for (const [metricId, { change }] of Object.entries(comparableResults)) {
+                        const metricShouldFailOnNegativeChanges =
+                            config.metricConfiguration[metricId]?.failOnSignificantChanges !== false;
+
+                        if (
+                            change?.significanceRank === 'high' &&
+                            isNegativeChange(taskAim, change) &&
+                            metricShouldFailOnNegativeChanges
+                        ) {
+                            return true;
+                        }
+                    }
                 }
             }
         }
@@ -120,8 +142,9 @@ function processTaskResult(
         );
     }
 
+    // TODO: need output breaking change — do not mix modes with stats.
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    const { __statsMap, observations, outliers, ...restReport } = current;
+    const { __statsMap, observations, outliers, value, lowerBound, upperBound, modes, ...restReport } = current;
     const result = { __comparable: true } as ComparableResultMap;
 
     for (const [currentMetricId, currentMetricResult] of Object.entries(restReport)) {
@@ -134,7 +157,9 @@ function processTaskResult(
         const isPreviousMetricResultWithError = Array.isArray(previousMetricResult);
 
         if (isCurrentMetricResultWithError !== isPreviousMetricResultWithError) {
-            warn(`Metric ${currentMetricId} changed output`);
+            if (previousMetricResult) {
+                warn(`Metric ${currentMetricId} changed output`);
+            }
 
             result[currentMetricId] = processMetricResult(currentMetricResult);
             continue;
@@ -145,6 +170,25 @@ function processTaskResult(
             previousMetricResult,
             metric.compare as Comparator<MetricResult>,
         );
+    }
+
+    const previousModes = isStatsMap(previous) ? previous.modes : undefined;
+
+    if (modes) {
+        if (!previousModes) {
+            result.modes = {
+                new: modes,
+            };
+        } else if (modes.length !== previousModes.length) {
+            result.modes = {
+                new: modes,
+                old: previousModes,
+            };
+        } else {
+            result.modes = modes.map((mode, i) => {
+                return processTaskResult(config, mode, previousModes[i]) as ComparableResultMap;
+            });
+        }
     }
 
     return result;
@@ -171,9 +215,9 @@ function processStaticTaskStabilizer(
                 continue;
             }
 
-            for (const [metricId, metricResult] of Object.entries(results)) {
-                if (metricId === '__statsMap') continue;
-
+            // eslint-disable-next-line @typescript-eslint/no-unused-vars
+            const { __statsMap, observations, outliers, modes, ...restReport } = results;
+            for (const [metricId, metricResult] of Object.entries(restReport)) {
                 results[metricId] = overrideMetric(staticTaskResult[taskId][metricId], metricResult as MetricResult);
             }
         }

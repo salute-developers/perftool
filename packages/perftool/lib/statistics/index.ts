@@ -6,12 +6,16 @@ import Deferred, { defer } from '../utils/deferred';
 import { id as staticTaskSubjectId } from '../stabilizers/staticTask';
 import { getAllMetrics } from '../config/metric';
 import { separateOutliers } from '../utils/outlierDetection';
+import { getModes, Mode as RawMode } from '../utils/statistics';
 
-import { MetricResult } from './types';
+import { MetricResult, MetricUsage } from './types';
 
-export type StatsMap = { __statsMap: true; observations: number[]; outliers?: number[] } & {
+type Mode = Pick<RawMode, 'value' | 'lowerBound' | 'upperBound'> & StatsMap;
+
+export type StatsMap = { __statsMap: true; observations: number[]; outliers?: number[]; modes?: Mode[] } & {
     [statKey: string]: MetricResult;
 };
+
 export type StatsReport = {
     [subjectId: string]: {
         [taskId: string]: JSONSerializable | StatsMap;
@@ -121,6 +125,46 @@ export default class Statistics<T extends Task<any, any>[]> {
         return undefined;
     }
 
+    processMode(mode: RawMode): Mode {
+        const { sample, ...modeInfo } = mode;
+        const separatedResult = this.separateOutliers(sample);
+        const result = { __statsMap: true, ...separatedResult, ...modeInfo } as Mode;
+
+        this.processObservations(result, separatedResult.observations, 'perMode');
+
+        return result;
+    }
+
+    processModes(results: number[]): { modes?: Mode[] } {
+        if (!this.config.useModeAnalysis) {
+            return {};
+        }
+
+        return {
+            modes: getModes(results).map((mode) => this.processMode(mode)),
+        };
+    }
+
+    processObservations(acc: StatsMap, observations: number[], type: MetricUsage, withAbsoluteError = true) {
+        // Presort for faster median and quantiles
+        const filteredObservations = [...observations].sort((a, b) => a - b);
+        for (const metric of getAllMetrics(this.config)) {
+            const metricUsage = metric.usage || ['perMode'];
+
+            if (this.config.useModeAnalysis && !metricUsage.includes(type)) {
+                continue;
+            }
+
+            const metricResult = metric.compute(filteredObservations);
+
+            if (Array.isArray(metricResult) && withAbsoluteError) {
+                metricResult[1] += this.config.absoluteError;
+            }
+
+            acc[metric.id] = metricResult;
+        }
+    }
+
     getResult(): StatsReport {
         // TODO feedback & restart for more
         const report: StatsReport = {};
@@ -135,20 +179,18 @@ export default class Statistics<T extends Task<any, any>[]> {
             for (const [taskId, results] of tasksResult) {
                 const separatedResult = this.separateOutliers(results);
 
-                report[subjectId][taskId] = report[subjectId][taskId] || { __statsMap: true, ...separatedResult };
+                report[subjectId][taskId] = report[subjectId][taskId] || {
+                    __statsMap: true,
+                    ...this.processModes(results),
+                    ...separatedResult,
+                };
 
-                // Presort for faster median and quantiles
-                // eslint-disable-next-line no-nested-ternary
-                const filteredObservations = [...separatedResult.observations].sort((a, b) => a - b);
-                for (const metric of getAllMetrics(this.config)) {
-                    const metricResult = metric.compute(filteredObservations);
-
-                    if (Array.isArray(metricResult) && subjectId !== staticTaskSubjectId) {
-                        metricResult[1] += this.config.absoluteError;
-                    }
-
-                    (report[subjectId][taskId] as StatsMap)[metric.id] = metricResult;
-                }
+                this.processObservations(
+                    report[subjectId][taskId] as StatsMap,
+                    separatedResult.observations,
+                    'wholeSample',
+                    subjectId !== staticTaskSubjectId,
+                );
             }
         }
 
