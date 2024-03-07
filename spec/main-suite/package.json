@@ -24,13 +24,13 @@
         "integration:prepare": "./start.sh",
         "integration:check": "NODE_OPTIONS=\"--experimental-vm-modules --no-warnings\" jest test",
         "integration:all": "pnpm run integration:unchanged && pnpm run integration:degradation",
-        "integration:npm": "perftool -o test-result/old.json --logLevel=verbose && SLOW=1 perftool -o test-result/new.json --logLevel=verbose && npm run integration:compare",
-        "integration:degradation": "perftool -o test-result/old.json --logLevel=verbose && SLOW=1 perftool -o test-result/new.json --logLevel=verbose && pnpm run integration:compare -o test-result/degradation.json",
-        "integration:unchanged": "perftool -o test-result/old.json --logLevel=verbose && perftool -o test-result/new.json --logLevel=verbose && pnpm run integration:compare -o test-result/unchanged.json",
-        "integration:collaborative": "perftool -v --baselineRefDir ../../../baseline/spec/main-suite -o test-result/new.json --baselineOutputPath test-result/old.json",
-        "integration:collaborative:unchanged": "./touch.mjs && pnpm run integration:collaborative --compareOutputPath test-result/unchanged.json",
-        "integration:collaborative:degradation": "./slowdown.mjs && pnpm run integration:collaborative --compareOutputPath test-result/degradation.json",
-        "integration:compare": "perftool-compare test-result/new.json test-result/old.json --logLevel=verbose"
+        "integration:npm": "perftool -o test-result/old.json --logLevel=verbose && SLOW=1 perftool -o test-result/new.json --logLevel=verbose && npm run integration:compare test-result/new.json test-result/old.json",
+        "integration:degradation": "perftool -o test-result/degradation_old.json --logLevel=verbose && SLOW=1 perftool -o test-result/degradation_new.json --logLevel=verbose && pnpm run integration:compare test-result/degradation_new.json test-result/degradation_old.json -o test-result/degradation.json",
+        "integration:unchanged": "perftool -o test-result/unchanged_old.json --logLevel=verbose && perftool -o test-result/unchanged_new.json --logLevel=verbose && pnpm run integration:compare test-result/unchanged_new.json test-result/unchanged_old.json -o test-result/unchanged.json",
+        "integration:collaborative": "perftool -v --baselineRefDir ../../../baseline/spec/main-suite",
+        "integration:collaborative:unchanged": "./touch.mjs && pnpm run integration:collaborative -o test-result/unchanged_new.json --baselineOutputPath test-result/unchanged_old.json --compareOutputPath test-result/unchanged.json",
+        "integration:collaborative:degradation": "./slowdown.mjs && pnpm run integration:collaborative -o test-result/degradation_new.json --baselineOutputPath test-result/degradation_old.json --compareOutputPath test-result/degradation.json",
+        "integration:compare": "perftool-compare --logLevel=verbose"
     },
     "private": true
 }

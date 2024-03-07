@@ -43,8 +43,10 @@ export type Config = {
     };
     /** Output stabilizer. Available: 'staticTask'. Default: ['staticTask'] **/
     stabilizers: string[];
-    /** Detect outliers and exclude them from staticstics **/
+    /** Detect outliers and exclude them from statistics **/
     separateOutliers: boolean;
+    /** Detect modes and compute metrics for each mode vicinity **/
+    useModeAnalysis: boolean;
     /** Absolute error that summed with actual metric error when comparing. Default: 1 **/
     absoluteError: number;
     /** Custom metrics **/
@@ -151,13 +153,14 @@ export function getConfig(cliConfig: CliConfig = {}, projectConfig: ProjectConfi
 
     const mode = withDefault(mixedInputConfig.mode, 'normal');
 
-    const result = {
+    const result: Config = {
         mode,
         taskConfiguration: withDefault(mixedInputConfig.taskConfiguration, {}),
         tasks: withDefault(mixedInputConfig.tasks, []),
         metricConfiguration: withDefault(mixedInputConfig.metricConfiguration, defaultMetricConfiguration, true),
         stabilizers: withDefault(mixedInputConfig.stabilizers, ['staticTask']),
         separateOutliers: withDefault(mixedInputConfig.separateOutliers, true),
+        useModeAnalysis: withDefault(mixedInputConfig.useModeAnalysis, true),
         absoluteError: withDefault(mixedInputConfig.absoluteError, 1),
         metrics: withDefault(mixedInputConfig.metrics, []),
         include: withDefault(mixedInputConfig.include, ['**/*.perftest.tsx']),

@@ -126,7 +126,7 @@ pnpm install
 
 ### Running perftool
 
-Now you can run perftool on the [example project](../../spec/main-suite).
+Now you can run perftool on the [example project](spec/main-suite).
 
 ```shell
 PERFTOOL_DEBUG=1 pnpm exec perftool -l verbose

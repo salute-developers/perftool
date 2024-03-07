@@ -70,6 +70,7 @@ const iqr: Metric<MetricResultWithError> = {
     id: 'iqr',
     name: 'Interquartile range',
     compare: compareMetricWithError,
+    usage: ['wholeSample'],
     compute: (observations) => {
         const quartiles = jStat.quartiles(observations);
         const result = quartiles[2] - quartiles[0];
@@ -83,6 +84,7 @@ const idr: Metric<MetricResultWithError> = {
     id: 'idr',
     name: 'Interdecile range',
     compare: compareMetricWithError,
+    usage: ['wholeSample'],
     compute: (observations) => {
         const deciles = jStat.quantiles(observations, [0.1, 0.9]);
         const result = deciles[1] - deciles[0];
@@ -96,6 +98,7 @@ const midhinge: Metric<MetricResultWithError> = {
     id: 'midhinge',
     name: 'Midhinge',
     compare: compareMetricWithError,
+    usage: ['wholeSample'],
     compute: (observations) => {
         const quartiles = jStat.quartiles(observations);
         const result = (quartiles[0] + quartiles[2]) / 2;
@@ -109,6 +112,7 @@ const trimean: Metric<MetricResultWithError> = {
     id: 'trimean',
     name: 'Trimean',
     compare: compareMetricWithError,
+    usage: ['wholeSample'],
     compute: (observations) => {
         const quartiles = jStat.quartiles(observations);
         const result = (quartiles[0] + 2 * quartiles[1] + quartiles[2]) / 4;
