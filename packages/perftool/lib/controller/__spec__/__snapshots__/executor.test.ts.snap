@@ -8,7 +8,7 @@ exports[`controller/Executor should create Executor instance with factory 1`] = 
       "--no-sandbox",
     ],
     "devtools": true,
-    "headless": "new",
+    "headless": true,
     "waitForInitialPage": true,
   },
 ]

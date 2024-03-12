@@ -99,7 +99,7 @@ export default class Executor<T extends Task<any, any, any>[]> implements IExecu
         debug('[executor]', 'launching browser...');
 
         const browserInstance = await puppeteer.launch({
-            headless: 'new',
+            headless: true,
             args: ['--js-flags="--maglev=false --max_opt=0"', '--no-sandbox'],
             ...config.puppeteerOptions,
         });
