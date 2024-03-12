@@ -1,3 +1,17 @@
+# (Tue Mar 12 2024)
+
+#### 🚀 Enhancement
+
+- `@salutejs/perftool@0.26.0`
+  - build(perftool): update packages [#420](https://github.com/salute-developers/perftool/pull/420) ([@akhdrv](https://github.com/akhdrv))
+  - feat(perftool): add mode analysis [#420](https://github.com/salute-developers/perftool/pull/420) ([@akhdrv](https://github.com/akhdrv))
+
+#### Authors: 1
+
+- Artem Khaydarov ([@akhdrv](https://github.com/akhdrv))
+
+---
+
 # (Tue Jan 23 2024)
 
 #### 🚀 Enhancement
