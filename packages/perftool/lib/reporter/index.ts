@@ -37,7 +37,7 @@ export function measureStartingPoint() {
     startTime = performance.now();
 }
 
-export async function report(statsStream: AsyncGenerator<StatsReport, undefined>): Promise<void> {
+export async function displayReport(statsStream: AsyncGenerator<StatsReport, undefined>): Promise<void> {
     for await (const statsReport of statsStream) {
         info(JSON.stringify(statsReport, null, 4));
     }
@@ -101,9 +101,9 @@ export async function generateReport({ config, data, testModules, actualTestModu
     info('Report is successfully written to', fileName);
 }
 
-export async function writeReport(rep: any, p: string): Promise<void> {
-    const contents = JSON.stringify(rep, null, 2);
+export async function writeReport(report: any, filePath: string): Promise<void> {
+    const contents = JSON.stringify(report, null, 2);
 
-    await fsPromises.mkdir(path.dirname(p), { recursive: true });
-    await fsPromises.writeFile(p, contents, { encoding: 'utf-8' });
+    await fsPromises.mkdir(path.dirname(filePath), { recursive: true });
+    await fsPromises.writeFile(filePath, contents, { encoding: 'utf-8' });
 }
