@@ -1,3 +1,22 @@
+# (Wed Mar 13 2024)
+
+#### 🐛 Bug Fix
+
+- `@salutejs/perftool@0.26.1`
+  - build(perftool): update packages [#426](https://github.com/salute-developers/perftool/pull/426) ([@akhdrv](https://github.com/akhdrv))
+  - fix(perftool): always write report [#426](https://github.com/salute-developers/perftool/pull/426) ([@akhdrv](https://github.com/akhdrv))
+
+#### 🔩 Dependency Updates
+
+- ci: bump pnpm/action-setup from 2 to 3 [#396](https://github.com/salute-developers/perftool/pull/396) ([@dependabot[bot]](https://github.com/dependabot[bot]))
+
+#### Authors: 2
+
+- [@dependabot[bot]](https://github.com/dependabot[bot])
+- Artem Khaydarov ([@akhdrv](https://github.com/akhdrv))
+
+---
+
 # (Tue Mar 12 2024)
 
 #### 🚀 Enhancement
