@@ -8,7 +8,14 @@ import { buildClient } from '../build';
 import { createServer } from '../server';
 import { runTests } from '../controller';
 import Statistics from '../statistics';
-import { formatFilename, generateReport, getReport, measureStartingPoint, report, writeReport } from '../reporter';
+import {
+    formatFilename,
+    generateReport,
+    getReport,
+    measureStartingPoint,
+    displayReport,
+    writeReport,
+} from '../reporter';
 import { CliConfig } from '../config/common';
 import { debug, error, info, pushPrefix, setLogLevel } from '../utils/logger';
 import getCurrentVersion from '../utils/version';
@@ -112,7 +119,6 @@ async function processNormalMode(config: Config, testModules: TestModule[]) {
     );
 
     const { subjectsDepsHashMap } = await buildClient({ config, testModules });
-    const { port, stop } = await createServer(config);
 
     debug('Deps mapping', subjectsDepsHashMap);
 
@@ -125,8 +131,17 @@ async function processNormalMode(config: Config, testModules: TestModule[]) {
 
     if (!filteredTestModulesByDepsCache.length) {
         info('No changed modules found, exiting');
+
+        await generateReport({
+            config,
+            data: {},
+            testModules,
+            actualTestModules: filteredTestModulesByDepsCache,
+        });
         return;
     }
+
+    const { port, stop } = await createServer(config);
 
     measureStartingPoint();
 
@@ -142,7 +157,7 @@ async function processNormalMode(config: Config, testModules: TestModule[]) {
     const consumingPromise = stats.consume(testResultsStream);
 
     if (config.displayIntermediateCalculations) {
-        await report(stats.stream());
+        await displayReport(stats.stream());
     } else {
         await consumingPromise;
     }
@@ -190,11 +205,6 @@ async function processCollaborativeMode(config: Config, testModules: TestModule[
         baselineSubjectsDeps,
     });
 
-    if (!filteredTestModules.length) {
-        info('No changed modules found, exiting');
-        return;
-    }
-
     const filteredBaselineTestModules = filterBaselineTestModules({
         testModules: filteredTestModules,
         baselineTestModules,
@@ -229,6 +239,7 @@ async function processCollaborativeMode(config: Config, testModules: TestModule[
     await cache.save();
     await stop();
     baselineServer.stop();
+    child.shutdown();
 
     const currentReport = await getReport({
         config,
