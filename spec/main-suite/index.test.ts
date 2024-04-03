@@ -33,9 +33,8 @@ const modeSchema = {
     properties: {
         __comparable: { type: 'boolean' },
         mean: metricComparisonSchema,
-        median: metricComparisonSchema,
     },
-    required: ['__comparable', 'mean', 'median'],
+    required: ['__comparable', 'mean'],
 };
 
 const taskComparisonSchema = {
@@ -43,9 +42,9 @@ const taskComparisonSchema = {
     properties: {
         __comparable: { type: 'boolean' },
         modes: { type: 'array', items: modeSchema },
-        iqr: metricComparisonSchema,
+        midhinge: metricComparisonSchema,
     },
-    required: ['__comparable', 'iqr'],
+    required: ['__comparable', 'midhinge'],
 };
 
 const subjectComparisonSchema = {
