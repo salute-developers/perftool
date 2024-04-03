@@ -1,6 +1,6 @@
 /* eslint-disable */
 
-import type { Config } from '../config/common';
+import type { ClientConfig } from "../config/common";
 import { getAllTasks } from '../config/task';
 import { subject as staticTaskSubject } from '../stabilizers/staticTask';
 import { setLogLevel } from '../utils/logger';
@@ -8,7 +8,7 @@ import { EntrySubject } from './input';
 
 const config = ((v) => v)(
     // <CONFIG_ARGS_MARK>
-) as unknown as Config;
+) as unknown as ClientConfig;
 
 setLogLevel(config.logLevel);
 

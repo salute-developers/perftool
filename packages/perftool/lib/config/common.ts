@@ -114,9 +114,16 @@ export type Config = {
     baselineOutputPath: string;
     /** In collaborative mode, output path of the comparison report **/
     compareOutputPath: string;
+    /** Output path of the visual report **/
+    visualReportOutputPath: string;
 };
 
 export type ProjectConfig = Partial<Omit<Config, 'configPath' | 'logLevel' | 'mode' | 'baselineRefDir'>>;
+
+export type ClientConfig = Pick<
+    Config,
+    'tasks' | 'taskConfiguration' | 'metrics' | 'metricConfiguration' | 'logLevel' | 'taskWaitTimeout'
+>;
 
 export type CliConfig = Partial<
     Pick<
@@ -131,6 +138,7 @@ export type CliConfig = Partial<
         | 'baselineRefDir'
         | 'baselineOutputPath'
         | 'compareOutputPath'
+        | 'visualReportOutputPath'
         | 'mode'
     >
 >;
@@ -203,9 +211,21 @@ export function getConfig(cliConfig: CliConfig = {}, projectConfig: ProjectConfi
         compareAtOnce: withDefault(mixedInputConfig.compareAtOnce, true),
         baselineOutputPath: withDefault(mixedInputConfig.baselineOutputPath, 'perftest/baseline.json'),
         compareOutputPath: withDefault(mixedInputConfig.compareOutputPath, 'perftest/comparison.json'),
+        visualReportOutputPath: withDefault(mixedInputConfig.visualReportOutputPath, 'perftest/report.html'),
     };
 
     debug('final config: ', result);
 
     return result;
+}
+
+export function getClientConfig(config: Config): ClientConfig {
+    return {
+        tasks: config.tasks,
+        taskConfiguration: config.taskConfiguration,
+        metrics: config.metrics,
+        metricConfiguration: config.metricConfiguration,
+        logLevel: config.logLevel,
+        taskWaitTimeout: config.taskWaitTimeout,
+    };
 }

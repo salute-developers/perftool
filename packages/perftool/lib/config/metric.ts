@@ -38,7 +38,7 @@ export const defaultMetricConfiguration = {
     },
 };
 
-export function getAllMetrics(config: Config) {
+export function getAllMetrics(config: Pick<Config, 'metricConfiguration' | 'metrics'>) {
     return [...config.metrics, ...nativeMetrics].filter((metric) => {
         const metricConfig = config.metricConfiguration[metric.id] || {};
 

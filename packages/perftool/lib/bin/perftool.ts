@@ -25,6 +25,7 @@ import PreviewController from '../preview/controller';
 import { processCliLogLevel, processPerftoolMode } from '../utils/cli';
 import { createChild, sendClientBuilt, sendServerCreated, sendTestModules } from '../utils/ipc';
 import { processReports } from '../compare/process';
+import { makeVisualReport } from '../reporter/htmlReporter';
 
 const cli = createCommand('perftool');
 
@@ -35,6 +36,7 @@ cli.addArgument(createArgument('[include...]', 'Modules to run perftest on'))
     .addOption(createOption('-o, --outputFilePath <path>', 'Output file path'))
     .addOption(createOption('--baselineOutputPath <path>', 'Baseline output file path'))
     .addOption(createOption('--compareOutputPath <path>', 'Comparison output file path'))
+    .addOption(createOption('-V, --visualReportPath <path>', 'Visual report path'))
     .addOption(
         createOption('-B, --baselineRefDir <path>', 'Path to baseline version of the project (collaborative mode)'),
     )
@@ -44,12 +46,13 @@ cli.addArgument(createArgument('[include...]', 'Modules to run perftest on'))
     .addOption(createOption('-p, --preview', 'Preview mode'));
 
 function getCliConfig(include: string[], rawOptions: OptionValues): CliConfig {
-    const { preview, verbose, quiet, logLevel, baselineRefDir, ...options } = rawOptions;
+    const { preview, verbose, quiet, logLevel, baselineRefDir, visualReportPath, ...options } = rawOptions;
     const mode = processPerftoolMode({ preview, baselineRefDir });
 
     return {
         include,
         logLevel: processCliLogLevel({ verbose, quiet, logLevel }),
+        visualReportOutputPath: visualReportPath,
         mode,
         baselineRefDir,
         ...options,
@@ -247,7 +250,7 @@ async function processCollaborativeMode(config: Config, testModules: TestModule[
         testModules,
         actualTestModules: filteredTestModules,
     });
-    const baselineReport = await getReport({
+    const previousReport = await getReport({
         config,
         data: baselineStats.getResult(),
         testModules: baselineTestModules,
@@ -256,16 +259,17 @@ async function processCollaborativeMode(config: Config, testModules: TestModule[
 
     const writeReqs = [
         writeReport(currentReport, formatFilename(config.outputFilePath)),
-        writeReport(baselineReport, formatFilename(config.baselineOutputPath)),
+        writeReport(previousReport, formatFilename(config.baselineOutputPath)),
     ];
 
     if (config.compareAtOnce) {
-        const compareReport = await processReports(config, currentReport, baselineReport);
-        writeReqs.push(writeReport(compareReport, formatFilename(config.compareOutputPath)));
+        const comparisonReport = await processReports(config, currentReport, previousReport);
+        writeReqs.push(writeReport(comparisonReport, formatFilename(config.compareOutputPath)));
+        writeReqs.push(makeVisualReport({ config, currentReport, previousReport, comparisonReport }));
 
         await Promise.all(writeReqs);
 
-        if (config.failOnSignificantChanges && compareReport.hasSignificantNegativeChanges) {
+        if (config.failOnSignificantChanges && comparisonReport.hasSignificantNegativeChanges) {
             throw new Error('Looks like something changed badly');
         }
     }

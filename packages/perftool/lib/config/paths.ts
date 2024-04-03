@@ -9,3 +9,5 @@ export const buildDirectory = path.resolve(mainDirectory, 'build');
 export const sourceDirectory = path.resolve(mainDirectory, 'lib');
 
 export const cacheDirectory = path.resolve(mainDirectory, 'cache');
+
+export const visualReportDirectory = path.resolve(mainDirectory, 'visualReport');

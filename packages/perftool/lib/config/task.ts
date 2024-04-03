@@ -7,11 +7,14 @@ import { Config } from './common';
 
 type TaskConfig<T extends Task<any, any>> = Parameters<T['run']>[0]['config'];
 
-export function getTaskConfig<T extends Task<any, any>>(task: T, config: Config): TaskConfig<T> {
+export function getTaskConfig<T extends Task<any, any>>(
+    task: T,
+    config: Pick<Config, 'taskConfiguration'>,
+): TaskConfig<T> {
     return merge(task.defaultConfig, config.taskConfiguration[task.id] || {});
 }
 
-export function getAllTasks(config: Config) {
+export function getAllTasks(config: Pick<Config, 'tasks' | 'taskConfiguration'>) {
     return [...config.tasks, ...nativeTasks].filter((task) => {
         const taskConfig = getTaskConfig(task, config);
 
