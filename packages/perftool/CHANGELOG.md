@@ -1,3 +1,20 @@
+# v0.27.0 (Wed Apr 03 2024)
+
+#### 🚀 Enhancement
+
+- feat(perftool): turns off unneccessary metrics [#456](https://github.com/salute-developers/perftool/pull/456) ([@akhdrv](https://github.com/akhdrv))
+- feat(perftool): visual report [#456](https://github.com/salute-developers/perftool/pull/456) ([@akhdrv](https://github.com/akhdrv))
+
+#### 🐛 Bug Fix
+
+- build(perftool): update pkgs [#456](https://github.com/salute-developers/perftool/pull/456) ([@akhdrv](https://github.com/akhdrv))
+
+#### Authors: 1
+
+- Artem Khaydarov ([@akhdrv](https://github.com/akhdrv))
+
+---
+
 # v0.26.1 (Wed Mar 13 2024)
 
 #### 🐛 Bug Fix
