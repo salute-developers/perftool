@@ -6,6 +6,7 @@ import { formatLines } from '../utils/codegen';
 import { Config } from '../config';
 import { debug } from '../utils/logger';
 import CWD from '../utils/cwd';
+import { getClientConfig } from '../config/common';
 
 import { TestModule } from './collect';
 
@@ -54,13 +55,4 @@ export async function modifyEntrypoint({ modules, entrypointPath, config }: Modi
     debug('writing modified contents');
     await fsPromises.writeFile(entrypointPath, formattedContents, { encoding: 'utf-8', mode: constants.O_TRUNC });
     debug('writing modified contents succeed');
-}
-
-function getClientConfig(config: Config) {
-    return {
-        tasks: config.tasks,
-        taskConfiguration: config.taskConfiguration,
-        logLevel: config.logLevel,
-        taskWaitTimeout: config.taskWaitTimeout,
-    };
 }

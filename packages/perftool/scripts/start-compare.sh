@@ -11,7 +11,7 @@ case "$(uname -s)" in
     TRAVERSED_LINK=$(readlink $0 || true)
 
     if [ -z "${TRAVERSED_LINK}" ]; then
-      TRAVERSED_LINK="start.sh"
+      TRAVERSED_LINK="start-compare.sh"
     fi
 
     SCRIPT_PATH="$(dirname "$0")/$TRAVERSED_LINK"

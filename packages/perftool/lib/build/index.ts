@@ -16,7 +16,7 @@ export type BuildResult = {
 };
 
 // TODO memfs unionfs
-function build(config: WebpackConfig): Promise<BuildResult> {
+export function build(config: WebpackConfig): Promise<BuildResult> {
     info('Running Webpack...');
 
     return new Promise((resolve, reject) => {

@@ -11,6 +11,7 @@ import { processReports } from '../compare/process';
 import { CliConfig } from '../config/common';
 import { processCliLogLevel } from '../utils/cli';
 import { writeReport } from '../reporter';
+import { makeVisualReport } from '../reporter/htmlReporter';
 
 const cli = createCommand('perftool-compare');
 
@@ -19,15 +20,17 @@ cli.addArgument(createArgument('<current>', 'Fresh perftool generated report'))
     .addOption(createOption('-F, --failOnSignificantChanges', 'Fail on significant negative changes'))
     .addOption(createOption('-c, --configPath <path>', 'Config path'))
     .addOption(createOption('-o, --outputFilePath <path>', 'Output file path'))
+    .addOption(createOption('-V, --visualReportPath <path>', 'Visual report path'))
     .addOption(createOption('-l, --logLevel <level>', 'Log level').choices(['quiet', 'normal', 'verbose']))
     .addOption(createOption('-v, --verbose', 'Log level verbose'))
     .addOption(createOption('-q, --quiet', 'Log level quiet'));
 
 function getCliConfig(rawOptions: OptionValues): CliConfig {
-    const { verbose, quiet, logLevel, ...options } = rawOptions;
+    const { verbose, quiet, logLevel, visualReportPath, ...options } = rawOptions;
 
     return {
         logLevel: processCliLogLevel({ verbose, quiet, logLevel }),
+        visualReportOutputPath: visualReportPath,
         ...options,
     };
 }
@@ -54,13 +57,18 @@ async function start() {
         fsPromises.readFile(path.resolve(CWD, previous), { encoding: 'utf-8' }).then(JSON.parse),
     ]);
 
-    const result = await processReports(config, currentReport, previousReport);
+    const comparisonReport = await processReports(config, currentReport, previousReport);
 
-    await writeReport(result, outputPath);
+    const writeReqs = [
+        writeReport(comparisonReport, outputPath),
+        makeVisualReport({ config, currentReport, previousReport, comparisonReport }),
+    ];
+
+    await Promise.all(writeReqs);
 
     info('Report successfully written to', outputPath);
 
-    if (config.failOnSignificantChanges && result.hasSignificantNegativeChanges) {
+    if (config.failOnSignificantChanges && comparisonReport.hasSignificantNegativeChanges) {
         throw new Error('Looks like something changed badly');
     }
 }

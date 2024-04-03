@@ -2,15 +2,16 @@ import React, { ReactNode, ErrorInfo, Component } from 'react';
 import { serializeError } from 'serialize-error';
 
 import BaseError from './baseError';
+import { error } from './logger';
 
 type ErrorBoundaryProps = {
-    onError: (error: BaseError) => void;
+    onError: (e: BaseError) => void;
     children: ReactNode;
 };
 
 class ErrorBoundary extends Component<ErrorBoundaryProps> {
-    componentDidCatch(error: Error, errorInfo: ErrorInfo) {
-        this.props.onError(new BaseError(`${error && error.toString()} ${errorInfo.componentStack}`));
+    componentDidCatch(e: Error, errorInfo: ErrorInfo) {
+        this.props.onError(new BaseError(`${e && e.toString()} ${errorInfo.componentStack}`));
     }
 
     render() {
@@ -22,8 +23,12 @@ export function withErrorBoundary(element: React.ReactElement): React.ReactEleme
     return <ErrorBoundary onError={onError}>{element}</ErrorBoundary>;
 }
 
-export function onError(error: unknown) {
-    window._perftool_on_error?.(serializeError(error));
+export function onError(e: unknown) {
+    if (window._perftool_on_error) {
+        window._perftool_on_error(serializeError(e));
+    } else {
+        error(e);
+    }
 }
 
 export default ErrorBoundary;

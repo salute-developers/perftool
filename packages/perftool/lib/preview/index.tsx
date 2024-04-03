@@ -1,15 +1,15 @@
 import React from 'react';
 
-import { Config } from '../config';
 import { render } from '../utils/react';
 import createContainer from '../utils/createContainer';
 import { EntrySubject } from '../client/input';
 import { debug, error } from '../utils/logger';
+import { ClientConfig } from '../config/common';
 
 import Root from './components/Root';
 
 type Params = {
-    config: Config;
+    config: ClientConfig;
     subjects: EntrySubject[];
 };
 

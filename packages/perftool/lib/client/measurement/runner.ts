@@ -1,6 +1,6 @@
 import type { ComponentType } from 'react';
 
-import type { Config } from '../../config/common';
+import type { ClientConfig } from '../../config/common';
 import { getTaskConfig } from '../../config/task';
 import BaseError from '../../utils/baseError';
 import { defer } from '../../utils/deferred';
@@ -21,7 +21,7 @@ export type Subject = {
 type RunTaskParams<T extends Task<any, any, any>> = {
     subject: Subject;
     task: T;
-    config: Config;
+    config: ClientConfig;
     state: TaskState<T>;
 };
 

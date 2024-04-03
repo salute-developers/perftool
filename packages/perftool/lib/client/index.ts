@@ -1,4 +1,4 @@
-import type { Config } from '../config/common';
+import type { ClientConfig } from '../config/common';
 import { debug } from '../utils/logger';
 import { onError } from '../utils/ErrorBoundary';
 
@@ -9,7 +9,7 @@ import { EntrySubject, resolveTest } from './input';
 type CreatePerfToolClientParams<T extends Task<any, any>[]> = {
     subjects: EntrySubject[];
     tasks: T;
-    config: Config;
+    config: ClientConfig;
 };
 
 export async function createPerfToolClient<T extends Task<any, any, any>[]>({

@@ -18,7 +18,7 @@ type IncomparableResult = {
     new: JSONSerializable;
 };
 
-type ComparableResult = {
+export type ComparableResult = {
     old?: MetricResult;
     new: MetricResult;
     change?: CompareResult;
@@ -44,7 +44,7 @@ export type CompareReport = {
     result: Report;
 };
 
-function isNegativeChange(aim: TaskAim, { difference }: CompareResult): boolean {
+export function isNegativeChange(aim: TaskAim, { difference }: CompareResult): boolean {
     return (aim === 'decrease' && difference > 0) || (aim === 'increase' && difference < 0);
 }
 
