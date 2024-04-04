@@ -12,8 +12,8 @@ importers:
         specifier: 11.1.2
         version: 11.1.2(@types/node@20.12.3)(typescript@5.4.3)
       '@auto-it/npm':
-        specifier: 11.1.2
-        version: 11.1.2(@types/node@20.12.3)(typescript@5.4.3)
+        specifier: 11.1.3
+        version: 11.1.3(@types/node@20.12.3)(typescript@5.4.3)
       '@commitlint/cli':
         specifier: 19.2.1
         version: 19.2.1(@types/node@20.12.3)(typescript@5.4.3)
@@ -273,6 +273,11 @@ packages:
     engines: {node: '>=10.x'}
     dev: true
 
+  /@auto-it/bot-list@11.1.3:
+    resolution: {integrity: sha512-FqVqkQPSi2+/29QvUpl2H94sg3vwBBb8Cng/0HOVmMk43RIBAf+sNIGYUQ9Ki8rsEqnW51MdfnO5/4SyPGoctw==}
+    engines: {node: '>=10.x'}
+    dev: true
+
   /@auto-it/conventional-commits@11.1.2(@types/node@20.12.3)(typescript@5.4.3):
     resolution: {integrity: sha512-0/A4Y3WkH6hzz330vq7ZDuCM644qqAyydp4Yr4SEyhQlg+xrzm6Y/y4HtTvZIwulPiNFEMIhoC+4j/+K082GZw==}
     dependencies:
@@ -352,6 +357,64 @@ packages:
       - supports-color
     dev: true
 
+  /@auto-it/core@11.1.3(@types/node@20.12.3)(typescript@5.4.3):
+    resolution: {integrity: sha512-M4brP8wyuBHxawNEcBy7CpXuj7i0Ku1iul7WCT2y0VNsY4UNenz7l4QoSBgSCdYz8oX2v/sx9nZeqD5wilVx8g==}
+    peerDependencies:
+      '@types/node': '*'
+      typescript: '>=2.7'
+    peerDependenciesMeta:
+      '@types/node':
+        optional: true
+    dependencies:
+      '@auto-it/bot-list': 11.1.3
+      '@endemolshinegroup/cosmiconfig-typescript-loader': 3.0.2(cosmiconfig@7.0.0)(typescript@5.4.3)
+      '@octokit/core': 3.6.0
+      '@octokit/plugin-enterprise-compatibility': 1.3.0
+      '@octokit/plugin-retry': 3.0.9
+      '@octokit/plugin-throttling': 3.7.0(@octokit/core@3.6.0)
+      '@octokit/rest': 18.12.0
+      '@types/node': 20.12.3
+      await-to-js: 3.0.0
+      chalk: 4.1.2
+      cosmiconfig: 7.0.0
+      deepmerge: 4.3.1
+      dotenv: 8.6.0
+      endent: 2.1.0
+      enquirer: 2.4.1
+      env-ci: 5.5.0
+      fast-glob: 3.3.2
+      fp-ts: 2.16.5
+      fromentries: 1.3.2
+      gitlog: 4.0.8
+      https-proxy-agent: 5.0.1
+      import-cwd: 3.0.0
+      import-from: 3.0.0
+      io-ts: 2.2.21(fp-ts@2.16.5)
+      lodash.chunk: 4.2.0
+      log-symbols: 4.1.0
+      node-fetch: 2.6.7
+      parse-author: 2.0.0
+      parse-github-url: 1.0.2
+      pretty-ms: 7.0.1
+      requireg: 0.2.2
+      semver: 7.6.0
+      signale: 1.4.0
+      tapable: 2.2.1
+      terminal-link: 2.1.1
+      tinycolor2: 1.6.0
+      ts-node: 10.9.2(@swc/core@1.4.11)(@types/node@20.12.3)(typescript@5.4.3)
+      tslib: 2.1.0
+      type-fest: 0.21.3
+      typescript: 5.4.3
+      typescript-memoize: 1.1.1
+      url-join: 4.0.1
+    transitivePeerDependencies:
+      - '@swc/core'
+      - '@swc/wasm'
+      - encoding
+      - supports-color
+    dev: true
+
   /@auto-it/npm@11.1.2(@types/node@20.12.3)(typescript@5.4.3):
     resolution: {integrity: sha512-s0itO3ZgkQ+0G6eMuOlYw4C5tpBJ21egOYktcK2e2OfPLENiGnLU0PlX74u9m2+rNBiykNR/UJpzgwLCFPBD5g==}
     dependencies:
@@ -378,8 +441,42 @@ packages:
       - typescript
     dev: true
 
+  /@auto-it/npm@11.1.3(@types/node@20.12.3)(typescript@5.4.3):
+    resolution: {integrity: sha512-mu15tS4l/grn915CsurX7EZHebX5oVhLCv/qtBhErr0dX65QRiz7TO5RF4TADBE2ACE4DerxnxdkNEE7qVuU1g==}
+    dependencies:
+      '@auto-it/core': 11.1.3(@types/node@20.12.3)(typescript@5.4.3)
+      '@auto-it/package-json-utils': 11.1.3
+      await-to-js: 3.0.0
+      endent: 2.1.0
+      env-ci: 5.5.0
+      fp-ts: 2.16.5
+      get-monorepo-packages: 1.2.0
+      io-ts: 2.2.21(fp-ts@2.16.5)
+      registry-url: 5.1.0
+      semver: 7.6.0
+      tslib: 2.1.0
+      typescript-memoize: 1.1.1
+      url-join: 4.0.1
+      user-home: 2.0.0
+    transitivePeerDependencies:
+      - '@swc/core'
+      - '@swc/wasm'
+      - '@types/node'
+      - encoding
+      - supports-color
+      - typescript
+    dev: true
+
   /@auto-it/package-json-utils@11.1.2:
     resolution: {integrity: sha512-R9YE/7jEBZzWkC/hc6Ju77iRGg9VnqYfIdj7oGkQq8jvbfvLxTm8g/BheBOvvVJuaY/C272Orvcw+3Pu+xtc+Q==}
+    engines: {node: '>=10.x'}
+    dependencies:
+      parse-author: 2.0.0
+      parse-github-url: 1.0.2
+    dev: true
+
+  /@auto-it/package-json-utils@11.1.3:
+    resolution: {integrity: sha512-DuXsEUDHiot1kR9joVwrG4yf7cS1amRFMgzJz7+Rr5b+Q57BxGzB5At1sH5QfDO1HOhgjEQNOYTM9Hw7XNKllQ==}
     engines: {node: '>=10.x'}
     dependencies:
       parse-author: 2.0.0
@@ -1859,7 +1956,7 @@ packages:
       lodash.get: 4.4.2
       make-error: 1.3.6
       ts-node: 9.1.1(typescript@5.4.3)
-      tslib: 2.1.0
+      tslib: 2.6.2
     transitivePeerDependencies:
       - typescript
     dev: true
@@ -6072,9 +6169,9 @@ packages:
     engines: {node: '>=10'}
     dependencies:
       cross-spawn: 7.0.3
-      get-stream: 6.0.0
+      get-stream: 6.0.1
       human-signals: 2.1.0
-      is-stream: 2.0.0
+      is-stream: 2.0.1
       merge-stream: 2.0.0
       npm-run-path: 4.0.1
       onetime: 5.1.2
@@ -7580,7 +7677,7 @@ packages:
     hasBin: true
     dependencies:
       async: 3.2.5
-      chalk: 4.1.0
+      chalk: 4.1.2
       filelist: 1.0.4
       minimatch: 3.1.2
     dev: true
@@ -7701,7 +7798,7 @@ packages:
     resolution: {integrity: sha512-LMIgiIrhigmPrs03JHpxUh2yISK3vLFPkAodPeo0+BuF7wA2FoQbkEg1u8gBYBThncu7e1oEDUfIXVuTqLRUjw==}
     engines: {node: ^14.15.0 || ^16.10.0 || >=18.0.0}
     dependencies:
-      chalk: 4.1.0
+      chalk: 4.1.2
       diff-sequences: 29.6.3
       jest-get-type: 29.6.3
       pretty-format: 29.7.0
@@ -8904,7 +9001,7 @@ packages:
       array-differ: 3.0.0
       array-union: 2.1.0
       arrify: 2.0.1
-      minimatch: 3.0.5
+      minimatch: 3.1.2
     dev: true
 
   /mute-stream@0.0.8:
@@ -9220,7 +9317,7 @@ packages:
       '@yarnpkg/parsers': 3.0.0-rc.46
       '@zkochan/js-yaml': 0.0.6
       axios: 1.6.8
-      chalk: 4.1.0
+      chalk: 4.1.2
       cli-cursor: 3.1.0
       cli-spinners: 2.6.1
       cliui: 8.0.1
@@ -9401,7 +9498,7 @@ packages:
     engines: {node: '>=10'}
     dependencies:
       bl: 4.1.0
-      chalk: 4.1.0
+      chalk: 4.1.2
       cli-cursor: 3.1.0
       cli-spinners: 2.6.1
       is-interactive: 1.0.0
