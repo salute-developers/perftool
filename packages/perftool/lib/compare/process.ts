@@ -126,7 +126,7 @@ function processTaskResult(
     previous?: JSONSerializable | StatsMap,
 ): IncomparableResult | ComparableResultMap {
     const isCurrentNumber = typeof current === 'number';
-    const metricIdToMetricMap = Object.fromEntries(getAllMetrics(config).map((metric) => [metric.id, metric]));
+    const metricIdToMetricMap = Object.fromEntries(getAllMetrics(config, false).map((metric) => [metric.id, metric]));
 
     if (!isStatsMap(current) && !isCurrentNumber) {
         const result: IncomparableResult = { new: current };
@@ -150,7 +150,7 @@ function processTaskResult(
     for (const [currentMetricId, currentMetricResult] of Object.entries(restReport)) {
         const metric = metricIdToMetricMap[currentMetricId];
 
-        assert(metric);
+        assert(metric, 'metric must exist to process');
 
         const previousMetricResult = isStatsMap(previous) ? previous[currentMetricId] : undefined;
         const isCurrentMetricResultWithError = Array.isArray(currentMetricResult);

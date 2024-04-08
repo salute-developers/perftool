@@ -49,7 +49,7 @@ export default function Components({ currentComponentId, currentTaskId, setCurre
         );
         const { quantiles, heights } = qrdeHD(observations, 2 / observations.length);
         const data = {
-            labels: quantiles,
+            labels: quantiles.map((q) => q.toFixed(2)),
             datasets: [
                 {
                     data: heights,
@@ -78,7 +78,7 @@ export default function Components({ currentComponentId, currentTaskId, setCurre
         );
         const { quantiles, heights } = qrdeHD(observations, 2 / observations.length);
         const data = {
-            labels: quantiles,
+            labels: quantiles.map((q) => q.toFixed(2)),
             datasets: [
                 {
                     data: heights,
@@ -151,7 +151,7 @@ export default function Components({ currentComponentId, currentTaskId, setCurre
                 );
             }
 
-            if (!Array.isArray(modes)) {
+            if (modes && !Array.isArray(modes)) {
                 result.push(
                     <div style={blockStyle}>
                         <b>Mode count</b>
