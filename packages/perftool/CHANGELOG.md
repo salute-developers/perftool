@@ -1,3 +1,19 @@
+# v0.28.0 (Mon Apr 08 2024)
+
+#### 🚀 Enhancement
+
+- feat(perftool): intercept FakeResponseType as string literal & export component type [#473](https://github.com/salute-developers/perftool/pull/473) ([@akhdrv](https://github.com/akhdrv))
+
+#### 🐛 Bug Fix
+
+- fix(perftool): visual report old modes existence check [#473](https://github.com/salute-developers/perftool/pull/473) ([@akhdrv](https://github.com/akhdrv))
+
+#### Authors: 1
+
+- Artem Khaydarov ([@akhdrv](https://github.com/akhdrv))
+
+---
+
 # v0.27.0 (Wed Apr 03 2024)
 
 #### 🚀 Enhancement
