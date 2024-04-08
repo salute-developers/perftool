@@ -46,8 +46,10 @@ export const defaultMetricConfiguration = {
     },
 };
 
-export function getAllMetrics(config: Pick<Config, 'metricConfiguration' | 'metrics'>) {
+export function getAllMetrics(config: Pick<Config, 'metricConfiguration' | 'metrics'>, filterDisabled = true) {
     return [...config.metrics, ...nativeMetrics].filter((metric) => {
+        if (!filterDisabled) return true;
+
         const metricConfig = config.metricConfiguration[metric.id] || {};
 
         return metricConfig.enable === undefined ? true : metricConfig.enable;
