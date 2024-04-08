@@ -1,17 +1,14 @@
-import type { ComponentType } from 'react';
-
 import type { ClientConfig } from '../../config/common';
 import { getTaskConfig } from '../../config/task';
 import BaseError from '../../utils/baseError';
 import { defer } from '../../utils/deferred';
 import { debug } from '../../utils/logger';
 import createContainer from '../../utils/createContainer';
+import { PerftoolComponent } from '../../utils/types';
 
 import { Task, TaskState } from './types';
 
 class TimeoutError extends BaseError {}
-
-export type PerftoolComponent = ComponentType & { beforeTest?: () => Promise<void> | void };
 
 export type Subject = {
     id: string;

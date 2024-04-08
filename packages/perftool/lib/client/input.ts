@@ -1,10 +1,11 @@
 import assert from '../utils/assert';
 import { debug } from '../utils/logger';
 import { defer } from '../utils/deferred';
+import { PerftoolComponent } from '../utils/types';
 import BaseError from '../utils/baseError';
 
 import { Task, TaskState } from './measurement/types';
-import { PerftoolComponent, Subject } from './measurement/runner';
+import { Subject } from './measurement/runner';
 
 type Test<T extends Task<any, any, any>> = { subject: Subject; task: T; state: TaskState<T> };
 export type RawTest<T extends Task<any, any, any>> = {
