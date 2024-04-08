@@ -18,19 +18,13 @@ const fileCache = new LRUCache({
     },
 });
 
-export const enum FakeResponseType {
-    JSON = 'json',
-    File = 'file',
-    Abort = 'abort',
-}
-
 export type InterceptParams = {
     method?: Method;
     source: string;
 } & (
-    | { responseType: FakeResponseType.Abort; response: undefined }
-    | { responseType?: FakeResponseType.File; response: string }
-    | { responseType: FakeResponseType.JSON; response: JSONSerializable }
+    | { responseType: 'abort'; response: undefined }
+    | { responseType?: 'file'; response: string }
+    | { responseType: 'json'; response: JSONSerializable }
 );
 
 type FakeResponse = { mimeType: string; data: string | Buffer };
@@ -63,19 +57,19 @@ export async function useInterceptApi(page: Page): Promise<void> {
     async function setRequestReplacement({
         method = ANY_METHOD,
         response,
-        responseType = FakeResponseType.File,
+        responseType = 'file',
         source,
     }: InterceptParams) {
         if (!requestReplacementByMethodMap.has(method)) {
             requestReplacementByMethodMap.set(method, new Map());
         }
 
-        if (responseType === FakeResponseType.Abort) {
+        if (responseType === 'abort') {
             debug(`[Intercept] Set up ABORT ${method} ${source}`);
             requestReplacementByMethodMap.get(method)!.set(source, null);
         }
 
-        if (responseType === FakeResponseType.JSON) {
+        if (responseType === 'json') {
             debug(`[Intercept] Set up JSON response ${method} ${source}`);
             requestReplacementByMethodMap.get(method)!.set(source, {
                 mimeType: 'application/json',
@@ -83,7 +77,7 @@ export async function useInterceptApi(page: Page): Promise<void> {
             });
         }
 
-        if (responseType === FakeResponseType.File) {
+        if (responseType === 'file') {
             if (typeof response !== 'string') {
                 error(
                     `[Intercept] Error while setting up file response ${method} ${source}: request replacement file path is not a string`,
