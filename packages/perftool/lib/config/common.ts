@@ -83,6 +83,8 @@ export type Config = {
     intermediateRefreshInterval: number;
     /** Fail if some metric changed badly significantly. Default: true **/
     failOnSignificantChanges: boolean;
+    /** Significant change threshold **/
+    significanceThreshold: number;
     /** Where to save testing report. Default: 'perftest/report-[time].json' **/
     outputFilePath: string;
     /** Path to perftool config. Default: perftool.config.(mts|mjs) **/
@@ -194,6 +196,7 @@ export function getConfig(cliConfig: CliConfig = {}, projectConfig: ProjectConfi
         ),
         intermediateRefreshInterval: withDefault(mixedInputConfig.intermediateRefreshInterval, 10000),
         failOnSignificantChanges: withDefault(mixedInputConfig.failOnSignificantChanges, true),
+        significanceThreshold: withDefault(mixedInputConfig.significanceThreshold, 0.1),
         outputFilePath: withDefault(
             mixedInputConfig.outputFilePath,
             mode === 'collaborative' ? 'perftest/result.json' : 'perftest/report-[time].json',
