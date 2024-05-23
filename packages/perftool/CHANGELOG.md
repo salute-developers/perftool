@@ -1,3 +1,20 @@
+# v0.29.0 (Thu May 23 2024)
+
+#### 🚀 Enhancement
+
+- build(perftool): upd packages [#498](https://github.com/salute-developers/perftool/pull/498) ([@akhdrv](https://github.com/akhdrv))
+- feat(perftool): significance threshold [#498](https://github.com/salute-developers/perftool/pull/498) ([@akhdrv](https://github.com/akhdrv))
+
+#### 🐛 Bug Fix
+
+- build(perftool): update pkgs [#497](https://github.com/salute-developers/perftool/pull/497) ([@akhdrv](https://github.com/akhdrv))
+
+#### Authors: 1
+
+- Artem Khaydarov ([@akhdrv](https://github.com/akhdrv))
+
+---
+
 # v0.28.0 (Mon Apr 08 2024)
 
 #### 🚀 Enhancement
