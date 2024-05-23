@@ -1,8 +1,8 @@
 import assert from '../utils/assert';
 
-import { CompareResult, MetricResultWithError, SignificanceRank, SimpleMetricResult } from './types';
+import { Comparator, MetricResultWithError, SignificanceRank, SimpleMetricResult } from './types';
 
-export function compareMetricWithError(current: MetricResultWithError, previous: MetricResultWithError): CompareResult {
+export const compareMetricWithError: Comparator<MetricResultWithError> = function (config, current, previous) {
     assert(Array.isArray(current) && Array.isArray(previous));
 
     const [currentVal, currentError] = current;
@@ -13,7 +13,7 @@ export function compareMetricWithError(current: MetricResultWithError, previous:
     const percentage = +((100 * difference) / previousVal).toFixed(2);
     let significanceRank: SignificanceRank;
 
-    if (absolute > currentError + previousError) {
+    if (absolute > currentError + previousError + config.significanceThreshold * previousVal) {
         significanceRank = 'high';
     } else if (absolute > currentError && absolute > previousError) {
         significanceRank = 'medium';
@@ -26,9 +26,9 @@ export function compareMetricWithError(current: MetricResultWithError, previous:
         percentage,
         significanceRank,
     };
-}
+};
 
-export function compareSimpleMetricResults(current: SimpleMetricResult, previous: SimpleMetricResult): CompareResult {
+export const compareSimpleMetricResults: Comparator<SimpleMetricResult> = function (_config, current, previous) {
     assert(typeof current === 'number' && typeof previous === 'number');
 
     const difference = current - previous;
@@ -38,4 +38,4 @@ export function compareSimpleMetricResults(current: SimpleMetricResult, previous
         difference,
         percentage,
     };
-}
+};

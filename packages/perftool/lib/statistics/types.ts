@@ -1,9 +1,11 @@
+import { Config } from '../config';
+
 export type SimpleMetricResult = number;
 export type MetricResultWithError = [number, number];
 
 export type MetricResult = SimpleMetricResult | MetricResultWithError;
 
-export type Comparator<T extends MetricResult> = (current: T, previous: T) => CompareResult;
+export type Comparator<T extends MetricResult> = (config: Config, current: T, previous: T) => CompareResult;
 
 export type MetricUsage = 'wholeSample' | 'perMode';
 

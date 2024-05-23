@@ -104,6 +104,7 @@ function findSignificantNegativeChanges(config: Config, report: Report): boolean
 }
 
 function processMetricResult<T extends MetricResult>(
+    config: Config,
     current: T,
     previous?: T,
     comparator?: Comparator<T>,
@@ -116,7 +117,7 @@ function processMetricResult<T extends MetricResult>(
     return {
         old: previous,
         new: current,
-        change: comparator(current, previous),
+        change: comparator(config, current, previous),
     };
 }
 
@@ -136,6 +137,7 @@ function processTaskResult(
 
     if (isCurrentNumber) {
         return processMetricResult(
+            config,
             current,
             typeof previous === 'number' ? previous : undefined,
             compareSimpleMetricResults,
@@ -161,11 +163,12 @@ function processTaskResult(
                 warn(`Metric ${currentMetricId} changed output`);
             }
 
-            result[currentMetricId] = processMetricResult(currentMetricResult);
+            result[currentMetricId] = processMetricResult(config, currentMetricResult);
             continue;
         }
 
         result[currentMetricId] = processMetricResult<MetricResult>(
+            config,
             currentMetricResult,
             previousMetricResult,
             metric.compare as Comparator<MetricResult>,
