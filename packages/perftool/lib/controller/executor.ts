@@ -172,7 +172,10 @@ export default class Executor<T extends Task<any, any, any>[]> implements IExecu
             result.promise,
             defer(
                 this.config.runWaitTimeout,
-                () => new Error(`timeout ${this.config.runWaitTimeout}ms reached waiting for run to end`),
+                () =>
+                    new Error(
+                        `timeout ${this.config.runWaitTimeout}ms reached waiting for run ${test.subjectId} to end`,
+                    ),
             ),
         ]).finally(() => {
             return page.close();

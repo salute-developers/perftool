@@ -22,7 +22,7 @@ export type InterceptParams = {
     method?: Method;
     source: string;
 } & (
-    | { responseType: 'abort'; response: undefined }
+    | { responseType: 'abort'; response?: undefined }
     | { responseType?: 'file'; response: string }
     | { responseType: 'json'; response: JSONSerializable }
 );
