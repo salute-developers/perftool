@@ -65,7 +65,7 @@
         "fast-glob": "3.3.2",
         "html-webpack-plugin": "5.6.0",
         "jstat": "1.9.6",
-        "loglevel": "1.9.1",
+        "loglevel": "1.9.2",
         "loglevel-plugin-prefix": "0.8.4",
         "lru-cache": "11.0.0",
         "mime": "4.0.4",
